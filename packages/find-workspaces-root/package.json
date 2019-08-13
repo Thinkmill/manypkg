@@ -1,0 +1,17 @@
+{
+  "name": "find-workspaces-root",
+  "version": "0.1.0",
+  "main": "dist/find-workspaces-root.cjs.js",
+  "module": "dist/find-workspaces-root.esm.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@types/fs-extra": "^8.0.0",
+    "@types/node": "^12.7.1",
+    "find-up": "^4.1.0",
+    "fs-extra": "^8.1.0"
+  },
+  "devDependencies": {
+    "fixturez": "^1.1.0"
+  }
+}

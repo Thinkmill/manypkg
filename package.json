@@ -1,0 +1,26 @@
+{
+  "name": "@manypkg/repo",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.17",
+    "jest": "^24.8.0",
+    "preconstruct": "^0.0.86",
+    "typescript": "^3.5.3"
+  },
+  "preconstruct": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "postinstall": "preconstruct dev"
+  }
+}
