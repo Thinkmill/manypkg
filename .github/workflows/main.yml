@@ -1,4 +1,3 @@
-
 name: CI
 on: [push]
 jobs:
@@ -6,18 +5,18 @@ jobs:
     name: Run
     runs-on: ubuntu-lastest
     steps:
-    - uses: actions/checkout@master
-    
-    - name: Set Node.js 10.x
-      uses: actions/setup-node@master
-      with:
-        version: 10.x
+      - uses: actions/checkout@master
 
-    - name: Install Yarn
-      run: npm install --global yarn
+      - name: Set Node.js 10.x
+        uses: actions/setup-node@master
+        with:
+          version: 10.x
 
-    - name: Install Dependencies
-      run: yarn
+      - name: Install Yarn
+        run: npm install --global yarn
 
-    - name: Test
-      run: yarn jest
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Test
+        run: yarn jest
