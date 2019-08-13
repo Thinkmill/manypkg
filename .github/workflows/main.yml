@@ -3,7 +3,7 @@ on: [push]
 jobs:
   run:
     name: Run
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
