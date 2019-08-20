@@ -1,0 +1,23 @@
+{
+  "name": "@manypkg/cli",
+  "version": "0.1.0",
+  "main": "dist/cli.cjs.js",
+  "module": "dist/cli.esm.js",
+  "license": "MIT",
+  "bin": {
+    "manypkg": "./bin.js"
+  },
+  "dependencies": {
+    "detect-indent": "^6.0.0",
+    "find-workspaces-root": "0.1.0",
+    "get-workspaces": "^0.4.0",
+    "immer": "^3.2.0",
+    "meow": "^5.0.0",
+    "semver": "^6.3.0",
+    "sver": "^1.8.2",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "fixturez": "^1.1.0"
+  }
+}

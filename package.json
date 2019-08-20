@@ -11,6 +11,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.17",
+    "@types/semver": "^6.0.1",
     "jest": "^24.8.0",
     "preconstruct": "^0.0.86",
     "typescript": "^3.5.3"

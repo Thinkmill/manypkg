@@ -12,14 +12,22 @@ yarn add @manypkg/cli
 
 ## Usage
 
+### Checker
+
+```
+yarn m manypkg check
+```
+
+```
+yarn m manypkg fix
+```
+
+### Script Runner
+
 ### In the root of a multi-package repo
 
 ```
-yarn m init
-```
-
-```
-yarn m check-repo
+yarn m <pkgName> add <depDescriptor>
 ```
 
 ```
@@ -30,11 +38,11 @@ yarn m <pkgName> <scriptName>
 yarn m <binaryFromNodeModulesName>
 ```
 
-```
-yarn m add <pkgName> <depDescriptor>
-```
-
 ### In a package
+
+```
+yarn m add <depDescriptor>
+```
 
 ```
 yarn m <scriptName>
@@ -42,8 +50,4 @@ yarn m <scriptName>
 
 ```
 yarn m <binaryFromNodeModulesName>
-```
-
-```
-yarn m add <depDescriptor>
 ```
