@@ -1,0 +1,7 @@
+{
+  "releases": [
+    { "name": "@manypkg/cli", "type": "minor" },
+    { "name": "find-workspaces-root", "type": "minor" }
+  ],
+  "dependents": []
+}
