@@ -8,10 +8,12 @@
     "manypkg": "./bin.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "chalk": "^2.4.2",
     "detect-indent": "^6.0.0",
     "find-workspaces-root": "0.1.0",
+    "fs-extra": "^8.1.0",
     "get-workspaces": "^0.4.0",
-    "immer": "^3.2.0",
     "meow": "^5.0.0",
     "semver": "^6.3.0",
     "sver": "^1.8.2",

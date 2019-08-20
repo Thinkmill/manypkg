@@ -14,7 +14,7 @@
     "@types/jest": "^24.0.17",
     "@types/semver": "^6.0.1",
     "jest": "^24.8.0",
-    "preconstruct": "^0.0.86",
+    "preconstruct": "^0.0.89",
     "typescript": "^3.5.3"
   },
   "preconstruct": {
@@ -23,6 +23,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "preconstruct dev"
+    "postinstall": "preconstruct dev",
+    "release": "yarn preconstruct build && yarn changeset release"
   }
 }
