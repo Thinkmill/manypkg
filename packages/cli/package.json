@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/cli",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "dist/cli.cjs.js",
   "module": "dist/cli.esm.js",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "detect-indent": "^6.0.0",
-    "find-workspaces-root": "0.0.0",
+    "find-workspaces-root": "0.1.0",
     "get-workspaces": "^0.4.0",
     "immer": "^3.2.0",
     "meow": "^5.0.0",
