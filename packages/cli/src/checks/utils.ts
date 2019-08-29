@@ -44,6 +44,15 @@ export function sortObject(prevObj: { [key: string]: string }) {
   return newObj;
 }
 
+export function sortDeps(workspace: Workspace) {
+  for (let depType of DEPENDENCY_TYPES) {
+    let prevDeps = workspace.config[depType];
+    if (prevDeps) {
+      workspace.config[depType] = sortObject(prevDeps);
+    }
+  }
+}
+
 export type Workspace = Workspace;
 
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {

@@ -2,7 +2,7 @@ import {
   makeCheck,
   Workspace,
   DEPENDENCY_TYPES,
-  sortObject,
+  sortDeps,
   isArrayEqual
 } from "./utils";
 
@@ -28,12 +28,7 @@ export default makeCheck<ErrorType>({
     return [];
   },
   fix: error => {
-    for (let depType of DEPENDENCY_TYPES) {
-      let prevDeps = error.workspace.config[depType];
-      if (prevDeps) {
-        error.workspace.config[depType] = sortObject(prevDeps);
-      }
-    }
+    sortDeps(error.workspace);
   },
   print: error =>
     `${

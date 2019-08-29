@@ -7,7 +7,7 @@ import path from "path";
 import { Workspace, Check } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
-import detectIndent from "detect-indent";
+import { writeWorkspace } from "./utils";
 
 let keys: <Obj>(obj: Obj) => Array<keyof Obj> = Object.keys;
 
@@ -36,17 +36,14 @@ function runAndPrintCheck<ErrorType>(
   }
   if (check.type === "root") {
     let errors = check.validate(rootWorkspace, allWorkspaces);
-    for (let error of errors) {
-      logger.error(check.print(error));
-      if (shouldFix && check.fix !== undefined) {
-        for (let error of errors) {
-          check.fix(error);
-        }
-      } else {
-        for (let error of errors) {
-          hasErrored = true;
-          logger.error(check.print(error));
-        }
+    if (shouldFix && check.fix !== undefined) {
+      for (let error of errors) {
+        check.fix(error);
+      }
+    } else {
+      for (let error of errors) {
+        hasErrored = true;
+        logger.error(check.print(error));
       }
     }
   }
@@ -123,16 +120,7 @@ function runAndPrintCheck<ErrorType>(
   if (shouldFix) {
     await Promise.all(
       [...workspacesByName].map(async ([pkgName, workspace]) => {
-        let pkgRaw = await fs.readFile(
-          path.join(workspace.dir, "package.json"),
-          "utf-8"
-        );
-        let indent = detectIndent(pkgRaw).indent || "  ";
-        return fs.writeFile(
-          path.join(workspace.dir, "package.json"),
-          JSON.stringify(workspace.config, null, indent) +
-            (pkgRaw.endsWith("\n") ? "\n" : "")
-        );
+        writeWorkspace(workspace);
       })
     );
 
