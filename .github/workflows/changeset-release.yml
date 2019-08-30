@@ -23,6 +23,7 @@ jobs:
 
       - name: Install Dependencies
         run: yarn
+      - run: git branch -a
 
       - name: "Create Pull Request or Publish to npm"
         uses: changesets/action@master
