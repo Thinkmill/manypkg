@@ -1,1 +1,0 @@
-Temporarily disable dev and peer dep relationship check
