@@ -1,6 +1,5 @@
 import { Workspace } from "get-workspaces";
-// @ts-ignore
-import { SemverRange } from "sver";
+import { highest } from "sembear";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -82,7 +81,7 @@ export let getHighestExternalRanges = weakMemoize(function getHighestVersions(
             let highestExternalRange = highestExternalRanges.get(depName);
             if (
               !highestExternalRange ||
-              SemverRange.compare(deps[depName], highestExternalRange) === 1
+              highest([highestExternalRange, deps[depName]]) === deps[depName]
             ) {
               highestExternalRanges.set(depName, deps[depName]);
             }

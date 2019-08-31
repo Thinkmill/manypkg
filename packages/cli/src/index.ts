@@ -87,12 +87,13 @@ function runAndPrintCheck<ErrorType>(
     workspacesByName,
     shouldFix
   );
-  runAndPrintCheck(
-    checks.INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
+  // this is disabled for now because we don't have a function for checking if a semver range is a subset of another range yet
+  // runAndPrintCheck(
+  //   checks.INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP,
+  //   rootWorkspace,
+  //   workspacesByName,
+  //   shouldFix
+  // );
   runAndPrintCheck(
     checks.INVALID_PACKAGE_NAME,
     rootWorkspace,

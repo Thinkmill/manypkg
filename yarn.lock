@@ -4716,6 +4716,14 @@ sax@^1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
+sembear@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.2.0.tgz#95a91b5f82b7c4891c9ab7105d8682c8631af8ad"
+  integrity sha512-9sIysRFIml2drUiivxbO4/Y+bjt7YBRKl/WpYTGkDGnjuCYHyWcaYI3BYrAOFhFpr41qcix7ppEiYFig/gQeVg==
+  dependencies:
+    "@types/semver" "^6.0.1"
+    semver "^6.3.0"
+
 "semver@2 || 3 || 4 || 5", semver@^5.4.1, semver@^5.5.1:
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.0.tgz#790a7cf6fea5459bac96110b29b60412dc8ff96b"
@@ -5042,11 +5050,6 @@ supports-color@^6.1.0:
   integrity sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
   dependencies:
     has-flag "^3.0.0"
-
-sver@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/sver/-/sver-1.8.2.tgz#d5bd07e00f52c6d707517d1808c66121b131bc8a"
-  integrity sha512-kPfLmvlrz5MRomgOKgYW+oul+0lhH+3jKio9O2JwQYlrffkky0NjmjBNpu3Q/9jd38BXqOg9hMny6xtjNzwFpQ==
 
 symbol-tree@^3.2.2:
   version "3.2.4"

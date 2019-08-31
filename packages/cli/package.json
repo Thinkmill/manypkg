@@ -17,9 +17,9 @@
     "fs-extra": "^8.1.0",
     "get-workspaces": "^0.4.0",
     "meow": "^5.0.0",
+    "sembear": "^0.2.0",
     "semver": "^6.3.0",
     "spawndamnit": "^2.0.0",
-    "sver": "^1.8.2",
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
