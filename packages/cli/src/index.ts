@@ -8,10 +8,12 @@ import { Workspace, Check } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writeWorkspace } from "./utils";
+import spawn from "spawndamnit";
 
 let keys: <Obj>(obj: Obj) => Array<keyof Obj> = Object.keys;
 
 let hasErrored = false;
+let requiresInstall = false;
 
 function runAndPrintCheck<ErrorType>(
   check: Check<ErrorType>,
@@ -24,7 +26,10 @@ function runAndPrintCheck<ErrorType>(
       let errors = check.validate(workspace, allWorkspaces);
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
-          check.fix(error);
+          let output = check.fix(error) || { requiresInstall: false };
+          if (output.requiresInstall) {
+            requiresInstall = true;
+          }
         }
       } else {
         for (let error of errors) {
@@ -38,7 +43,10 @@ function runAndPrintCheck<ErrorType>(
     let errors = check.validate(rootWorkspace, allWorkspaces);
     if (shouldFix && check.fix !== undefined) {
       for (let error of errors) {
-        check.fix(error);
+        let output = check.fix(error) || { requiresInstall: false };
+        if (output.requiresInstall) {
+          requiresInstall = true;
+        }
       }
     } else {
       for (let error of errors) {
@@ -124,6 +132,9 @@ function runAndPrintCheck<ErrorType>(
         writeWorkspace(workspace);
       })
     );
+    if (requiresInstall) {
+      await spawn("yarn", [], { cwd: workspacesRoot, stdio: "inherit" });
+    }
 
     logger.success(`fixed workspaces!`);
   } else if (hasErrored) {

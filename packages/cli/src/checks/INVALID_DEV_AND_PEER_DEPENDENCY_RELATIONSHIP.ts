@@ -51,6 +51,7 @@ export default makeCheck<ErrorType>({
     error.workspace.config.devDependencies[
       error.dependencyName
     ] = error.workspace.config.peerDependencies![error.dependencyName];
+    return { requiresInstall: true };
   },
   print: error => {
     if (error.devVersion === null) {

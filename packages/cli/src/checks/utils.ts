@@ -21,7 +21,7 @@ export type Check<ErrorType> =
         rootWorkspace: Workspace,
         allWorkspaces: Map<string, Workspace>
       ) => ErrorType[];
-      fix?: (error: ErrorType) => void;
+      fix?: (error: ErrorType) => void | { requiresInstall: true };
       print: (error: ErrorType) => string;
     }
   | {
@@ -30,7 +30,7 @@ export type Check<ErrorType> =
         workspace: Workspace,
         allWorkspaces: Map<string, Workspace>
       ) => ErrorType[];
-      fix?: (error: ErrorType) => void;
+      fix?: (error: ErrorType) => void | { requiresInstall: true };
       print: (error: ErrorType) => string;
     };
 

@@ -47,14 +47,9 @@ export default makeCheck<ErrorType>({
           error.dependencyWorkspace.config.version;
       }
     }
+    return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.name} has a dependency on ${
-      error.dependencyWorkspace.name
-    }@${error.dependencyRange} but the version of ${
-      error.dependencyWorkspace.name
-    } in the repo is ${
-      error.dependencyWorkspace.config.version
-    } which is not within range of the depended on version, please update the dependency version`,
+    `${error.workspace.name} has a dependency on ${error.dependencyWorkspace.name}@${error.dependencyRange} but the version of ${error.dependencyWorkspace.name} in the repo is ${error.dependencyWorkspace.config.version} which is not within range of the depended on version, please update the dependency version`,
   type: "all"
 });

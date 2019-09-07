@@ -42,6 +42,7 @@ export default makeCheck<ErrorType>({
         delete error.workspace.config[error.dependencyType];
       }
     }
+    return { requiresInstall: true };
   },
   print: error =>
     `${error.workspace.name} has a dependency and a ${

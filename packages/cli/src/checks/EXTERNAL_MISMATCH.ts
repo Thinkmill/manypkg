@@ -50,12 +50,9 @@ export default makeCheck<ErrorType>({
         deps[error.dependencyName] = error.highestDependencyRange;
       }
     }
+    return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.name} has a dependency on ${error.dependencyName}@${
-      error.dependencyRange
-    } but the highest range in the repo is ${
-      error.highestDependencyRange
-    }, the range should be set to ${error.highestDependencyRange}`,
+    `${error.workspace.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the highest range in the repo is ${error.highestDependencyRange}, the range should be set to ${error.highestDependencyRange}`,
   type: "all"
 });
