@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.4.0
+
+### Minor Changes
+
+- 50c7974: Run `yarn` after fixers that require it
+
 ## 0.3.0
 
 ### Minor Changes
