@@ -10,23 +10,38 @@ import { ExitError } from "./errors";
 import { writeWorkspace } from "./utils";
 import spawn from "spawndamnit";
 
-let keys: <Obj>(obj: Obj) => Array<keyof Obj> = Object.keys;
-
-let hasErrored = false;
-let requiresInstall = false;
-
-function runAndPrintCheck<ErrorType>(
-  check: Check<ErrorType>,
-  rootWorkspace: Workspace,
+let runChecks = (
   allWorkspaces: Map<string, Workspace>,
+  rootWorkspace: Workspace,
   shouldFix: boolean
-) {
-  if (check.type === "all") {
-    for (let [, workspace] of allWorkspaces) {
-      let errors = check.validate(workspace, allWorkspaces);
+) => {
+  let hasErrored = false;
+  let requiresInstall = false;
+
+  for (let check of checks) {
+    if (check.type === "all") {
+      for (let [, workspace] of allWorkspaces) {
+        let errors = check.validate(workspace, allWorkspaces);
+        if (shouldFix && check.fix !== undefined) {
+          for (let error of errors) {
+            let output = check.fix(error as any) || { requiresInstall: false };
+            if (output.requiresInstall) {
+              requiresInstall = true;
+            }
+          }
+        } else {
+          for (let error of errors) {
+            hasErrored = true;
+            logger.error(check.print(error as any));
+          }
+        }
+      }
+    }
+    if (check.type === "root") {
+      let errors = check.validate(rootWorkspace, allWorkspaces);
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
-          let output = check.fix(error) || { requiresInstall: false };
+          let output = check.fix(error as any) || { requiresInstall: false };
           if (output.requiresInstall) {
             requiresInstall = true;
           }
@@ -34,28 +49,12 @@ function runAndPrintCheck<ErrorType>(
       } else {
         for (let error of errors) {
           hasErrored = true;
-          logger.error(check.print(error));
+          logger.error(check.print(error as any));
         }
       }
     }
   }
-  if (check.type === "root") {
-    let errors = check.validate(rootWorkspace, allWorkspaces);
-    if (shouldFix && check.fix !== undefined) {
-      for (let error of errors) {
-        let output = check.fix(error) || { requiresInstall: false };
-        if (output.requiresInstall) {
-          requiresInstall = true;
-        }
-      }
-    } else {
-      for (let error of errors) {
-        hasErrored = true;
-        logger.error(check.print(error));
-      }
-    }
-  }
-}
+};
 
 (async () => {
   let things = process.argv.slice(2);
@@ -83,49 +82,6 @@ function runAndPrintCheck<ErrorType>(
   );
   workspacesByName.set(rootWorkspace.name, rootWorkspace);
 
-  runAndPrintCheck(
-    checks.EXTERNAL_MISMATCH,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
-  runAndPrintCheck(
-    checks.INTERNAL_MISMATCH,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
-  // this is disabled for now because we don't have a function for checking if a semver range is a subset of another range yet
-  // runAndPrintCheck(
-  //   checks.INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP,
-  //   rootWorkspace,
-  //   workspacesByName,
-  //   shouldFix
-  // );
-  runAndPrintCheck(
-    checks.INVALID_PACKAGE_NAME,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
-  runAndPrintCheck(
-    checks.MULTIPLE_DEPENDENCY_TYPES,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
-  runAndPrintCheck(
-    checks.ROOT_HAS_DEV_DEPENDENCIES,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
-  runAndPrintCheck(
-    checks.UNSORTED_DEPENDENCIES,
-    rootWorkspace,
-    workspacesByName,
-    shouldFix
-  );
   if (shouldFix) {
     await Promise.all(
       [...workspacesByName].map(async ([pkgName, workspace]) => {

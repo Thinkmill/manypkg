@@ -4716,10 +4716,10 @@ sax@^1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-sembear@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.2.0.tgz#95a91b5f82b7c4891c9ab7105d8682c8631af8ad"
-  integrity sha512-9sIysRFIml2drUiivxbO4/Y+bjt7YBRKl/WpYTGkDGnjuCYHyWcaYI3BYrAOFhFpr41qcix7ppEiYFig/gQeVg==
+sembear@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.3.0.tgz#8af905c16d6c7a9c5ccabdb03f0c3da717f2b34e"
+  integrity sha512-IP39etFscpOV8i8EC+kyu8g8sx3o3IelMM6zZDvzuFlKbnS18jogM+GdwtqeeiOxMJJpqw8WmV9BU+iwHhstsA==
   dependencies:
     "@types/semver" "^6.0.1"
     semver "^6.3.0"

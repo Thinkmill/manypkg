@@ -1,5 +1,5 @@
 import { makeCheck, Workspace } from "./utils";
-import * as semver from "semver";
+import { contains } from "sembear";
 
 type ErrorType = {
   type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
@@ -25,13 +25,7 @@ export default makeCheck<ErrorType>({
             dependencyName: depName,
             devVersion: null
           });
-        } else if (
-          // TODO: this is wrong
-          // it should be is devDeps[depName] a subset of peerDeps[depName]
-          // but that function doesn't exist yet
-          // so this check is disabled for now
-          !semver.gte(devDeps[depName], peerDeps[depName])
-        ) {
+        } else if (!contains(peerDeps[depName], devDeps[depName])) {
           errors.push({
             type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
             workspace,
