@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.5.0
+
+### Minor Changes
+
+- 594c153: Enable peer and dev dep check
+
 ## 0.4.0
 
 ### Minor Changes
