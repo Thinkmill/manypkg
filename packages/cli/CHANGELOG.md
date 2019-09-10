@@ -1,5 +1,12 @@
 # @manypkg/cli
 
+## 0.5.1
+
+### Patch Changes
+
+- e1874c3: Fix checks not running
+- e1874c3: Improve the range chosen by the peer dev dep fixer
+
 ## 0.5.0
 
 ### Minor Changes
