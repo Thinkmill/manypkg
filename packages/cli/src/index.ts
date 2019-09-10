@@ -100,6 +100,7 @@ let runChecks = (
     logger.success(`fixed workspaces!`);
   } else if (hasErrored) {
     logger.info(`the above errors may be fixable with yarn manypkg fix`);
+    throw new ExitError(1);
   } else {
     logger.success(`workspaces valid!`);
   }
