@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.5.2
+
+### Patch Changes
+
+- 89d7407: Exit with 0 when checks fail
+
 ## 0.5.1
 
 ### Patch Changes

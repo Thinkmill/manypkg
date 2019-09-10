@@ -1,1 +1,0 @@
-Exit with 0 when checks fail
