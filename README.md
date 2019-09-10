@@ -1,7 +1,5 @@
 # manypkg
 
-> **Note**: This is some ideas, it doesn't actually exist yet
-
 `manypkg` is a CLI to make working in multi-package repos easier based on some of my experiences working in multi-package repos, conversations with other people and lots of learnings from `bolt` and `bolt-check`.
 
 ## Install
@@ -15,14 +13,16 @@ yarn add @manypkg/cli
 ### Checker
 
 ```
-yarn m manypkg check
+yarn manypkg check
 ```
 
 ```
-yarn m manypkg fix
+yarn manypkg fix
 ```
 
 ### Script Runner
+
+> Note: The following is not implemented currently
 
 ### In the root of a multi-package repo
 
