@@ -54,6 +54,7 @@ let runChecks = (
       }
     }
   }
+  return { requiresInstall, hasErrored };
 };
 
 (async () => {
@@ -81,7 +82,11 @@ let runChecks = (
     workspaces.map(x => [x.name, x])
   );
   workspacesByName.set(rootWorkspace.name, rootWorkspace);
-
+  let { hasErrored, requiresInstall } = runChecks(
+    workspacesByName,
+    rootWorkspace,
+    shouldFix
+  );
   if (shouldFix) {
     await Promise.all(
       [...workspacesByName].map(async ([pkgName, workspace]) => {

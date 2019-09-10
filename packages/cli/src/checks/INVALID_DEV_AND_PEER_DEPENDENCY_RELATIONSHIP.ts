@@ -1,4 +1,4 @@
-import { makeCheck, Workspace } from "./utils";
+import { makeCheck, Workspace, getHighestExternalRanges } from "./utils";
 import { contains } from "sembear";
 
 type ErrorType = {
@@ -7,31 +7,45 @@ type ErrorType = {
   peerVersion: string;
   dependencyName: string;
   devVersion: string | null;
+  idealDevVersion: string;
 };
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: workspace => {
+  validate: (workspace, allWorkspaces) => {
     let errors: ErrorType[] = [];
     let peerDeps = workspace.config.peerDependencies;
     let devDeps = workspace.config.devDependencies || {};
     if (peerDeps) {
       for (let depName in peerDeps) {
         if (!devDeps[depName]) {
+          let highestRanges = getHighestExternalRanges(allWorkspaces);
+          let idealDevVersion = highestRanges.get(depName);
+          if (idealDevVersion === undefined) {
+            idealDevVersion = peerDeps[depName];
+          }
+
           errors.push({
             type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
             workspace,
             peerVersion: peerDeps[depName],
             dependencyName: depName,
-            devVersion: null
+            devVersion: null,
+            idealDevVersion
           });
         } else if (!contains(peerDeps[depName], devDeps[depName])) {
+          let highestRanges = getHighestExternalRanges(allWorkspaces);
+          let idealDevVersion = highestRanges.get(depName);
+          if (idealDevVersion === undefined) {
+            idealDevVersion = peerDeps[depName];
+          }
           errors.push({
             type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
             workspace,
             dependencyName: depName,
             peerVersion: peerDeps[depName],
-            devVersion: devDeps[depName]
+            devVersion: devDeps[depName],
+            idealDevVersion
           });
         }
       }
@@ -42,9 +56,8 @@ export default makeCheck<ErrorType>({
     if (!error.workspace.config.devDependencies) {
       error.workspace.config.devDependencies = {};
     }
-    error.workspace.config.devDependencies[
-      error.dependencyName
-    ] = error.workspace.config.peerDependencies![error.dependencyName];
+    error.workspace.config.devDependencies[error.dependencyName] =
+      error.idealDevVersion;
     return { requiresInstall: true };
   },
   print: error => {
