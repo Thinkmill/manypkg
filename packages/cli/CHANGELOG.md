@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.6.0
+
+### Minor Changes
+
+- 2e39bfa: Improve fix for external dependency range mismatches
+
 ## 0.5.2
 
 ### Patch Changes
