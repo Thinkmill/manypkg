@@ -73,7 +73,7 @@ The dep is removed from `devDependencies` or `optionalDependencies`.
 
 ### Invalid package name
 
-There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a monorepo, everything will be published together so some packages may depend on a package which can't be published so we should check that package names are valid before publishing.
+There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a multi-package repository, everything will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
 
 ### Unsorted dependencies
 
