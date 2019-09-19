@@ -65,11 +65,11 @@ All `devDependencies` in the root `package.json` are moved to `dependencies`.
 
 ### Multiple dependency types
 
-A dependency shouldn't be specified in more than one of `dependencies`, `devDependencies` or `optionalDependencies` because what would that even do? TODO: find out what package managers actually do when this happens
+A dependency shouldn't be specified in more than one of `dependencies`, `devDependencies` or `optionalDependencies`.
 
 #### How it's fixed
 
-The dep is removed from `devDependencies` or `optionalDependencies`.
+The dep is removed from `devDependencies` or `optionalDependencies` if it's also in `dependencies`, if it's in `devDependencies` and `optionalDependencies`, it is removed from `dependencies`.
 
 ### Invalid package name
 
