@@ -57,7 +57,7 @@ The range for the dependency specified in `peerDependencies` is added to `devDep
 
 ### Root has devDependencies
 
-Whether a dependency is in `devDependencies` or `dependencies` do not make a difference in the root/private packages in general(though we don't enforce it for all private packages to support the case where a package is private for development or etc. and then published) so to avoid confusion as to where a root dependency should go, all dependencies should go in `dependencies`. This decision may be changed in the future to force all root dependencies to be in `dependencies` so that installation instructions for development packages do not have to be different for monorepos.
+In the root `package.json` of a multi-package repository, whether a dependency is in `devDependencies` or `dependencies` does not make a difference. To avoid confusion as to where a root dependency should go, all dependencies should go in `dependencies`.
 
 #### How it's fixed
 
@@ -75,9 +75,13 @@ The dep is removed from `devDependencies` or `optionalDependencies`.
 
 There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a multi-package repository, everything will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
 
+#### How it's fixed
+
+This requires manual fixing as automatically fixing this may lead to valid but incorrect package names.
+
 ### Unsorted dependencies
 
-Dependencies should be sorted alphabetically because when you add a package with yarn add or etc. deps are sorted and that results in confusing diffs so we should enforce that they're sorted.
+When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted.  Dependencies should be sorted alphabetically to avoid this.
 
 #### How it's fixed
 
