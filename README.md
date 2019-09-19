@@ -61,7 +61,7 @@ Whether a dependency is in `devDependencies` or `dependencies` do not make a dif
 
 #### How it's fixed
 
-All `devDependencies` at the root are moved to `dependencies`.
+All `devDependencies` in the root `package.json` are moved to `dependencies`.
 
 ### Multiple dependency types
 
