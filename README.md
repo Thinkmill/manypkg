@@ -26,6 +26,7 @@ yarn manypkg fix
 - **internal package/workspace** - A package that is local/in the repo
 - **external package** - A package that is from a registry like npm
 - **range** - A [node-semver range](https://github.com/npm/node-semver#ranges)
+- **highest range** - The range which has the highest lower bound. If there are multiple ranges with the same highest lower bound, the range with the highest upper bound is the highest range.
 
 ## Checks
 
@@ -37,7 +38,7 @@ There are vague thoughts that it should be possible to partially disable externa
 
 ### How it's fixed
 
-The highest range of the dependency is found as defined by [sembear](https://github.com/mitchellhamilton/sembear) and set as the range at every non-peer dependency place it is depended on.
+The highest range of the dependency is set as the range at every non-peer dependency place it is depended on.
 
 ## Internal mismatch
 
