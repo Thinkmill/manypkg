@@ -4,7 +4,8 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "test-gatsby"
   ],
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -19,7 +20,7 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/[!gatsby-source-workspaces]"
+      "packages/[!gatsby]"
     ]
   },
   "scripts": {

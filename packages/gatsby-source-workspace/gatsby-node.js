@@ -1,7 +1,9 @@
 const getWorkspaces = require("get-workspaces").default;
-const findUp = require("find-up");
+const findWorkspacesRoot = require("find-workspaces-root").default;
+const divideChangelogs = require("./divide-changelogs");
 
 const path = require("path");
+const fs = require("fs-extra");
 const { createContentDigest } = require("gatsby-core-utils");
 /*
 I'm mostly just implementing the workspaces as it exists. One change, I've renamed 'config'
@@ -10,21 +12,21 @@ to 'meta' - this might still be the wrong name but I want to try it out.
 (meta represents the full contents of the package.json)
 */
 
-const badFindRepoRoot = async () => {
-  let badPath = await findUp(".git/index");
-  return path.resolve(badPath, "..", "..");
-};
-
 exports.createSchemaCustomization = ({ actions }) => {
   let { createTypes } = actions;
 
   let typeDefs = `
+      type Changelog {
+        version: String
+        md: String
+      }
       type workspaceInfo implements Node {
         name: String
         dir: String
         relativeDir: String
         meta: JSON
         version: String
+        changelogEntries: [Changelog!]
       }
     `;
   createTypes(typeDefs);
@@ -35,28 +37,35 @@ exports.sourceNodes = async (
   pluginOptions
 ) => {
   let { createNode } = actions;
-  let cwd = pluginOptions.cwd || (await badFindRepoRoot());
-  let workspaces = await getWorkspaces({ cwd });
+  let cwd = pluginOptions.cwd || process.cwd();
+  let repoRoot = await findWorkspacesRoot(cwd);
+  let workspaces = await getWorkspaces({ cwd: repoRoot });
 
-  console.log(workspaces);
+  // TODO: parallelize
+  for (let ws of workspaces) {
+    let { name, dir, config: meta } = ws;
+    let changelogEntries = [];
 
-  // Process workspaces into nodes.
-  workspaces.forEach(
-    ({ name, dir, config: meta }) =>
-      console.log("forEach call", name) ||
-      createNode({
-        name,
-        dir,
-        relativeDir: path.relative(cwd, dir),
-        meta,
-        version: meta.version,
-        id: name,
-        internal: {
-          contentDigest: createContentDigest({
-            name
-          }),
-          type: "workspaceInfo"
-        }
-      })
-  );
+    const changelogPath = path.resolve(dir, "CHANGELOG.md");
+    if (await fs.exists(changelogPath)) {
+      let changelog = await fs.readFile(changelogPath, "utf-8");
+      changelogEntries = divideChangelogs(changelog);
+    }
+    console.log(changelogEntries);
+    createNode({
+      name,
+      dir,
+      relativeDir: path.relative(cwd, dir),
+      meta,
+      version: meta.version,
+      id: name,
+      changelogEntries,
+      internal: {
+        contentDigest: createContentDigest({
+          name
+        }),
+        type: "workspaceInfo"
+      }
+    });
+  }
 };
