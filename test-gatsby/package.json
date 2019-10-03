@@ -1,0 +1,16 @@
+{
+    "name": "test-gatsby-thing",
+    "private": true,
+    "version": "0.0.0",
+    "peerDependencies": {
+        "gatsby": "^2.15.28"
+    },
+    "dependencies": {
+        "@manypkg/gatsby-monorepo-plugin": "0.0.0",
+        "@manypkg/gatsby-source-workspace": "0.0.0",
+        "gatsby": "^2.15.28",
+        "react": "^16.10.1",
+        "react-dom": "^16.10.1",
+        "styled-components": "^4.4.0"
+    }
+}
