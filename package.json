@@ -19,7 +19,7 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/*"
+      "packages/[!gatsby-source-workspaces]"
     ]
   },
   "scripts": {
