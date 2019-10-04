@@ -4,7 +4,7 @@ import path from "path";
 
 let f = fixturez(__dirname);
 
-test("it returns the root of a multi-package repo", async () => {
+test("it returns the root of a monorepo", async () => {
   let tmpPath = f.copy("basic");
   let workspacesRoot = await findWorkspacesRoot(
     path.join(tmpPath, "packages", "package-one", "src")

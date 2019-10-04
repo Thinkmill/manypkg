@@ -1,6 +1,6 @@
 # manypkg
 
-`manypkg` is a CLI to make working in multi-package repos easier based on some of my experiences working in multi-package repos, conversations with other people and lots of learnings from `bolt` and `bolt-check`.
+`manypkg` is a CLI to make working in monorepos easier based on some of my experiences working in monorepos, conversations with other people and lots of learnings from `bolt` and `bolt-check`.
 
 ## Install
 
@@ -56,7 +56,7 @@ The range for the dependency specified in `peerDependencies` is added to `devDep
 
 ### Root has devDependencies
 
-In the root `package.json` of a multi-package repository, whether a dependency is in `devDependencies` or `dependencies` does not make a difference. To avoid confusion as to where a root dependency should go, all dependencies should go in `dependencies`.
+In the root `package.json` of a monorepo, whether a dependency is in `devDependencies` or `dependencies` does not make a difference. To avoid confusion as to where a root dependency should go, all dependencies should go in `dependencies`.
 
 #### How it's fixed
 
@@ -72,7 +72,7 @@ The dep is removed from `devDependencies` or `optionalDependencies` if it's also
 
 ### Invalid package name
 
-There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a multi-package repository, everything will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
+There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a monorepo, everything will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
 
 #### How it's fixed
 
@@ -80,7 +80,7 @@ This requires manual fixing as automatically fixing this may lead to valid but i
 
 ### Unsorted dependencies
 
-When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted.  Dependencies should be sorted alphabetically to avoid this.
+When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted. Dependencies should be sorted alphabetically to avoid this.
 
 #### How it's fixed
 
