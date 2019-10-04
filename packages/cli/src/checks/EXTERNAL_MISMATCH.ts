@@ -1,9 +1,9 @@
 import {
   makeCheck,
-  Workspace,
   getHighestExternalRanges,
   NORMAL_DEPENDENCY_TYPES
 } from "./utils";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";

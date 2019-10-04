@@ -15,7 +15,8 @@
     "@types/semver": "^6.0.1",
     "jest": "^24.8.0",
     "preconstruct": "^0.0.89",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "wsrun": "^5.0.2"
   },
   "preconstruct": {
     "packages": [

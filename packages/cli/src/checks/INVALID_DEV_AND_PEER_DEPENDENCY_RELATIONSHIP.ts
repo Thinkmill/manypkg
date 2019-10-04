@@ -1,5 +1,6 @@
-import { makeCheck, Workspace, getHighestExternalRanges } from "./utils";
+import { makeCheck, getHighestExternalRanges } from "./utils";
 import { contains } from "sembear";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";

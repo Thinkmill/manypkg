@@ -1,4 +1,5 @@
-import { makeCheck, Workspace } from "./utils";
+import { makeCheck } from "./utils";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "MULTIPLE_DEPENDENCY_TYPES";

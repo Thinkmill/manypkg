@@ -1,10 +1,5 @@
-import {
-  makeCheck,
-  Workspace,
-  DEPENDENCY_TYPES,
-  sortDeps,
-  isArrayEqual
-} from "./utils";
+import { makeCheck, DEPENDENCY_TYPES, sortDeps, isArrayEqual } from "./utils";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";
@@ -31,7 +26,5 @@ export default makeCheck<ErrorType>({
     sortDeps(error.workspace);
   },
   print: error =>
-    `${
-      error.workspace.name
-    }'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`
+    `${error.workspace.name}'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`
 });

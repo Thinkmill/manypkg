@@ -52,8 +52,6 @@ export function sortDeps(workspace: Workspace) {
   }
 }
 
-export type Workspace = Workspace;
-
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   let cache = new WeakMap<any, any>();
   // @ts-ignore

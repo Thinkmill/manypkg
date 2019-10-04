@@ -1,5 +1,5 @@
-import { makeCheck, Workspace, sortObject } from "./utils";
-import chalk from "chalk";
+import { makeCheck } from "./utils";
+import { Workspace } from "get-workspaces";
 // @ts-ignore
 import validateNpmPackageName from "validate-npm-package-name";
 

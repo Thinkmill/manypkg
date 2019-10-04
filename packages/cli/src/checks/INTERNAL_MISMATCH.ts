@@ -1,10 +1,10 @@
 import {
   makeCheck,
-  Workspace,
   NORMAL_DEPENDENCY_TYPES,
   versionRangeToRangeType
 } from "./utils";
 import semver from "semver";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "INTERNAL_MISMATCH";

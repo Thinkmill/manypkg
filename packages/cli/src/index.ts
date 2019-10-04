@@ -2,9 +2,9 @@
 import * as logger from "./logger";
 import findWorkspacesRoot from "find-workspaces-root";
 import fs from "fs-extra";
-import getWorkspaces from "get-workspaces";
+import getWorkspaces, { Workspace } from "get-workspaces";
 import path from "path";
-import { Workspace, Check } from "./checks/utils";
+import { Check } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writeWorkspace } from "./utils";
@@ -93,11 +93,12 @@ let runChecks = (
         writeWorkspace(workspace);
       })
     );
+    logger.success(`fixed workspaces!`);
+
     if (requiresInstall) {
+      logger.info(`running yarn to update packages`);
       await spawn("yarn", [], { cwd: workspacesRoot, stdio: "inherit" });
     }
-
-    logger.success(`fixed workspaces!`);
   } else if (hasErrored) {
     logger.info(`the above errors may be fixable with yarn manypkg fix`);
     throw new ExitError(1);

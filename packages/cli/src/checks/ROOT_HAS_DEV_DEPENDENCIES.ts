@@ -1,5 +1,6 @@
-import { makeCheck, Workspace, sortObject } from "./utils";
+import { makeCheck, sortObject } from "./utils";
 import chalk from "chalk";
+import { Workspace } from "get-workspaces";
 
 type ErrorType = {
   type: "ROOT_HAS_DEV_DEPENDENCIES";

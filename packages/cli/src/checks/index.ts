@@ -14,4 +14,4 @@ export let checks = [
   MULTIPLE_DEPENDENCY_TYPES,
   ROOT_HAS_DEV_DEPENDENCIES,
   UNSORTED_DEPENDENCIES
-];
+] as const;
