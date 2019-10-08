@@ -9,6 +9,7 @@ import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writeWorkspace } from "./utils";
 import spawn from "spawndamnit";
+import pLimit from "p-limit";
 
 let runChecks = (
   allWorkspaces: Map<string, Workspace>,
@@ -57,10 +58,38 @@ let runChecks = (
   return { requiresInstall, hasErrored };
 };
 
+let execLimit = pLimit(4);
+
+async function execCmd(args: string[]) {
+  let workspacesRoot = await findWorkspacesRoot(process.cwd());
+  let workspaces = (await getWorkspaces({
+    cwd: workspacesRoot,
+    tools: ["yarn", "bolt", "root"]
+  }))!;
+  let highestExitCode = 0;
+  await Promise.all(
+    workspaces.map(workspace => {
+      return execLimit(async () => {
+        let { code } = await spawn(args[0], args.slice(1), {
+          cwd: workspace.dir,
+          stdio: "inherit"
+        });
+        highestExitCode = Math.max(code, highestExitCode);
+      });
+    })
+  );
+  throw new ExitError(highestExitCode);
+}
+
 (async () => {
   let things = process.argv.slice(2);
+  if (things[0] === "exec") {
+    return execCmd(things.slice(1));
+  }
   if (things[0] !== "check" && things[0] !== "fix") {
-    logger.error(`command ${things[0]} not found, only check and fix exist`);
+    logger.error(
+      `command ${things[0]} not found, only check, exec and fix exist`
+    );
     throw new ExitError(1);
   }
   let shouldFix = things[0] === "fix";
