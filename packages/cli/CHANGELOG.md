@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.7.0
+
+### Minor Changes
+
+- 801a468: Add exec command that runs a command in every workspace
+
 ## 0.6.0
 
 ### Minor Changes
