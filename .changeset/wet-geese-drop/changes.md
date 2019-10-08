@@ -1,1 +1,0 @@
-Add exec command that runs a command in every workspace
