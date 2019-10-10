@@ -19,6 +19,8 @@ async function getGatsbyConfig() {
         resolve: `gatsby-source-filesystem`,
         options: {
           path: workspacesRoot,
+          // This syntax matches all FILES that are not .md, but does not match on folders
+          // If it matches on folders, this plugin does not run successfully
           ignore: ["**/.cache/**/*", "**/*.!(md)"]
         }
       },
@@ -26,6 +28,8 @@ async function getGatsbyConfig() {
         resolve: `gatsby-source-filesystem`,
         options: {
           path: workspacesRoot,
+          // This syntax matches all FILES that are not .md, but does not match on folders
+          // If it matches on folders, this plugin does not run successfully
           ignore: ["**/.cache/**/*", "**/*.!(mdx)"]
         }
       },

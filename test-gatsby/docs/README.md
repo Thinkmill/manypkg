@@ -33,3 +33,5 @@ Derived fields I want in the secondPlugin
 
 - tidyName:: the package name with the scope removed (trust me people will want this)
 - wsBaseUrl:: This is currently calculated in this package's gatsby-node. I think it would be better to store it in the graphql on the workspace. This also cirumvents needing a list of pages under the package, as you can use matching to match against the `wsBaseUrl`
+
+The `/packages` path should be in the site's meta.
