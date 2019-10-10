@@ -4,7 +4,8 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "test-gatsby"
   ],
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -19,11 +20,12 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/*"
+      "packages/!(gatsby)*"
     ]
   },
   "scripts": {
     "postinstall": "preconstruct dev",
-    "release": "yarn preconstruct build && yarn changeset release"
+    "release": "yarn preconstruct build && yarn changeset release",
+    "test-gatsby": "cd test-gatsby && gatsby develop"
   }
 }

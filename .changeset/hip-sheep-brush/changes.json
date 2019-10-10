@@ -1,0 +1,4 @@
+{
+  "releases": [{ "name": "@manypkg/gatsby-source-workspace", "type": "minor" }],
+  "dependents": []
+}
