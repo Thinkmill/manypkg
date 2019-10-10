@@ -1,20 +1,20 @@
 {
-    "name": "@manypkg/gatsby-source-workspace",
-    "version": "0.0.0",
-    "peerDependencies": {
-        "gatsby": "^2.15.28"
-    },
-    "devDependencies": {
-        "gatsby": "^2.15.28",
-        "react": "^16.10.1",
-        "react-dom": "^16.10.1"
-    },
-    "dependencies": {
-        "find-workspaces-root": "^0.1.0",
-        "fs-extra": "^8.1.0",
-        "get-workspaces": "^0.5.0"
-    },
-    "files": [
-        "gatsby-node.js"
-    ]
+  "name": "@manypkg/gatsby-source-workspace",
+  "version": "0.1.0",
+  "peerDependencies": {
+    "gatsby": "^2.15.28"
+  },
+  "devDependencies": {
+    "gatsby": "^2.15.28",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1"
+  },
+  "dependencies": {
+    "find-workspaces-root": "^0.1.0",
+    "fs-extra": "^8.1.0",
+    "get-workspaces": "^0.5.0"
+  },
+  "files": [
+    "gatsby-node.js"
+  ]
 }
