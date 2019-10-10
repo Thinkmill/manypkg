@@ -21,7 +21,7 @@ Navigation data should be trivial to get
 ## Second plugin
 
 I want to make a second plugin called `gatsby-source-workspace-deep` (something like this, need another better word).
-This should wrap `gatsby-source-worskpace` and then use [onCreateNode](https://www.gatsbyjs.org/docs/node-apis/#onCreateNode)
+This should wrap `gatsby-source-workspace` and then use [onCreateNode](https://www.gatsbyjs.org/docs/node-apis/#onCreateNode)
 to modify the workspace schema to populate information from the package.json.
 
 Bonus: It would be good to allow users to extend their own `package.json` fields easily, so we have a standard, but also add stuff you want.
