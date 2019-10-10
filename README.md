@@ -85,3 +85,4 @@ When you add a package with `yarn add` or etc. dependencies are sorted, and this
 #### How it's fixed
 
 This is fixed by sorting deps by key alphabetically.
+
