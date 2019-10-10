@@ -3,3 +3,4 @@ dist/
 *.log
 .cache
 public
+scratchings.js

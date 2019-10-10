@@ -1,27 +1,31 @@
 import React from "react";
-import { useStaticQuery, graphql } from "gatsby";
+import { useStaticQuery, graphql, Link } from "gatsby";
 
 const FunTimes = () => {
-  const data = useStaticQuery(graphql`
+  const { allSitePage } = useStaticQuery(graphql`
     query ThisQuery {
-      allWorkspaceInfo {
-        edges {
-          node {
-            id
-            name
-            version
-          }
+      allSitePage {
+        nodes {
+          path
         }
       }
     }
   `);
   return (
     <div>
-      {data.allWorkspaceInfo.edges.map(ws => (
-        <div id={ws.node.id}>
-          {ws.node.name} @ {ws.node.version}
-        </div>
-      ))}
+      <h1>Welcome!</h1>
+      <p>
+        I'm building all this as experiments in using gatsby to programmatically
+        generate this stuff. Here's a list of the pages we have generated so
+        far:
+      </p>
+      <ul>
+        {allSitePage.nodes.map(({ path }) => (
+          <li key={path}>
+            <Link to={path}>{path}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

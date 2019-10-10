@@ -1,16 +1,19 @@
 {
-    "name": "test-gatsby-thing",
-    "private": true,
-    "version": "0.0.0",
-    "peerDependencies": {
-        "gatsby": "^2.15.28"
-    },
-    "dependencies": {
-        "@manypkg/gatsby-monorepo-plugin": "0.0.0",
-        "@manypkg/gatsby-source-workspace": "0.0.0",
-        "gatsby": "^2.15.28",
-        "react": "^16.10.1",
-        "react-dom": "^16.10.1",
-        "styled-components": "^4.4.0"
-    }
+  "name": "test-gatsby-thing",
+  "private": true,
+  "version": "0.0.0",
+  "peerDependencies": {
+    "gatsby": "^2.15.28"
+  },
+  "dependencies": {
+    "@manypkg/gatsby-source-workspace": "0.0.0",
+    "@mdx-js/mdx": "^1.5.1",
+    "@mdx-js/react": "^1.5.1",
+    "gatsby": "^2.15.28",
+    "gatsby-plugin-mdx": "^1.0.49",
+    "gatsby-source-filesystem": "^2.1.30",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "styled-components": "^4.4.0"
+  }
 }
