@@ -1,6 +1,6 @@
 # @manypkg/gatsby-source-workspace
 
-> Add information about worksapces in a monorepo to gatsby
+> Add information about workspaces in a monorepo to gatsby
 
 This package is a stepping-stone package, providing the most important bits of information in a monorepo
 directly through to you in the graphql.
