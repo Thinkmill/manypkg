@@ -1,4 +1,4 @@
-# @manypgk/gatsby-source-workspace
+# @manypkg/gatsby-source-workspace
 
 > Add information about worksapces in a monorepo to gatsby
 
