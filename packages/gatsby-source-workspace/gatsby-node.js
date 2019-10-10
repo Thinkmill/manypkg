@@ -30,7 +30,6 @@ exports.sourceNodes = async ({ actions }, pluginOptions) => {
   let repoRoot = await findWorkspacesRoot(cwd);
   let workspaces = await getWorkspaces({ cwd: repoRoot });
 
-  // TODO: parallelize
   for (let { name, dir, config: manifest } of workspaces) {
     createNode({
       name,
