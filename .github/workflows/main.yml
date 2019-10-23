@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  run:
-    name: Run
+  test:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -16,13 +16,27 @@ jobs:
       - name: Set Node.js 10.x
         uses: actions/setup-node@master
         with:
-          version: 10.x
-
-      - name: Install Yarn
-        run: npm install --global yarn
+          node-version: 10.x
 
       - name: Install Dependencies
         run: yarn
 
-      - name: Test
+      - name: Run Tests
         run: yarn jest
+
+  typescript:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set Node.js 10.x
+        uses: actions/setup-node@master
+        with:
+          node-version: 10.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Check Types
+        run: yarn tsc
