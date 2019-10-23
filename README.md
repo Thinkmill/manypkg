@@ -40,7 +40,7 @@ The highest range of the dependency is set as the range at every non-peer depend
 
 ## Internal mismatch
 
-The ranges for all non-dev dependencies(excluding `peerDependencies`) on internal packages should include the version of the internal package. This is so that an internal package will never depend on another internal package but get the package from the registry because that happening is very confusing and you should always prefer a local version of any given package.
+The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package. This is so that an internal package will never depend on another internal package but get the package from the registry because that happening is very confusing and you should always prefer a local version of any given package.
 
 ### How it's fixed
 
