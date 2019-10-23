@@ -6,7 +6,7 @@ import {
 } from "./utils";
 import semver from "semver";
 
-type ErrorType = {
+export type ErrorType = {
   type: "INTERNAL_MISMATCH";
   workspace: Workspace;
   dependencyWorkspace: Workspace;
@@ -17,6 +17,8 @@ export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspaces) => {
     let errors: ErrorType[] = [];
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
+      // devDependencies are handled by INTERNAL_DEV_DEP_NOT_STAR
+      if (depType === "devDependencies") continue;
       let deps = workspace.config[depType];
       if (deps) {
         for (let depName in deps) {
@@ -36,6 +38,7 @@ export default makeCheck<ErrorType>({
         }
       }
     }
+
     return errors;
   },
   fix: error => {
