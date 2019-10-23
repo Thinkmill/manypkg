@@ -10,7 +10,7 @@ This check moves internal devDepencies between packages to be `*` - so in a case
 {
   "name": "sunshine",
   "version": "1.0.0",
-  "devDepencies": {
+  "devDependencies": {
     "sun": "^1.0.0"
   }
 }
