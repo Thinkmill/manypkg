@@ -22,7 +22,7 @@ we will now have:
 {
   "name": "sunshine",
   "version": "1.0.0",
-  "devDepencies": {
+  "devDependencies": {
     "sun": "*"
   }
 }
