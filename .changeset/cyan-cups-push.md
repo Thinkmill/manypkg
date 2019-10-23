@@ -28,4 +28,4 @@ we will now have:
 }
 ```
 
-This is because all internal dependencies are always linked, and devDepencies are only relevant in local installs. Having set versions here caused packages to be patched when one of their devDepencies left the range, which was not strictly necessary.
+This is because all internal dependencies are always linked if the version of theinternal dependency is within the specified range(which is already enforced by Manypkg), and devDependencies are only relevant in local installs. Having set versions here caused packages to be patched when one of their devDependencies left the range, which was not strictly necessary.
