@@ -15,10 +15,10 @@
     "find-up": "^4.1.0",
     "find-workspaces-root": "^0.1.0",
     "fs-extra": "^8.1.0",
-    "get-workspaces": "^0.4.0",
+    "get-workspaces": "^0.5.0",
     "meow": "^5.0.0",
     "p-limit": "^2.2.1",
-    "sembear": "^0.4.0",
+    "sembear": "^0.4.1",
     "semver": "^6.3.0",
     "spawndamnit": "^2.0.0",
     "validate-npm-package-name": "^3.0.0"
