@@ -20,4 +20,4 @@ yarn manypkg check
 yarn manypkg fix
 ```
 
-See more details at https://github.com/mitchellhamilton/manypkg
+See more details at https://github.com/thinkmill/manypkg

@@ -40,11 +40,19 @@ The highest range of the dependency is set as the range at every non-peer depend
 
 ## Internal mismatch
 
-The ranges for all dependencies(excluding `peerDependencies`) on internal packages should include the version of the internal package. This is so that an internal package will never depend on another internal package but get the package from the registry because that happening is very confusing and you should always prefer a local version of any given package.
+The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package. This is so that an internal package will never depend on another internal package but get the package from the registry because that happening is very confusing and you should always prefer a local version of any given package.
 
 ### How it's fixed
 
 If the range is a [caret range](https://github.com/npm/node-semver#caret-ranges-123-025-004) or a [tilde range](https://github.com/npm/node-semver#tilde-ranges-123-12-1) with no other comparators, the range is set as a caret or tilde range respectively with the version of the internal package. If it is any other range, the range is set to the exact version of the internal package.
+
+## Internal devDependencies are not `*`
+
+The ranges for devDependencies should not matter, and having non-star versions causes accidental patching of packages when no changes have been made.
+
+### How it's fixed
+
+Change whatever other version is specified to be `*`
 
 ## Invalid dev and peer dependency relationship
 
@@ -85,4 +93,3 @@ When you add a package with `yarn add` or etc. dependencies are sorted, and this
 #### How it's fixed
 
 This is fixed by sorting deps by key alphabetically.
-

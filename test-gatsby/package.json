@@ -2,9 +2,6 @@
   "name": "test-gatsby-thing",
   "private": true,
   "version": "0.0.1",
-  "peerDependencies": {
-    "gatsby": "^2.15.28"
-  },
   "dependencies": {
     "@manypkg/gatsby-source-workspace": "0.1.0",
     "@mdx-js/mdx": "^1.5.1",
