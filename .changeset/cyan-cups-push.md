@@ -4,7 +4,7 @@
 
 Add new check: INTERNAL_DEV_DEP_NOT_STAR
 
-This check moves internal devDepencies between packages to be `*` - so in a case where I had a package sunshine, which depends on internal package 'sun':
+This check moves internal devDependencies between packages to be `*` - so in a case where I had a package sunshine, which depends on internal package 'sun':
 
 ```json
 {
