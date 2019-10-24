@@ -25,7 +25,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "preconstruct dev",
+    "postinstall": "preconstruct dev && manypkg check",
     "release": "yarn preconstruct build && yarn changeset publish",
     "test-gatsby": "cd test-gatsby && gatsby develop"
   }
