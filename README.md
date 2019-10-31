@@ -48,7 +48,7 @@ If the range is a [caret range](https://github.com/npm/node-semver#caret-ranges-
 
 ## Internal devDependencies are not `*`
 
-The ranges for devDependencies should not matter, and having non-star versions causes accidental patching of packages when no changes have been made.
+The ranges for internal devDependencies should not matter, and having non-star versions causes accidental patching of packages when no changes have been made.
 
 ### How it's fixed
 
