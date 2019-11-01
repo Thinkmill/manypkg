@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.8.1
+
+### Patch Changes
+
+- dcbfa46: Fix an error with the new internal dependencies being "\*", which was incompatible with the peerDependency check
+
 ## 0.8.0
 
 ### Minor Changes
