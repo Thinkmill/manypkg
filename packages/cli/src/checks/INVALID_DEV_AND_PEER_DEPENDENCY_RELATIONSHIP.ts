@@ -21,7 +21,7 @@ export default makeCheck<ErrorType>({
         if (!devDeps[depName]) {
           let highestRanges = getHighestExternalRanges(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
-          let isInternalDependency = !!allWorkspaces.get(depName);
+          let isInternalDependency = allWorkspaces.has(depName);
           if (isInternalDependency) {
             idealDevVersion = "*";
           } else if (idealDevVersion === undefined) {
