@@ -1,25 +1,5 @@
 import makeCheck, { ErrorType } from "../INTERNAL_DEV_DEP_NOT_STAR";
-import { Workspace } from "get-workspaces";
-
-let getFakeWS = (
-  name: string = "pkg-1",
-  version: string = "1.0.0"
-): Workspace => {
-  return {
-    name,
-    dir: `some/fake/dir/${name}`,
-    config: {
-      name,
-      version
-    }
-  };
-};
-
-let getWS = (): Map<string, Workspace> => {
-  let ws = new Map();
-  ws.set("pkg-1", getFakeWS());
-  return ws;
-};
+import { getWS, getFakeWS } from "../../test-helpers";
 
 describe("internal dev ep is not star", () => {
   it("should not error if internal version is *", () => {

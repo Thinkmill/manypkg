@@ -1,25 +1,5 @@
 import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH";
-import { Workspace } from "get-workspaces";
-
-let getFakeWS = (
-  name: string = "pkg-1",
-  version: string = "1.0.0"
-): Workspace => {
-  return {
-    name,
-    dir: `some/fake/dir/${name}`,
-    config: {
-      name,
-      version
-    }
-  };
-};
-
-let getWS = (): Map<string, Workspace> => {
-  let ws = new Map();
-  ws.set("pkg-1", getFakeWS());
-  return ws;
-};
+import { getWS, getFakeWS } from "../../test-helpers";
 
 describe("internal mismatch", () => {
   it("should not error if internal version is compatible", () => {
@@ -75,11 +55,5 @@ describe("internal mismatch", () => {
     ws.set("depends-on-one", dependsOnOne);
     let errors = makeCheck.validate(dependsOnOne, ws);
     expect(errors.length).toEqual(0);
-  });
-  // NB this is the same as dependency right now, but I added it for completeness
-  describe.skip("peerDependency", () => {
-    it("should not error if internal version is compatible", () => {});
-    it("should error if internal version is not compatible", () => {});
-    it("should fix an incompatible version", () => {});
   });
 });
