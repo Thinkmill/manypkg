@@ -21,7 +21,10 @@ export default makeCheck<ErrorType>({
         if (!devDeps[depName]) {
           let highestRanges = getHighestExternalRanges(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
-          if (idealDevVersion === undefined) {
+          let isInternalDependency = !!allWorkspaces.get(depName);
+          if (isInternalDependency) {
+            idealDevVersion = "*";
+          } else if (idealDevVersion === undefined) {
             idealDevVersion = peerDeps[depName];
           }
 
@@ -33,7 +36,7 @@ export default makeCheck<ErrorType>({
             devVersion: null,
             idealDevVersion
           });
-        } else if (!contains(peerDeps[depName], devDeps[depName])) {
+        } else if (!contains(devDeps[depName], peerDeps[depName])) {
           let highestRanges = getHighestExternalRanges(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
           if (idealDevVersion === undefined) {
