@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@0.2.1/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "Thinkmill/manypkg" }
+  ],
   "commit": false,
   "linked": [],
   "access": "public"
