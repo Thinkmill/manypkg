@@ -138,7 +138,7 @@ describe("invalid dev and peer dependency", () => {
       "external-dep": "^1.0.0"
     });
   });
-  it("should work pls", () => {
+  it("should work when the lower bound of the devDep range is above the lower bound of the peer dep range", () => {
     let ws = getWS();
     let pkg1 = ws.get("pkg-1")!;
 
