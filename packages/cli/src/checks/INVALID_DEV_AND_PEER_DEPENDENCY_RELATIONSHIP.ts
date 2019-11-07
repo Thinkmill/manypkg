@@ -1,5 +1,5 @@
 import { makeCheck, Workspace, getHighestExternalRanges } from "./utils";
-import { contains } from "sembear";
+import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
 
 type ErrorType = {
   type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
@@ -36,7 +36,12 @@ export default makeCheck<ErrorType>({
             devVersion: null,
             idealDevVersion
           });
-        } else if (!contains(devDeps[depName], peerDeps[depName])) {
+        } else if (
+          !upperBoundOfRangeAWithinBoundsOfB(
+            devDeps[depName],
+            peerDeps[depName]
+          )
+        ) {
           let highestRanges = getHighestExternalRanges(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
           if (idealDevVersion === undefined) {
