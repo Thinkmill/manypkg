@@ -138,4 +138,17 @@ describe("invalid dev and peer dependency", () => {
       "external-dep": "^1.0.0"
     });
   });
+  it("should work pls", () => {
+    let ws = getWS();
+    let pkg1 = ws.get("pkg-1")!;
+
+    pkg1.config.peerDependencies = {
+      "external-dep": "^1.0.0"
+    };
+    pkg1.config.devDependencies = {
+      "external-dep": "^1.1.0"
+    };
+    let errors = makeCheck.validate(pkg1, ws);
+    expect(errors).toHaveLength(0);
+  });
 });
