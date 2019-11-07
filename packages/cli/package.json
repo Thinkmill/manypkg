@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/cli",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "main": "dist/cli.cjs.js",
   "module": "dist/cli.esm.js",
   "license": "MIT",
