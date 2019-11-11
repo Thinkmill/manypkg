@@ -15,6 +15,7 @@
     "get-workspaces": "^0.5.0"
   },
   "files": [
-    "gatsby-node.js"
+    "gatsby-node.js",
+    "index.js"
   ]
 }

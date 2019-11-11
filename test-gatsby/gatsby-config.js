@@ -14,7 +14,17 @@ async function getGatsbyConfig() {
           path: `${__dirname}/src/pages`
         }
       },
-      "@manypkg/gatsby-source-workspace",
+      {
+        resolve: "@manypkg/gatsby-source-workspace",
+        options: {
+          extraFields: [
+            {
+              name: "license",
+              definition: `String`
+            }
+          ]
+        }
+      },
       {
         resolve: `gatsby-source-filesystem`,
         options: {
