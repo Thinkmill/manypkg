@@ -57,10 +57,10 @@ exports.sourceNodes = async (
       }
     };
 
-    for (let { name, generatorFunction } of extraFields) {
-      if (generatorFunction) {
+    for (let { name, getFieldInfo } of extraFields) {
+      if (getFieldInfo) {
         let { config, ...rest } = workspace;
-        newNode[name] = await generatorFunction({
+        newNode[name] = await getFieldInfo({
           ...rest,
           // This pre-empts making this name change in get-workspaces so it doesn't create
           // a breaking change here.

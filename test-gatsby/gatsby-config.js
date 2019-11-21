@@ -24,7 +24,7 @@ async function getGatsbyConfig() {
             {
               name: "changelog",
               definition: `String`,
-              generatorFunction: async ws =>
+              getFieldInfo: async ws =>
                 await fs.readFile(path.join(ws.dir, "changelog.md"), "utf-8")
             },
             {
