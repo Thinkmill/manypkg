@@ -5,9 +5,7 @@ const path = require("path");
 const { createContentDigest } = require("gatsby-core-utils");
 /*
 I'm mostly just implementing the workspaces as it exists. One change, I've renamed 'config'
-to 'meta' - this might still be the wrong name but I want to try it out.
-
-(meta represents the full contents of the package.json)
+to 'packageJSON' - this might still be the wrong name but I want to try it out.
 */
 
 exports.createSchemaCustomization = ({ actions }, { extraFields }) => {
@@ -19,7 +17,7 @@ exports.createSchemaCustomization = ({ actions }, { extraFields }) => {
         version: String
         dir: String
         relativeDir: String
-        manifest: JSON!
+        packageJSON: JSON!
         ${extraFields
           .map(({ name, definition }) => `${name}: ${definition}`)
           .join("\n        ")}
@@ -28,19 +26,28 @@ exports.createSchemaCustomization = ({ actions }, { extraFields }) => {
   createTypes(typeDefs);
 };
 
-exports.sourceNodes = async ({ actions }, { cwd, extraFields }) => {
+exports.sourceNodes = async (
+  { actions },
+  { cwd, extraFields = [], workspaceFilter }
+) => {
   let { createNode } = actions;
   cwd = cwd || process.cwd();
   let repoRoot = await findWorkspacesRoot(cwd);
   let workspaces = await getWorkspaces({ cwd: repoRoot });
 
-  for (let { name, dir, config: manifest } of workspaces) {
+  if (workspaceFilter) {
+    workspaces = workspaces.filter(workspaceFilter);
+  }
+
+  for (let workspace of workspaces) {
+    let { name, dir, config: packageJSON } = workspace;
+
     let newNode = {
       name,
       dir,
       relativeDir: path.relative(cwd, dir),
-      version: manifest.version,
-      manifest,
+      version: packageJSON.version,
+      packageJSON,
       id: name,
       internal: {
         contentDigest: createContentDigest({
@@ -50,9 +57,19 @@ exports.sourceNodes = async ({ actions }, { cwd, extraFields }) => {
       }
     };
 
-    extraFields.forEach(({ name }) => {
-      newNode[name] = manifest[name];
-    });
+    for (let { name, getFieldInfo } of extraFields) {
+      if (getFieldInfo) {
+        let { config, ...rest } = workspace;
+        newNode[name] = await getFieldInfo({
+          ...rest,
+          // This pre-empts making this name change in get-workspaces so it doesn't create
+          // a breaking change here.
+          packageJSON: config
+        });
+      } else {
+        newNode[name] = packageJSON[name];
+      }
+    }
 
     createNode(newNode);
   }
