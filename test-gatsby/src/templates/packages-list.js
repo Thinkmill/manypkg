@@ -8,7 +8,7 @@ const PackagesList = () => {
         nodes {
           id
           name
-          manifest
+          packageJSON
         }
       }
     }
@@ -21,7 +21,7 @@ const PackagesList = () => {
             TODO: Already, the link not being the name is a problem - need to associate the base url for a ws as a value on it, instead of this.
             I am deliberately not making this a link until we do that
           */}
-          {ws.name} @ {ws.manifest.version}
+          {ws.name} @ {ws.packageJSON.version}
         </div>
       ))}
     </div>
