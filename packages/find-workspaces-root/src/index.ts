@@ -1,6 +1,5 @@
 import findUp from "find-up";
-import path from "path";
-import fs from "fs-extra";
+import getWorkspaces from "get-workspaces";
 
 export class NoPkgJsonFound extends Error {
   directory: string;
@@ -12,16 +11,14 @@ export class NoPkgJsonFound extends Error {
   }
 }
 
-export default async function findWorkspacesRoot(cwd: string): Promise<string> {
-  let firstPkgJsonDirectory: string | undefined;
-  let dir = await findUp(
+const findWorkspacesUp = (options: {
+  cwd: string;
+  tools?: NonNullable<Parameters<typeof getWorkspaces>[0]>["tools"];
+}) =>
+  findUp(
     async directory => {
       try {
-        let pkgJson = await fs.readJson(path.join(directory, "package.json"));
-        if (firstPkgJsonDirectory === undefined) {
-          firstPkgJsonDirectory = directory;
-        }
-        if (pkgJson.workspaces || pkgJson.bolt) {
+        if (await getWorkspaces({ cwd: directory, tools: options.tools })) {
           return directory;
         }
       } catch (err) {
@@ -30,13 +27,21 @@ export default async function findWorkspacesRoot(cwd: string): Promise<string> {
         }
       }
     },
-    { cwd, type: "directory" }
+    { cwd: options.cwd, type: "directory" }
   );
-  if (firstPkgJsonDirectory === undefined) {
-    throw new NoPkgJsonFound(cwd);
+
+export default async function findWorkspacesRoot(cwd: string): Promise<string> {
+  let workspacesRoot = await findWorkspacesUp({ cwd });
+
+  if (workspacesRoot) {
+    return workspacesRoot;
   }
-  if (dir === undefined) {
-    return firstPkgJsonDirectory;
+
+  let singlePackageRoot = await findWorkspacesUp({ cwd, tools: ["root"] });
+
+  if (singlePackageRoot) {
+    return singlePackageRoot;
   }
-  return dir;
+
+  throw new NoPkgJsonFound(cwd);
 }

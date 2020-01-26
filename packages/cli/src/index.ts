@@ -64,7 +64,7 @@ async function execCmd(args: string[]) {
   let workspacesRoot = await findWorkspacesRoot(process.cwd());
   let workspaces = (await getWorkspaces({
     cwd: workspacesRoot,
-    tools: ["yarn", "bolt", "root"]
+    tools: ["yarn", "bolt", "pnpm", "root"]
   }))!;
   let highestExitCode = 0;
   await Promise.all(

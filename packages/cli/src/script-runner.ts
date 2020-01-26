@@ -47,7 +47,7 @@ let keys: <Obj>(obj: Obj) => Array<keyof Obj> = Object.keys;
   );
   let workspaces = (await getWorkspaces({
     cwd: workspacesRoot,
-    tools: ["yarn", "bolt", "root"]
+    tools: ["yarn", "bolt", "pnpm", "root"]
   }))!;
   let rootWorkspace: Workspace = {
     config: await rootWorkspaceContentPromise,
