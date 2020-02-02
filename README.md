@@ -1,6 +1,6 @@
 # Manypkg
 
-Manypkg is a linter for `package.json` files in a monorepo.
+Manypkg is a linter for `package.json` files in Yarn, Bolt or pnpm monorepos.
 
 ## Install
 
@@ -10,15 +10,16 @@ yarn add @manypkg/cli
 
 ## Usage
 
-### Checker
 
-```
-yarn manypkg check
-```
+### `manypkg check`
 
-```
-yarn manypkg fix
-```
+`manypkg check` runs all of the [checks](#checks) against your repo, logs and exits with a code 
+
+### `manypkg fix`
+
+`manypkg check` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
+
+
 
 ## Dictionary
 
