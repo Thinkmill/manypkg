@@ -1,6 +1,6 @@
-# manypkg
+# Manypkg
 
-`manypkg` is a CLI to make working in monorepos easier based on some of my experiences working in monorepos, conversations with other people and lots of learnings from `bolt` and `bolt-check`.
+Manypkg is a linter for `package.json` files in a monorepo.
 
 ## Install
 
@@ -23,7 +23,7 @@ yarn manypkg fix
 ## Dictionary
 
 - **private package** - A package that has `private: true`/is not published. It does not refer to a package published to a private registry here.
-- **internal package/workspace** - A package that is local/in the repo
+- **internal package** - A package that is local/in the repo
 - **external package** - A package that is from a registry like npm
 - **range** - A [node-semver range](https://github.com/npm/node-semver#ranges)
 - **highest range** - The range which has the highest lower bound. If there are multiple ranges with the same highest lower bound, the range with the highest upper bound is the highest range.
