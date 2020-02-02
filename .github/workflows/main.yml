@@ -22,7 +22,7 @@ jobs:
         run: yarn
 
       - name: Run Tests
-        run: yarn jest
+        run: yarn test
 
   typescript:
     name: TypeScript
