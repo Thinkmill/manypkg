@@ -13,7 +13,7 @@ yarn add @manypkg/cli
 
 ### `manypkg check`
 
-`manypkg check` runs all of the [checks](#checks) against your repo, logs and exits with a code 
+`manypkg check` runs all of the [checks](#checks) against your repo, logs any errors and exits with a code 
 
 ### `manypkg fix`
 
