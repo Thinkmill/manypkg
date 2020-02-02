@@ -10,16 +10,13 @@ yarn add @manypkg/cli
 
 ## Usage
 
-
 ### `manypkg check`
 
-`manypkg check` runs all of the [checks](#checks) against your repo, logs and exits with a code 
+`manypkg check` runs all of the [checks](#checks) against your repo, logs and exits with a code
 
 ### `manypkg fix`
 
 `manypkg check` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
-
-
 
 ## Dictionary
 
@@ -33,15 +30,109 @@ yarn add @manypkg/cli
 
 ## External mismatch
 
-The ranges for all dependencies(excluding `peerDependencies`) on external packages should exactly match(`===`). This is so that only a single version of an external package will be installed because having multiple versions of the same package can cause confusion and bundle size problems especially with libraries like React that require there to only be a single copy of the library. It's important to note that this check does not enforce that only a single version of an external package is installed, only that two versions of an external package will never be installed because they're specified as dependencies of internal packages.
+The ranges for all dependencies(excluding `peerDependencies`) on external packages should exactly match(`===`). It's important to note that this check does not enforce that only a single version of an external package is installed, only that two versions of an external package will never be installed because they're specified as dependencies of internal packages.
+
+### Why it's a rule
+
+So that only a single version of an external package will be installed because having multiple versions of the same package can cause confusion and bundle size problems especially with libraries like React that require there to only be a single copy of the library.
 
 ### How it's fixed
 
 The highest range of the dependency is set as the range at every non-peer dependency place it is depended on.
 
+### Examples
+
+<details><summary>Incorrect example</summary>
+
+> NOTE: This example uses Yarn Workspaces but this will work the same with Bolt and pnpm
+
+`package.json`
+
+```json
+{
+  "name": "@manypkg-example/repo",
+  "version": "1.0.0",
+  "workspaces": ["packages/*"]
+}
+```
+
+`packages/pkg-a/package.json`
+
+```json
+{
+  "name": "@manypkg-example/pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "some-external-package": "1.0.0"
+  }
+}
+```
+
+`packages/pkg-b/package.json`
+
+```json
+{
+  "name": "@manypkg-example/pkg-b",
+  "version": "1.0.0",
+  "dependencies": {
+    "some-external-package": "2.0.0"
+  }
+}
+```
+
+This example will cause an error because the range `1.0.0` for `some-external-package` specified in `@manypkg-example/pkg-a` is not equal(`===`) to the range `2.0.0` specified in `@manypkg-example/pkg-b`.
+
+</details>
+
+<details><summary>Correct example</summary>
+
+> NOTE: This example uses Yarn Workspaces but this will work the same with Bolt and pnpm
+
+`package.json`
+
+```json
+{
+  "name": "@manypkg-example/repo",
+  "version": "1.0.0",
+  "workspaces": ["packages/*"]
+}
+```
+
+`packages/pkg-a/package.json`
+
+```json
+{
+  "name": "@manypkg-example/pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "some-external-package": "1.0.0"
+  }
+}
+```
+
+`packages/pkg-b/package.json`
+
+```json
+{
+  "name": "@manypkg-example/pkg-b",
+  "version": "1.0.0",
+  "dependencies": {
+    "some-external-package": "1.0.0"
+  }
+}
+```
+
+This example will not cause an error because the range `1.0.0` for `some-external-package` specified in `@manypkg-example/pkg-a` is equal(`===`) to the range `1.0.0` specified in `@manypkg-example/pkg-b`.
+
+</details>
+
 ## Internal mismatch
 
-The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package. This is so that an internal package will never depend on another internal package but get the package from the registry because that happening is very confusing and you should always prefer a local version of any given package.
+The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package.
+
+### Why it's a rule
+
+So that an internal package that depends on another internal package will always get the local version of the internal package rather than a version from the registry because installing internal packages from the registry can be very confusing since you generally expect to get the local version when you depend on an internal package.
 
 ### How it's fixed
 
@@ -49,15 +140,23 @@ If the range is a [caret range](https://github.com/npm/node-semver#caret-ranges-
 
 ## Internal devDependencies are not `*`
 
-The ranges for internal devDependencies should not matter, and having non-star versions causes accidental patching of packages when no changes have been made.
+Internal packages that have `devDependencies` on other internal packages must have the range set to `*`.
+
+### Why it's a rule
+
+The ranges for internal `devDependencies` do not matter since they will be using the local version anyway, and having non-star versions causes accidental patching of packages when no changes have been made which creates lots of unnecessary versions of packages in large repos.
 
 ### How it's fixed
 
-Change whatever other version is specified to be `*`
+Change whatever other range is specified to be `*`
 
 ## Invalid dev and peer dependency relationship
 
-All `peerDependencies` should also be specified in `devDependencies` and the range specified in `devDependencies` should be a subset of the range for that dependency in `peerDependencies`. This is so that `peerDependencies` are available in the package during development for testing and etc.
+All `peerDependencies` should also be specified in `devDependencies` and the range specified in `devDependencies` should be a subset of the range for that dependency in `peerDependencies`.
+
+### Why it's a rule
+
+This is so that `peerDependencies` are available in the package during development for testing and etc.
 
 ### How it's fixed
 
@@ -65,7 +164,11 @@ The range for the dependency specified in `peerDependencies` is added to `devDep
 
 ### Root has devDependencies
 
-In the root `package.json` of a monorepo, whether a dependency is in `devDependencies` or `dependencies` does not make a difference. To avoid confusion as to where a root dependency should go, all dependencies should go in `dependencies`.
+The root package should not have any `devDependencies`, instead all dependencies should be in `dependencies`
+
+### Why it's a rule
+
+The root `package.json` of a monorepo is not published so whether a dependency is in `devDependencies` or `dependencies` does not make a difference and having one place to put dependencies in the root means that people do not have to arbitrarily decide where a dependency should go every time they install one.
 
 #### How it's fixed
 
@@ -81,7 +184,11 @@ The dep is removed from `devDependencies` or `optionalDependencies` if it's also
 
 ### Invalid package name
 
-There are rules from npm about what a package name can be. This is already enforced by npm on publish but in a monorepo, everything will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
+There are rules from npm about what a package name can be and a package will fail to publish if those rules are not met.
+
+#### Why it's a rule
+
+All packages will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
 
 #### How it's fixed
 
@@ -89,7 +196,11 @@ This requires manual fixing as automatically fixing this may lead to valid but i
 
 ### Unsorted dependencies
 
-When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted. Dependencies should be sorted alphabetically to avoid this.
+Dependencies in the dependency fields(`dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`) should be sorted alphabetically.
+
+### Why it's a rule
+
+When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted.
 
 #### How it's fixed
 
