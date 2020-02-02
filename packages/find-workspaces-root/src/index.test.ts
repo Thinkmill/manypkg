@@ -12,6 +12,14 @@ test("it returns the root of a monorepo", async () => {
   expect(workspacesRoot).toBe(tmpPath);
 });
 
+test("it returns the root of a pnpm monorepo", async () => {
+  let tmpPath = f.copy("basic-pnpm");
+  let workspacesRoot = await findWorkspacesRoot(
+    path.join(tmpPath, "packages", "package-one", "src")
+  );
+  expect(workspacesRoot).toBe(tmpPath);
+});
+
 test("it returns the root of a single-package repo", async () => {
   let tmpPath = f.copy("single-pkg");
   let workspacesRoot = await findWorkspacesRoot(path.join(tmpPath, "src"));
