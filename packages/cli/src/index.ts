@@ -81,10 +81,34 @@ async function execCmd(args: string[]) {
   throw new ExitError(highestExitCode);
 }
 
+async function runCmd(args: string[]) {
+  let workspacesRoot = await findWorkspacesRoot(process.cwd());
+  let workspaces = (await getWorkspaces({
+    cwd: workspacesRoot,
+    tools: ["yarn", "bolt", "pnpm", "root"]
+  }))!;
+  // console.log(workspaces);
+  const matchingWorkspaces = workspaces.filter(workspace => {
+    return workspace.name.includes(args[0]);
+  });
+
+  if (matchingWorkspaces.length > 1) {
+  } else if (matchingWorkspaces.length === 0) {
+    console.warn("No matching packages found");
+    throw new ExitError(1);
+  } else {
+    const [workspace] = matchingWorkspaces;
+    await spawn("yarn", args, { cwd: workspacesRoot, stdio: "inherit" });
+  }
+}
+
 (async () => {
   let things = process.argv.slice(2);
   if (things[0] === "exec") {
     return execCmd(things.slice(1));
+  }
+  if (things[0] === "run") {
+    return runCmd(things.slice(1));
   }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(
