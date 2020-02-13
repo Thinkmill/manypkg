@@ -2,9 +2,6 @@
   "name": "test-gatsby-thing",
   "private": true,
   "version": "0.0.3",
-  "scripts": {
-    "start": "echo Hello World"
-  },
   "dependencies": {
     "@manypkg/gatsby-source-workspace": "0.3.0",
     "@mdx-js/mdx": "^1.5.1",
