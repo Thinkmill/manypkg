@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Run command should execute "package start" and exit with 1: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+☔️ error an identifier must only match a single package but \\"package\\" matches the following packages: 
+☔️ error @manypkg/basic-fixture-pkg-one
+☔️ error @manypkg/basic-fixture-pkg-two
+"
+`;
+
+exports[`Run command should execute "package start" and exit with 1: stdout 1`] = `""`;
+
+exports[`Run command should execute "package-one start" and exit with 0: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+"
+`;
+
+exports[`Run command should execute "package-one start" and exit with 0: stdout 1`] = `
+"$ echo hello start
+hello start
+"
+`;
+
+exports[`Run command should execute "package-one test" and exit with 0: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+"
+`;
+
+exports[`Run command should execute "package-one test" and exit with 0: stdout 1`] = `
+"$ echo testing
+testing
+"
+`;
+
+exports[`Run command should execute "package-three start" and exit with 1: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+☔️ error No matching packages found
+"
+`;
+
+exports[`Run command should execute "package-three start" and exit with 1: stdout 1`] = `""`;
+
+exports[`Run command should execute "package-two something" and exit with 1: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+error Command \\"something\\" not found.
+"
+`;
+
+exports[`Run command should execute "package-two something" and exit with 1: stdout 1`] = `
+"info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+"
+`;
+
+exports[`Run command should execute "package-two start" and exit with 0: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+"
+`;
+
+exports[`Run command should execute "package-two start" and exit with 0: stdout 1`] = `
+"$ echo hello start
+hello start
+"
+`;
+
+exports[`Run command should execute "pkg-one start" and exit with 0: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+"
+`;
+
+exports[`Run command should execute "pkg-one start" and exit with 0: stdout 1`] = `
+"$ echo hello start
+hello start
+"
+`;
