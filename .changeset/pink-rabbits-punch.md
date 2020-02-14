@@ -1,26 +1,8 @@
-# Manypkg
+---
+"@manypkg/cli": minor
+---
 
-Manypkg is a linter for `package.json` files in Yarn, Bolt or pnpm monorepos.
-
-## Install
-
-```
-yarn add @manypkg/cli
-```
-
-## Usage
-
-### `manypkg check`
-
-`manypkg check` runs all of the [checks](#checks) against your repo, logs any errors and exits with a code
-
-### `manypkg fix`
-
-`manypkg check` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
-
-### `manypkg run <partial package name or directory> <script>`
-
-`manypkg run` executes scripts for packages within a monorepo.
+Added `manypkg run <partial package name or directory> <script>` which can be used to execute scripts for packages within a monorepo.
 
 As an example, let's say there are two packages: `@project/package-a` at `packages/pkg-a` and `@project/package-b` at `packages/pkg-a` which both have a `start` script, `manypkg run` can be used like this:
 

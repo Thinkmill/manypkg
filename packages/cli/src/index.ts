@@ -8,6 +8,7 @@ import { Workspace, Check } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writeWorkspace } from "./utils";
+import { runCmd } from "./run";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
@@ -86,9 +87,12 @@ async function execCmd(args: string[]) {
   if (things[0] === "exec") {
     return execCmd(things.slice(1));
   }
+  if (things[0] === "run") {
+    return runCmd(things.slice(1), process.cwd());
+  }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(
-      `command ${things[0]} not found, only check, exec and fix exist`
+      `command ${things[0]} not found, only check, exec, run and fix exist`
     );
     throw new ExitError(1);
   }
