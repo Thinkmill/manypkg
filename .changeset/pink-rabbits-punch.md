@@ -2,11 +2,23 @@
 "@manypkg/cli": minor
 ---
 
-Added `manypkg run` which can be used to execute scripts for packages within a monorepo.
+Added `manypkg run <partial package name or directory> <script>` which can be used to execute scripts for packages within a monorepo.
 
-For instance, there are two packages: package-a and package-b. Assuming these packages are located within a packages/ directory at the root and include a start script, `manypkg run` can be used to execute these scripts at the root level.
+As an example, let's say there are two packages: `@project/package-a` at `packages/pkg-a` and `@project/package-b` at `packages/pkg-a` which both have a `start` script, `manypkg run` can be used like this:
 
-Examples
+```bash
+yarn manypkg run pkg-a start
+yarn manypkg run a start
+yarn manypkg run package-a start
+yarn manypkg run @project/package-a start
+yarn manypkg run packages/pkg-a start
+yarn manypkg run package-b start
+yarn manypkg run b start
+```
 
-- yarn manypkg run <folder_name> <script_name>
-- yarn manypkg run hello-world start
+The following wouldn't work though because the `package` and `pkg` aren't unique among the package names/directories:
+
+```bash
+yarn manypkg run package start
+yarn manypkg run pkg start
+```
