@@ -1,5 +1,12 @@
 # test-gatsby-thing
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`0ed3f2b`](https://github.com/Thinkmill/manypkg/commit/0ed3f2b55aa01a33654de28c0e5a4249af9872a3)]:
+  - @manypkg/gatsby-source-workspace@0.4.0
+
 ## 0.0.3
 
 ### Patch Changes

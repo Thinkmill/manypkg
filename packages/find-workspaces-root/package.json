@@ -1,6 +1,6 @@
 {
   "name": "find-workspaces-root",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/find-workspaces-root.cjs.js",
   "module": "dist/find-workspaces-root.esm.js",
   "license": "MIT",
