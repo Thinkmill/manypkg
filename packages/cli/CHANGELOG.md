@@ -1,5 +1,37 @@
 # @manypkg/cli
 
+## 0.10.0
+
+### Minor Changes
+
+- [`63cdae1`](https://github.com/Thinkmill/manypkg/commit/63cdae1bc7fd3b699756144bce4ddf53c46afeb0) [#42](https://github.com/Thinkmill/manypkg/pull/42) Thanks [@tarang9211](https://github.com/tarang9211)! - Added `manypkg run <partial package name or directory> <script>` which can be used to execute scripts for packages within a monorepo.
+
+  As an example, let's say there are two packages: `@project/package-a` at `packages/pkg-a` and `@project/package-b` at `packages/pkg-a` which both have a `start` script, `manypkg run` can be used like this:
+
+  ```bash
+  yarn manypkg run pkg-a start
+  yarn manypkg run a start
+  yarn manypkg run package-a start
+  yarn manypkg run @project/package-a start
+  yarn manypkg run packages/pkg-a start
+  yarn manypkg run package-b start
+  yarn manypkg run b start
+  ```
+
+  The following wouldn't work though because the `package` and `pkg` aren't unique among the package names/directories:
+
+  ```bash
+  yarn manypkg run package start
+  yarn manypkg run pkg start
+  ```
+
+* [`0ed3f2b`](https://github.com/Thinkmill/manypkg/commit/0ed3f2b55aa01a33654de28c0e5a4249af9872a3) [#39](https://github.com/Thinkmill/manypkg/pull/39) Thanks [@Andarist](https://github.com/Andarist)! - Added support for finding pnpm workspace packages.
+
+### Patch Changes
+
+- Updated dependencies [[`0ed3f2b`](https://github.com/Thinkmill/manypkg/commit/0ed3f2b55aa01a33654de28c0e5a4249af9872a3)]:
+  - find-workspaces-root@0.2.0
+
 ## 0.9.0
 
 ### Minor Changes
