@@ -41,6 +41,16 @@ yarn manypkg run package start
 yarn manypkg run pkg start
 ```
 
+### `manypkg exec <cli command>`
+
+`manypkg exec` executes a command for all packages within a monorepo.
+
+As an example, let's say there are two packages which both have a `dist` dir, `manypkg exec` can be used like this:
+
+```bash
+yarn manypkg exec rm -rf dist
+```
+
 ## Dictionary
 
 - **private package** - A package that has `private: true`/is not published. It does not refer to a package published to a private registry here.
