@@ -1,0 +1,8 @@
+{
+  "name": "get-packages",
+  "version": "0.0.1",
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "globby": "^11.0.0"
+  }
+}
