@@ -1,5 +1,13 @@
 # @manypkg/cli
 
+## 0.10.1
+
+### Patch Changes
+
+- [`447c580`](https://github.com/Thinkmill/manypkg/commit/447c58010816c72a3a2a32504a284f9fb979dff1) [#45](https://github.com/Thinkmill/manypkg/pull/45) Thanks [@NateRadebaugh](https://github.com/NateRadebaugh)! - Add reference to `manypkg exec` to readme
+
+* [`c5275fb`](https://github.com/Thinkmill/manypkg/commit/c5275fba714c68539d304f07eb19962704fd560d) Thanks [@mitchellhamilton](https://github.com/mitchellhamilton)! - Show a more informative error when a package has no name
+
 ## 0.10.0
 
 ### Minor Changes
