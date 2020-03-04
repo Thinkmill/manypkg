@@ -20,6 +20,7 @@ type RootCheck<ErrorType> = {
     rootWorkspace: Workspace,
     allWorkspaces: Map<string, Workspace>
   ) => ErrorType[];
+  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
 };
 
@@ -29,7 +30,7 @@ type RootCheckWithFix<ErrorType> = {
     rootWorkspace: Workspace,
     allWorkspaces: Map<string, Workspace>
   ) => ErrorType[];
-  fix: (error: ErrorType) => void | { requiresInstall: true };
+  fix: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
 };
 
@@ -40,6 +41,7 @@ type AllCheck<ErrorType> = {
     allWorkspaces: Map<string, Workspace>,
     rootWorkspace: Workspace
   ) => ErrorType[];
+  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
 };
 
@@ -50,7 +52,7 @@ type AllCheckWithFix<ErrorType> = {
     allWorkspaces: Map<string, Workspace>,
     rootWorkspace: Workspace
   ) => ErrorType[];
-  fix: (error: ErrorType) => void | { requiresInstall: true };
+  fix: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
 };
 
@@ -135,15 +137,15 @@ export function isArrayEqual(arrA: Array<string>, arrB: Array<string>) {
 }
 
 function makeCheck<ErrorType>(
-  check: RootCheck<ErrorType>
-): RootCheck<ErrorType>;
-function makeCheck<ErrorType>(check: AllCheck<ErrorType>): AllCheck<ErrorType>;
-function makeCheck<ErrorType>(
   check: RootCheckWithFix<ErrorType>
 ): RootCheckWithFix<ErrorType>;
 function makeCheck<ErrorType>(
   check: AllCheckWithFix<ErrorType>
 ): AllCheckWithFix<ErrorType>;
+function makeCheck<ErrorType>(
+  check: RootCheck<ErrorType>
+): RootCheck<ErrorType>;
+function makeCheck<ErrorType>(check: AllCheck<ErrorType>): AllCheck<ErrorType>;
 function makeCheck<ErrorType>(
   check: RootCheck<ErrorType> | AllCheck<ErrorType>
 ): RootCheck<ErrorType> | AllCheck<ErrorType> {
