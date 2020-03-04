@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.11.0
+
+### Minor Changes
+
+- [`d73628d`](https://github.com/Thinkmill/manypkg/commit/d73628db75a8ff3088cb4e62813dbf31b13b72bb) [#48](https://github.com/Thinkmill/manypkg/pull/48) Thanks [@mitchellhamilton](https://github.com/mitchellhamilton)! - Add repository field check which checks if a GitHub repo URL is in the `repository` field in the root `package.json` and if it is, checks that all of the packages have a `repository` field which goes into the directory of the package.
+
 ## 0.10.1
 
 ### Patch Changes
