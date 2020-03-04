@@ -1,6 +1,8 @@
 import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH";
 import { getWS, getFakeWS } from "../../test-helpers";
 
+let rootWorkspace = getFakeWS("root");
+
 describe("internal mismatch", () => {
   it("should not error if internal version is compatible", () => {
     let ws = getWS();
@@ -9,7 +11,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^1.0.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
     expect(errors.length).toEqual(0);
   });
   it("should error if internal version is not compatible", () => {
@@ -19,7 +21,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^0.1.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
     expect(errors[0]).toMatchObject({
       type: "INTERNAL_MISMATCH",
       dependencyWorkspace: ws.get("pkg-1"),
@@ -53,7 +55,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^0.1.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
     expect(errors.length).toEqual(0);
   });
 });

@@ -1,6 +1,8 @@
 import makeCheck, { ErrorType } from "../INTERNAL_DEV_DEP_NOT_STAR";
 import { getWS, getFakeWS } from "../../test-helpers";
 
+let rootWorkspace = getFakeWS("root");
+
 describe("internal dev ep is not star", () => {
   it("should not error if internal version is *", () => {
     let ws = getWS();
@@ -9,7 +11,7 @@ describe("internal dev ep is not star", () => {
       "pkg-1": "*"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
     expect(errors.length).toEqual(0);
   });
   it("should error if internal version is not *", () => {
@@ -19,7 +21,7 @@ describe("internal dev ep is not star", () => {
       "pkg-1": "^1.0.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
     expect(errors[0]).toMatchObject({
       type: "INTERNAL_DEV_DEP_NOT_STAR",
       workspace: dependsOnOne,

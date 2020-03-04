@@ -23,7 +23,7 @@ let runChecks = (
   for (let check of checks) {
     if (check.type === "all") {
       for (let [, workspace] of allWorkspaces) {
-        let errors = check.validate(workspace, allWorkspaces);
+        let errors = check.validate(workspace, allWorkspaces, rootWorkspace);
         if (shouldFix && check.fix !== undefined) {
           for (let error of errors) {
             let output = check.fix(error as any) || { requiresInstall: false };
