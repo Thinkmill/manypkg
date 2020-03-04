@@ -25,7 +25,6 @@ describe("incorrect repository field", () => {
       ]
     `);
 
-    expect(errors).toMatchSnapshot();
     check.fix(errors[0]);
 
     expect((workspace.config as any).repository).toBe(
