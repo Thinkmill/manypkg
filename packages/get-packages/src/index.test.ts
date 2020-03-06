@@ -7,6 +7,11 @@ describe("getPackages", () => {
   it("should resolve workspaces for yarn", async () => {
     const path = f.find("yarn-workspace-base");
     const allPackages = await getPackages(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-a"
     );
@@ -18,6 +23,11 @@ describe("getPackages", () => {
   it("should resolve workspaces for bolt", async () => {
     const path = f.find("bolt-workspace");
     const allPackages = await getPackages(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "bolt-workspace-pkg-a"
     );
@@ -29,6 +39,11 @@ describe("getPackages", () => {
   it("should resolve workspaces for pnpm", async () => {
     const path = f.find("pnpm-workspace-base");
     const allPackages = await getPackages(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-a"
     );
@@ -40,6 +55,11 @@ describe("getPackages", () => {
   it("should resolve the main package", async () => {
     const path = f.find("root-only");
     const allPackages = await getPackages(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].dir).toEqual(path);
     expect(allPackages.packages.length).toEqual(1);
   });
@@ -60,6 +80,11 @@ describe("getPackagesSync", () => {
   it("should resolve workspaces for yarn", () => {
     const path = f.find("yarn-workspace-base");
     const allPackages = getPackagesSync(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-a"
     );
@@ -71,6 +96,11 @@ describe("getPackagesSync", () => {
   it("should resolve workspaces for bolt", () => {
     const path = f.find("bolt-workspace");
     const allPackages = getPackagesSync(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "bolt-workspace-pkg-a"
     );
@@ -82,6 +112,11 @@ describe("getPackagesSync", () => {
   it("should resolve workspaces for pnpm", () => {
     const path = f.find("pnpm-workspace-base");
     const allPackages = getPackagesSync(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-a"
     );
@@ -93,6 +128,11 @@ describe("getPackagesSync", () => {
   it("should resolve the main package", () => {
     const path = f.find("root-only");
     const allPackages = getPackagesSync(path);
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
     expect(allPackages.packages[0].dir).toEqual(path);
     expect(allPackages.packages.length).toEqual(1);
   });
