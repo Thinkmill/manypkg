@@ -1,7 +1,9 @@
+import { getFixturePath } from "jest-fixtures";
 import { getPackages } from "./";
 
 describe("get-packages", () => {
-  it('should throw an error when "dir" is not provided', () => {
-    expect(getPackages()).toThrowError("Dir path must be provided");
+  it("should work", async () => {
+    let url = await getFixturePath(__dirname, "yarn-workspace-base");
+    await getPackages(url);
   });
 });

@@ -1,8 +1,13 @@
 {
-  "name": "get-packages",
+  "name": "@manypkg/get-packages",
   "version": "0.0.1",
+  "main": "dist/get-packages.cjs.js",
   "dependencies": {
     "fs-extra": "^8.1.0",
-    "globby": "^11.0.0"
+    "globby": "^11.0.0",
+    "read-yaml-file": "^1.1.0"
+  },
+  "devDependencies": {
+    "jest-fixtures": "^0.6.0"
   }
 }

@@ -1,8 +1,8 @@
 {
   "name": "@manypkg/cli",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/Thinkmill/manypkg.git",
+    "type": "git",
+    "url": "https://github.com/Thinkmill/manypkg.git",
     "directory": "packages/cli"
   },
   "version": "0.10.0",
