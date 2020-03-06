@@ -11,7 +11,8 @@ yarn add @manypkg/find-root
 ## Usage
 
 ```tsx
-import { findRoot } from "@manypkg/find-root";
+import { findRoot, findRootSync } from "@manypkg/find-root";
 
 let dir = await findRoot(process.cwd());
+let dir = findRootSync(process.cwd());
 ```
