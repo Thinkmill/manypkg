@@ -13,7 +13,7 @@ type Tool = "yarn" | "bolt" | "pnpm" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
 
-type Packages = {
+export type Packages = {
   tool: Tool;
   packages: Package[];
   root: Package;
