@@ -18,6 +18,7 @@ describe("getPackages", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-b"
     );
+    expect(allPackages.tool).toEqual("yarn");
   });
 
   it("should resolve workspaces for bolt", async () => {
@@ -34,6 +35,7 @@ describe("getPackages", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "bolt-workspace-pkg-b"
     );
+    expect(allPackages.tool).toEqual("bolt");
   });
 
   it("should resolve workspaces for pnpm", async () => {
@@ -50,6 +52,7 @@ describe("getPackages", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-b"
     );
+    expect(allPackages.tool).toEqual("pnpm");
   });
 
   it("should resolve the main package", async () => {
@@ -91,6 +94,7 @@ describe("getPackagesSync", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-b"
     );
+    expect(allPackages.tool).toEqual("yarn");
   });
 
   it("should resolve workspaces for bolt", () => {
@@ -107,6 +111,7 @@ describe("getPackagesSync", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "bolt-workspace-pkg-b"
     );
+    expect(allPackages.tool).toEqual("bolt");
   });
 
   it("should resolve workspaces for pnpm", () => {
@@ -123,6 +128,7 @@ describe("getPackagesSync", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-b"
     );
+    expect(allPackages.tool).toEqual("pnpm");
   });
 
   it("should resolve the main package", () => {
