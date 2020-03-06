@@ -1,9 +1,11 @@
-import { getFixturePath } from "jest-fixtures";
+import fixturez from "fixturez";
 import { getPackages } from "./";
 
-describe("get-packages", () => {
+const f = fixturez(__dirname);
+
+describe("getPackages", () => {
   it("should resolve workspaces for yarn", async () => {
-    const path = await getFixturePath(__dirname, "yarn-workspace-base");
+    const path = f.find("yarn-workspace-base");
     const allPackages = await getPackages(path);
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-a"
@@ -14,7 +16,7 @@ describe("get-packages", () => {
   });
 
   it("should resolve workspaces for bolt", async () => {
-    const path = await getFixturePath(__dirname, "bolt-workspace");
+    const path = f.find("bolt-workspace");
     const allPackages = await getPackages(path);
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "bolt-workspace-pkg-a"
@@ -25,7 +27,7 @@ describe("get-packages", () => {
   });
 
   it("should resolve workspaces for pnpm", async () => {
-    const path = await getFixturePath(__dirname, "pnpm-workspace-base");
+    const path = f.find("pnpm-workspace-base");
     const allPackages = await getPackages(path);
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-a"
@@ -33,5 +35,12 @@ describe("get-packages", () => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-b"
     );
+  });
+
+  it("should resolve the main package", async () => {
+    const path = f.find("root-only");
+    const allPackages = await getPackages(path);
+    expect(allPackages.packages[0].dir).toEqual(path);
+    expect(allPackages.packages.length).toEqual(1);
   });
 });

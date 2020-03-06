@@ -203,20 +203,23 @@ export function getPackagesSync(cwd: string): Packages {
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
-  const results = folders.sort().map(dir => {
-    try {
-      const packageJson = fs.readJsonSync(path.join(dir, "package.json"));
-      if (!packageJson.name) {
-        pkgJsonsMissingNameField.push(
-          path.relative(cwd, path.join(dir, "package.json"))
-        );
+  const results = folders
+    .sort()
+    .map(dir => {
+      try {
+        const packageJson = fs.readJsonSync(path.join(dir, "package.json"));
+        if (!packageJson.name) {
+          pkgJsonsMissingNameField.push(
+            path.relative(cwd, path.join(dir, "package.json"))
+          );
+        }
+        return { packageJson, dir };
+      } catch (err) {
+        if (err.code === "ENOENT") return null;
+        throw err;
       }
-      return { packageJson, dir };
-    } catch (err) {
-      if (err.code === "ENOENT") return null;
-      throw err;
-    }
-  });
+    })
+    .filter(x => x);
 
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort();
