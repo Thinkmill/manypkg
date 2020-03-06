@@ -65,6 +65,7 @@ describe("getPackages", () => {
 
     expect(allPackages.packages[0].dir).toEqual(path);
     expect(allPackages.packages.length).toEqual(1);
+    expect(allPackages.tool).toEqual("root");
   });
 
   it("should throw an error if a package.json is missing the name field", async () => {
@@ -141,6 +142,7 @@ describe("getPackagesSync", () => {
 
     expect(allPackages.packages[0].dir).toEqual(path);
     expect(allPackages.packages.length).toEqual(1);
+    expect(allPackages.tool).toEqual("root");
   });
 
   it("should throw an error if a package.json is missing the name field", async () => {
