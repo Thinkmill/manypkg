@@ -5,7 +5,7 @@ const f = fixturez(__dirname);
 
 describe("getPackages", () => {
   it("should resolve workspaces for yarn", async () => {
-    const allPackages = await getPackages(f.find("yarn-workspace-base"));
+    const allPackages = await getPackages(f.copy("yarn-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -21,7 +21,7 @@ describe("getPackages", () => {
   });
 
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", async () => {
-    const allPackages = await getPackages(f.find("yarn-workspace-base"));
+    const allPackages = await getPackages(f.copy("yarn-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -36,7 +36,7 @@ describe("getPackages", () => {
   });
 
   it("should resolve workspaces for bolt", async () => {
-    const allPackages = await getPackages(f.find("bolt-workspace"));
+    const allPackages = await getPackages(f.copy("bolt-workspace"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -52,7 +52,7 @@ describe("getPackages", () => {
   });
 
   it("should resolve workspaces for pnpm", async () => {
-    const allPackages = await getPackages(f.find("pnpm-workspace-base"));
+    const allPackages = await getPackages(f.copy("pnpm-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -68,8 +68,8 @@ describe("getPackages", () => {
   });
 
   it("should resolve the main package", async () => {
-    const path = f.find("root-only");
-    const allPackages = await getPackages(f.find("root-only"));
+    const path = f.copy("root-only");
+    const allPackages = await getPackages(path);
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -82,7 +82,7 @@ describe("getPackages", () => {
 
   it("should throw an error if a package.json is missing the name field", async () => {
     try {
-      const allPackages = await getPackagesSync(f.find("no-name-field"));
+      const allPackages = await getPackagesSync(f.copy("no-name-field"));
     } catch (err) {
       expect(err.message).toBe(
         'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
@@ -93,7 +93,7 @@ describe("getPackages", () => {
 
 describe("getPackagesSync", () => {
   it("should resolve workspaces for yarn", () => {
-    const allPackages = getPackagesSync(f.find("yarn-workspace-base"));
+    const allPackages = getPackagesSync(f.copy("yarn-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -109,7 +109,7 @@ describe("getPackagesSync", () => {
   });
 
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", () => {
-    const allPackages = getPackagesSync(f.find("yarn-workspace-base"));
+    const allPackages = getPackagesSync(f.copy("yarn-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -124,7 +124,7 @@ describe("getPackagesSync", () => {
   });
 
   it("should resolve workspaces for bolt", () => {
-    const allPackages = getPackagesSync(f.find("bolt-workspace"));
+    const allPackages = getPackagesSync(f.copy("bolt-workspace"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -140,7 +140,7 @@ describe("getPackagesSync", () => {
   });
 
   it("should resolve workspaces for pnpm", () => {
-    const allPackages = getPackagesSync(f.find("pnpm-workspace-base"));
+    const allPackages = getPackagesSync(f.copy("pnpm-workspace-base"));
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -156,8 +156,8 @@ describe("getPackagesSync", () => {
   });
 
   it("should resolve the main package", () => {
-    const path = f.find("root-only");
-    const allPackages = getPackagesSync(f.find("root-only"));
+    const path = f.copy("root-only");
+    const allPackages = getPackagesSync(path);
 
     if (allPackages.packages === null) {
       return expect(allPackages.packages).not.toBeNull();
@@ -170,7 +170,7 @@ describe("getPackagesSync", () => {
 
   it("should throw an error if a package.json is missing the name field", async () => {
     try {
-      const allPackages = getPackagesSync(f.find("no-name-field"));
+      const allPackages = getPackagesSync(f.copy("no-name-field"));
     } catch (err) {
       expect(err.message).toBe(
         'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'

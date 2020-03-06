@@ -1,14 +1,14 @@
 {
-  "name": "find-workspaces-root",
+  "name": "@manypkg/find-root",
   "version": "0.2.0",
-  "main": "dist/find-workspaces-root.cjs.js",
-  "module": "dist/find-workspaces-root.esm.js",
+  "main": "dist/find-root.cjs.js",
+  "module": "dist/find-root.esm.js",
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "@types/find-root": "1.1.1",
     "@types/node": "^12.7.1",
-    "find-up": "^4.1.0",
-    "get-workspaces": "^0.6.0"
+    "find-up": "^4.1.0"
   },
   "devDependencies": {
     "fixturez": "^1.1.0"

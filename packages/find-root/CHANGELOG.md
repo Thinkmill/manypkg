@@ -1,4 +1,4 @@
-# find-workspaces-root
+# @manypkg/find-root
 
 ## 0.2.0
 

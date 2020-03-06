@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "dist/get-packages.cjs.js",
   "dependencies": {
+    "@manypkg/find-root": "^0.2.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "read-yaml-file": "^1.1.0"

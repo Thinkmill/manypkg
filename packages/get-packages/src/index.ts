@@ -7,6 +7,7 @@ import path from "path";
 import globby, { sync as globbySync } from "globby";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
+import { findRoot, findRootSync } from "@manypkg/find-root";
 
 type Tool = "yarn" | "bolt" | "pnpm" | "root";
 
@@ -30,7 +31,8 @@ export class PackageJsonMissingNameError extends Error {
   }
 }
 
-export async function getPackages(cwd: string): Promise<Packages> {
+export async function getPackages(dir: string): Promise<Packages> {
+  const cwd = await findRoot(dir);
   const pkg = await fs.readJson(path.join(cwd, "package.json"));
 
   let tool:
@@ -135,7 +137,8 @@ export async function getPackages(cwd: string): Promise<Packages> {
   };
 }
 
-export function getPackagesSync(cwd: string): Packages {
+export function getPackagesSync(dir: string): Packages {
+  const cwd = findRootSync(dir);
   const pkg = fs.readJsonSync(path.join(cwd, "package.json"));
 
   let tool:
