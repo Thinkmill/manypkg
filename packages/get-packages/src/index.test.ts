@@ -23,4 +23,15 @@ describe("get-packages", () => {
       "bolt-workspace-pkg-b"
     );
   });
+
+  it("should resolve workspaces for pnpm", async () => {
+    const path = await getFixturePath(__dirname, "pnpm-workspace-base");
+    const allPackages = await getPackages(path);
+    expect(allPackages.packages[0].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-a"
+    );
+    expect(allPackages.packages[1].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-b"
+    );
+  });
 });
