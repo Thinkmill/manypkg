@@ -1,43 +1,22 @@
-# Get Packages
+# @manypkg/get-packages
 
-> A simple utility to get workspaces, whether they be yarn or bolt.
+> A simple utility to get the packages from a monorepo, whether they're using Yarn, Bolt or pnpm
 
-This library exports a very simple function that looks at a package.json, and generates
-the glob of accepted workspaces from the `workspaces` field. It is intended mostly for
-use of developers building tools that want to support both kinds of mono-repos as an easy
-way to write tools for both.
-
-```javascript
-import getPackages from "@manypkg/get-packages";
-
-const { tool, root, packages } = await getPackages();
-```
-
-Workspaces have the shape:
+This library exports `getPackages` and `getPackagesSync`. It is intended mostly for use of developers building tools that want to support different kinds of monorepos as an easy way to write tools without having to write tool-specific code. It supports Yarn, Bolt, pnpm and single-package repos(where the only package is the the same as the root package). This library uses `@manypkg/find-root` to search up from the directory that's passed to `getPackages` or `getPackagesSync` to find the project root.
 
 ```typescript
+import { getPackages, getPackagesSync } from "@manypkg/get-packages";
+
+const { tool, root, packages } = await getPackages(process.cwd());
+const { tool, root, packages } = getPackagesSync(process.cwd());
+
 type Tool = "yarn" | "bolt" | "pnpm" | "root";
 
-export type Package = { packageJson: PackageJSON; dir: string };
+type Package = { packageJson: PackageJSON; dir: string };
 
 type Packages = {
   tool: Tool;
   packages: Package[];
   root: Package;
 };
-
-export function getPackages(cwd: string): Promise<Packages>;
-export function getPackagesSync(cwd: string): Packages;
 ```
-
-## Config
-
-We assume the function is being run from a directory with the package.json you want to target,
-however you can pass in a working directory if you want. In addition, you can change what tools
-the package will scan for.
-
-```javascript
-const packages = await getPackages(cwd);
-```
-
-The tools supported are `yarn`, `bolt`, `pnpm` and `root`, which returns the root package as a single workspace if passed.

@@ -9,7 +9,7 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
-type Tool = "yarn" | "bolt" | "pnpm" | "root";
+export type Tool = "yarn" | "bolt" | "pnpm" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
 
