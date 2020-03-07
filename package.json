@@ -34,7 +34,9 @@
       "packages/!(gatsby)*"
     ]
   },
-  "prettier": {},
+  "prettier": {
+    "proseWrap": "never"
+  },
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
     "release": "yarn preconstruct build && yarn changeset publish",
