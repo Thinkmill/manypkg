@@ -1,6 +1,5 @@
 import {
   makeCheck,
-  Workspace,
   getHighestExternalRanges,
   NORMAL_DEPENDENCY_TYPES
 } from "./utils";

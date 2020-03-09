@@ -1,6 +1,5 @@
 import {
   makeCheck,
-  Workspace,
   NORMAL_DEPENDENCY_TYPES,
   versionRangeToRangeType
 } from "./utils";
@@ -10,7 +9,7 @@ import { Package } from "@manypkg/get-packages";
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
   pkg: Package;
-  dependancyPackage: Package;
+  dependencyPackage: Package;
   dependencyRange: string;
 };
 
@@ -24,15 +23,15 @@ export default makeCheck<ErrorType>({
       if (deps) {
         for (let depName in deps) {
           let range = deps[depName];
-          let dependancyPackage = allPackages.get(depName);
+          let dependencyPackage = allPackages.get(depName);
           if (
-            dependancyPackage !== undefined &&
-            !semver.satisfies(dependancyPackage.packageJson.version, range)
+            dependencyPackage !== undefined &&
+            !semver.satisfies(dependencyPackage.packageJson.version, range)
           ) {
             errors.push({
               type: "INTERNAL_MISMATCH",
               pkg,
-              dependancyPackage,
+              dependencyPackage,
               dependencyRange: range
             });
           }
@@ -45,16 +44,16 @@ export default makeCheck<ErrorType>({
   fix: error => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.pkg.packageJson[depType];
-      if (deps && deps[error.dependancyPackage.packageJson.name]) {
-        deps[error.dependancyPackage.packageJson.name] =
+      if (deps && deps[error.dependencyPackage.packageJson.name]) {
+        deps[error.dependencyPackage.packageJson.name] =
           versionRangeToRangeType(
-            deps[error.dependancyPackage.packageJson.name]
-          ) + error.dependancyPackage.packageJson.version;
+            deps[error.dependencyPackage.packageJson.name]
+          ) + error.dependencyPackage.packageJson.version;
       }
     }
     return { requiresInstall: true };
   },
   print: error =>
-    `${error.pkg.packageJson.name} has a dependency on ${error.dependancyPackage.packageJson.name}@${error.dependencyRange} but the version of ${error.dependancyPackage.packageJson.name} in the repo is ${error.dependancyPackage.packageJson.version} which is not within range of the depended on version, please update the dependency version`,
+    `${error.pkg.packageJson.name} has a dependency on ${error.dependencyPackage.packageJson.name}@${error.dependencyRange} but the version of ${error.dependencyPackage.packageJson.name} in the repo is ${error.dependencyPackage.packageJson.version} which is not within range of the depended on version, please update the dependency version`,
   type: "all"
 });
