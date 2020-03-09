@@ -4,24 +4,23 @@
 //
 // Who can say? ¯\_(ツ)_/¯
 
-import { Workspace } from "get-workspaces";
+import { Package } from "@manypkg/get-packages/src";
 
-export let getFakeWS = (
+export let getFakePkg = (
   name: string = "pkg-1",
   version: string = "1.0.0"
-): Workspace => {
+): Package => {
   return {
-    name,
     dir: `some/fake/dir/${name}`,
-    config: {
+    packageJson: {
       name,
       version
     }
   };
 };
 
-export let getWS = (): Map<string, Workspace> => {
-  let ws = new Map();
-  ws.set("pkg-1", getFakeWS());
-  return ws;
+export let getPkg = (): Map<string, Package> => {
+  let pkg = new Map();
+  pkg.set("pkg-1", getFakePkg());
+  return pkg;
 };

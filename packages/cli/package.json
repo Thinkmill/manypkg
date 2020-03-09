@@ -10,8 +10,7 @@
   "module": "dist/cli.esm.js",
   "license": "MIT",
   "bin": {
-    "manypkg": "./bin.js",
-    "m": "./script-runner-bin.js"
+    "manypkg": "./bin.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
@@ -33,11 +32,5 @@
   "devDependencies": {
     "fixturez": "^1.1.0",
     "strip-ansi": "^6.0.0"
-  },
-  "preconstruct": {
-    "entrypoints": [
-      ".",
-      "script-runner"
-    ]
   }
 }

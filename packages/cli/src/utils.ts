@@ -1,5 +1,4 @@
 import * as fs from "fs-extra";
-import { Workspace } from "get-workspaces";
 import { Package } from "@manypkg/get-packages";
 import path from "path";
 import detectIndent from "detect-indent";
