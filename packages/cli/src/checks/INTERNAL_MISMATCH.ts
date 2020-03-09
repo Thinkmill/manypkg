@@ -5,33 +5,34 @@ import {
   versionRangeToRangeType
 } from "./utils";
 import semver from "semver";
+import { Package } from "@manypkg/get-packages";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
-  workspace: Workspace;
-  dependencyWorkspace: Workspace;
+  pkg: Package;
+  dependancyPackage: Package;
   dependencyRange: string;
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspaces) => {
+  validate: (pkg, allPackages) => {
     let errors: ErrorType[] = [];
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       // devDependencies are handled by INTERNAL_DEV_DEP_NOT_STAR
       if (depType === "devDependencies") continue;
-      let deps = workspace.config[depType];
+      let deps = pkg.packageJson[depType];
       if (deps) {
         for (let depName in deps) {
           let range = deps[depName];
-          let dependencyWorkspace = allWorkspaces.get(depName);
+          let dependancyPackage = allPackages.get(depName);
           if (
-            dependencyWorkspace !== undefined &&
-            !semver.satisfies(dependencyWorkspace.config.version, range)
+            dependancyPackage !== undefined &&
+            !semver.satisfies(dependancyPackage.packageJson.version, range)
           ) {
             errors.push({
               type: "INTERNAL_MISMATCH",
-              workspace,
-              dependencyWorkspace,
+              pkg,
+              dependancyPackage,
               dependencyRange: range
             });
           }
@@ -43,16 +44,17 @@ export default makeCheck<ErrorType>({
   },
   fix: error => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = error.workspace.config[depType];
-      if (deps && deps[error.dependencyWorkspace.name]) {
-        deps[error.dependencyWorkspace.name] =
-          versionRangeToRangeType(deps[error.dependencyWorkspace.name]) +
-          error.dependencyWorkspace.config.version;
+      let deps = error.pkg.packageJson[depType];
+      if (deps && deps[error.dependancyPackage.packageJson.name]) {
+        deps[error.dependancyPackage.packageJson.name] =
+          versionRangeToRangeType(
+            deps[error.dependancyPackage.packageJson.name]
+          ) + error.dependancyPackage.packageJson.version;
       }
     }
     return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.name} has a dependency on ${error.dependencyWorkspace.name}@${error.dependencyRange} but the version of ${error.dependencyWorkspace.name} in the repo is ${error.dependencyWorkspace.config.version} which is not within range of the depended on version, please update the dependency version`,
+    `${error.pkg.packageJson.name} has a dependency on ${error.dependancyPackage.packageJson.name}@${error.dependencyRange} but the version of ${error.dependancyPackage.packageJson.name} in the repo is ${error.dependancyPackage.packageJson.version} which is not within range of the depended on version, please update the dependency version`,
   type: "all"
 });
