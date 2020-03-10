@@ -18,8 +18,15 @@ export default makeCheck<ErrorType>({
     if (typeof rootRepositoryField === "string") {
       let result = parseGithubUrl(rootRepositoryField);
       if (result !== null) {
+        let baseRepositoryUrl = "";
+        if (result.host === "github.com") {
+          baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}`;
+        } else if (result.host === "dev.azure.com") {
+          baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}/_git/${result.name}`;
+        }
+
         if (workspace === rootWorkspace) {
-          let correctRepositoryField = `https://github.com/${result.owner}/${result.name}`;
+          let correctRepositoryField = baseRepositoryUrl;
           if (rootRepositoryField !== correctRepositoryField) {
             return [
               {
@@ -32,11 +39,18 @@ export default makeCheck<ErrorType>({
           }
         } else {
           // TODO: handle default branches that aren't master
-          let correctRepositoryField = `https://github.com/${result.owner}/${
-            result.name
-          }/tree/master/${normalizePath(
-            path.relative(rootWorkspace.dir, workspace.dir)
-          )}`;
+          let correctRepositoryField = "";
+
+          if (result.host === "github.com") {
+            correctRepositoryField = `${baseRepositoryUrl}/tree/master/${normalizePath(
+              path.relative(rootWorkspace.dir, workspace.dir)
+            )}`;
+          } else if (result.host === "dev.azure.com") {
+            correctRepositoryField = `${baseRepositoryUrl}?path=${normalizePath(
+              path.relative(rootWorkspace.dir, workspace.dir)
+            )}&version=GBmaster&_a=contents`;
+          }
+
           let currentRepositoryField = (workspace.config as any).repository;
           if (correctRepositoryField !== currentRepositoryField) {
             return [
