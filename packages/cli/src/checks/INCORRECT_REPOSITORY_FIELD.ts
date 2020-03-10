@@ -22,7 +22,7 @@ export default makeCheck<ErrorType>({
         if (result.host === "github.com") {
           baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}`;
         } else if (result.host === "dev.azure.com") {
-          baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}/_git/${result.name}`;
+          baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}/_git/${result.filepath}`;
         }
 
         if (workspace === rootWorkspace) {
