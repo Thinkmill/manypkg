@@ -14,25 +14,53 @@ export const DEPENDENCY_TYPES = [
   "peerDependencies"
 ] as const;
 
+type RootCheck<ErrorType> = {
+  type: "root";
+  validate: (
+    rootWorkspace: Workspace,
+    allWorkspaces: Map<string, Workspace>
+  ) => ErrorType[];
+  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
+  print: (error: ErrorType) => string;
+};
+
+type RootCheckWithFix<ErrorType> = {
+  type: "root";
+  validate: (
+    rootWorkspace: Workspace,
+    allWorkspaces: Map<string, Workspace>
+  ) => ErrorType[];
+  fix: (error: ErrorType) => void | { requiresInstall: boolean };
+  print: (error: ErrorType) => string;
+};
+
+type AllCheck<ErrorType> = {
+  type: "all";
+  validate: (
+    workspace: Workspace,
+    allWorkspaces: Map<string, Workspace>,
+    rootWorkspace: Workspace
+  ) => ErrorType[];
+  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
+  print: (error: ErrorType) => string;
+};
+
+type AllCheckWithFix<ErrorType> = {
+  type: "all";
+  validate: (
+    workspace: Workspace,
+    allWorkspaces: Map<string, Workspace>,
+    rootWorkspace: Workspace
+  ) => ErrorType[];
+  fix: (error: ErrorType) => void | { requiresInstall: boolean };
+  print: (error: ErrorType) => string;
+};
+
 export type Check<ErrorType> =
-  | {
-      type: "root";
-      validate: (
-        rootWorkspace: Workspace,
-        allWorkspaces: Map<string, Workspace>
-      ) => ErrorType[];
-      fix?: (error: ErrorType) => void | { requiresInstall: true };
-      print: (error: ErrorType) => string;
-    }
-  | {
-      type: "all";
-      validate: (
-        workspace: Workspace,
-        allWorkspaces: Map<string, Workspace>
-      ) => ErrorType[];
-      fix?: (error: ErrorType) => void | { requiresInstall: true };
-      print: (error: ErrorType) => string;
-    };
+  | RootCheck<ErrorType>
+  | AllCheck<ErrorType>
+  | RootCheckWithFix<ErrorType>
+  | AllCheckWithFix<ErrorType>;
 
 export function sortObject(prevObj: { [key: string]: string }) {
   let newObj: { [key: string]: string } = {};
@@ -108,6 +136,20 @@ export function isArrayEqual(arrA: Array<string>, arrB: Array<string>) {
   return true;
 }
 
-export function makeCheck<ErrorType>(check: Check<ErrorType>) {
+function makeCheck<ErrorType>(
+  check: RootCheckWithFix<ErrorType>
+): RootCheckWithFix<ErrorType>;
+function makeCheck<ErrorType>(
+  check: AllCheckWithFix<ErrorType>
+): AllCheckWithFix<ErrorType>;
+function makeCheck<ErrorType>(
+  check: RootCheck<ErrorType>
+): RootCheck<ErrorType>;
+function makeCheck<ErrorType>(check: AllCheck<ErrorType>): AllCheck<ErrorType>;
+function makeCheck<ErrorType>(
+  check: RootCheck<ErrorType> | AllCheck<ErrorType>
+): RootCheck<ErrorType> | AllCheck<ErrorType> {
   return check;
 }
+
+export { makeCheck };

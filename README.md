@@ -41,6 +41,16 @@ yarn manypkg run package start
 yarn manypkg run pkg start
 ```
 
+### `manypkg exec <cli command>`
+
+`manypkg exec` executes a command for all packages within a monorepo.
+
+As an example, let's say there are two packages which both have a `dist` dir, `manypkg exec` can be used like this:
+
+```bash
+yarn manypkg exec rm -rf dist
+```
+
 ## Dictionary
 
 - **private package** - A package that has `private: true`/is not published. It does not refer to a package published to a private registry here.
@@ -228,3 +238,15 @@ When you add a package with `yarn add` or etc. dependencies are sorted, and this
 #### How it's fixed
 
 This is fixed by sorting deps by key alphabetically.
+
+### Incorrect `repository` field
+
+If a GitHub repo URL is in the `repository` field in the root `package.json`, all of the packages should have a `repository` field which goes into the directory of the package.
+
+### Why it's a rule
+
+Having a `repository` field is helpful so there is a link to the source of a package on npm but setting that field on every package and making sure it's correct is error prone and time consuming.
+
+#### How it's fixed
+
+This is fixed by setting the correct URL.

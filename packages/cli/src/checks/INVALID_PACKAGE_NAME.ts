@@ -12,6 +12,15 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: workspace => {
+    if (!workspace.name) {
+      return [
+        {
+          type: "INVALID_PACKAGE_NAME",
+          workspace,
+          errors: ["name cannot be undefined"]
+        }
+      ];
+    }
     let validationErrors = validateNpmPackageName(workspace.name);
     let errors = [
       ...(validationErrors.errors || []),
@@ -21,17 +30,23 @@ export default makeCheck<ErrorType>({
       return [
         {
           type: "INVALID_PACKAGE_NAME",
-          workspace: workspace,
+          workspace,
           errors
         }
       ];
     }
     return [];
   },
-  print: error =>
-    `${
+  print: error => {
+    if (!error.workspace.name) {
+      return `The package at ${JSON.stringify(
+        error.workspace.dir
+      )} does not have a name`;
+    }
+    return `${
       error.workspace.name
     } is an invalid package name for the following reasons:\n${error.errors.join(
       "\n"
-    )}`
+    )}`;
+  }
 });

@@ -15,6 +15,8 @@
     "@changesets/cli": "^2.5.0",
     "@types/fs-extra": "^8.0.1",
     "@types/jest": "^24.0.17",
+    "@types/normalize-path": "^3.0.0",
+    "@types/parse-github-url": "^1.0.0",
     "@types/semver": "^6.0.1",
     "jest": "^24.8.0",
     "jest-watch-typeahead": "^0.4.2",
@@ -32,7 +34,9 @@
       "packages/!(gatsby)*"
     ]
   },
-  "prettier": {},
+  "prettier": {
+    "proseWrap": "never"
+  },
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
     "release": "yarn preconstruct build && yarn changeset publish",
