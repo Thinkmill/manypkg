@@ -17,7 +17,7 @@ export default makeCheck<ErrorType>({
 
     if (typeof rootRepositoryField === "string") {
       let result = parseGithubUrl(rootRepositoryField);
-      if (result !== null) {
+      if (result !== null && (result.host === 'github.com' || result.host === 'dev.azure.com')) {
         let baseRepositoryUrl = "";
         if (result.host === "github.com") {
           baseRepositoryUrl = `${result.protocol}//${result.host}/${result.owner}/${result.name}`;
