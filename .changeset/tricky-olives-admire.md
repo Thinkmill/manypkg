@@ -2,4 +2,4 @@
 "@manypkg/get-packages": patch
 ---
 
-Ignore git-ignored files when glob searching for packages. This fixes an issue with package cycles.
+Ignore `node_modules` when glob searching for packages. This fixes an issue with package cycles.

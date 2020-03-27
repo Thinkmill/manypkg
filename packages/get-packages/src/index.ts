@@ -97,7 +97,7 @@ export async function getPackages(dir: string): Promise<Packages> {
     onlyDirectories: true,
     absolute: true,
     expandDirectories: false,
-    gitignore: true
+    ignore: ["**/node_modules"]
   });
 
   let pkgJsonsMissingNameField: Array<string> = [];
@@ -203,7 +203,7 @@ export function getPackagesSync(dir: string): Packages {
     onlyDirectories: true,
     absolute: true,
     expandDirectories: false,
-    gitignore: true
+    ignore: ["**/node_modules"]
   });
 
   let pkgJsonsMissingNameField: Array<string> = [];

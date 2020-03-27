@@ -1,4 +1,5 @@
 node_modules/
+!/__fixtures__/local-deps-cycle/packages/package-one/node_modules/
 dist/
 *.log
 .cache
