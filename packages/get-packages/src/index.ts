@@ -92,18 +92,19 @@ export async function getPackages(dir: string): Promise<Packages> {
     };
   }
 
-  const folders = await globby(tool.packageGlobs, {
+  const directories = await globby(tool.packageGlobs, {
     cwd,
     onlyDirectories: true,
     absolute: true,
-    expandDirectories: false
+    expandDirectories: false,
+    gitignore: true
   });
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
   const results = (
     await Promise.all(
-      folders.sort().map(dir =>
+      directories.sort().map(dir =>
         fs
           .readJson(path.join(dir, "package.json"))
           .then(packageJson => {
@@ -197,16 +198,17 @@ export function getPackagesSync(dir: string): Packages {
       packages: [root]
     };
   }
-  const folders = globbySync(tool.packageGlobs, {
+  const directories = globbySync(tool.packageGlobs, {
     cwd,
     onlyDirectories: true,
     absolute: true,
-    expandDirectories: false
+    expandDirectories: false,
+    gitignore: true
   });
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
-  const results = folders
+  const results = directories
     .sort()
     .map(dir => {
       try {
