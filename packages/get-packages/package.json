@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/get-packages",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/get-packages.cjs.js",
   "dependencies": {
     "@babel/runtime": "^7.5.5",
