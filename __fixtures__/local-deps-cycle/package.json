@@ -1,0 +1,7 @@
+{
+  "name": "@manypkg/local-deps-cycle-fixture",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/**"
+  ]
+}

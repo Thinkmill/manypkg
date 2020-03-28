@@ -91,6 +91,19 @@ let runTests = (getPackages: GetPackages) => {
       );
     }
   });
+
+  it("should not crash on cyclic deps", async () => {
+    const allPackages = await getPackages(f.copy("local-deps-cycle"));
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
+    expect(allPackages.packages[0].packageJson.name).toEqual(
+      "@manypkg/cyclic-dep"
+    );
+    expect(allPackages.tool).toEqual("yarn");
+  });
 };
 
 describe("getPackages", () => {
