@@ -39,7 +39,7 @@ let runChecks = (
       }
     }
     if (check.type === "root") {
-      let errors = check.validate(root, allWorkspaces);
+      let errors = check.validate(rootWorkspace, allWorkspaces);
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
           let output = check.fix(error as any) || { requiresInstall: false };
