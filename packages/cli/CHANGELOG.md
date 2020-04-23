@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- [`3594303`](https://github.com/Thinkmill/manypkg/commit/35943031c777b6a879260147ae6df36073d4191d) [#51](https://github.com/Thinkmill/manypkg/pull/51) Thanks [@tarang9211](https://github.com/tarang9211)! - Use @manypkg/get-packages instead of get-workspaces internally
+
 ## 0.11.1
 
 ### Patch Changes
