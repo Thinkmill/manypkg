@@ -4,9 +4,9 @@
 //
 // Who can say? ¯\_(ツ)_/¯
 
-import { Package } from "@manypkg/get-packages/src";
+import { Package } from "@manypkg/get-packages";
 
-export let getFakePkg = (
+export let getFakeWS = (
   name: string = "pkg-1",
   version: string = "1.0.0"
 ): Package => {
@@ -19,8 +19,8 @@ export let getFakePkg = (
   };
 };
 
-export let getPkg = (): Map<string, Package> => {
+export let getWS = (): Map<string, Package> => {
   let pkg = new Map();
-  pkg.set("pkg-1", getFakePkg());
+  pkg.set("pkg-1", getFakeWS());
   return pkg;
 };

@@ -1,4 +1,5 @@
-const { getPackages } = require("@manypkg/get-packages");
+const getWorkspaces = require("get-workspaces").default;
+const findWorkspacesRoot = require("find-workspaces-root").default;
 
 const path = require("path");
 const { createContentDigest } = require("gatsby-core-utils");
@@ -31,19 +32,18 @@ exports.sourceNodes = async (
 ) => {
   let { createNode } = actions;
   cwd = cwd || process.cwd();
-
-  let { packages } = await getPackages(cwd);
+  let repoRoot = await findWorkspacesRoot(cwd);
+  let workspaces = await getWorkspaces({ cwd: repoRoot });
 
   if (workspaceFilter) {
-    packages = packages.filter(workspaceFilter);
+    workspaces = workspaces.filter(workspaceFilter);
   }
 
-  for (let pkg of packages) {
-    // let { name, dir, config: packageJSON } = workspace;
-    let { packageJSON, dir } = pkg;
+  for (let workspace of workspaces) {
+    let { name, dir, config: packageJSON } = workspace;
 
     let newNode = {
-      name: packageJSON.name,
+      name,
       dir,
       relativeDir: path.relative(cwd, dir),
       version: packageJSON.version,
@@ -53,19 +53,18 @@ exports.sourceNodes = async (
         contentDigest: createContentDigest({
           name
         }),
-        type: "packageInfo"
+        type: "workspaceInfo"
       }
     };
 
     for (let { name, getFieldInfo } of extraFields) {
       if (getFieldInfo) {
         let { config, ...rest } = workspace;
-        let { packageJson, ...rest } = pkg;
         newNode[name] = await getFieldInfo({
           ...rest,
           // This pre-empts making this name change in get-workspaces so it doesn't create
           // a breaking change here.
-          packageJSON
+          packageJSON: config
         });
       } else {
         newNode[name] = packageJSON[name];

@@ -1,15 +1,16 @@
-import { makeCheck, Workspace } from "./utils";
+import { Package } from "@manypkg/get-packages";
+import { makeCheck } from "./utils";
 
 export type ErrorType = {
   type: "INTERNAL_DEV_DEP_NOT_STAR";
-  workspace: Workspace;
-  dependencyWorkspace: Workspace;
+  workspace: Package;
+  dependencyWorkspace: Package;
 };
 
 export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspaces) => {
     let errors: ErrorType[] = [];
-    let deps = workspace.config.devDependencies;
+    let deps = workspace.packageJson.devDependencies;
     if (deps) {
       for (let depName in deps) {
         let range = deps[depName];
@@ -27,17 +28,19 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: error => {
-    let deps = error.workspace.config.devDependencies;
-    if (deps && deps[error.dependencyWorkspace.name]) {
-      deps[error.dependencyWorkspace.name] = "*";
+    let deps = error.workspace.packageJson.devDependencies;
+    if (deps && deps[error.dependencyWorkspace.packageJson.name]) {
+      deps[error.dependencyWorkspace.packageJson.name] = "*";
     }
     return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.name} has a dependency on ${
-      error.dependencyWorkspace.name
+    `${error.workspace.packageJson.name} has a dependency on ${
+      error.dependencyWorkspace.packageJson.name
     } as a devDependency, but has the version listed as ${
-      error.workspace.config.devDependencies![error.dependencyWorkspace.name]
+      error.workspace.packageJson.devDependencies![
+        error.dependencyWorkspace.packageJson.name
+      ]
     }. Please update the dependency to be "*"`,
   type: "all"
 });
