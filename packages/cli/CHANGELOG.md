@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.11.1
+
+### Patch Changes
+
+- [`503f242`](https://github.com/Thinkmill/manypkg/commit/503f24292626849d54216121b742c27af9f9e70f) [#53](https://github.com/Thinkmill/manypkg/pull/53) Thanks [@NateRadebaugh](https://github.com/NateRadebaugh)! - Add special logic for `INCORRECT_REPOSITORY_FIELD` check to handle github repository separately from azure
+
 ## 0.11.0
 
 ### Minor Changes
