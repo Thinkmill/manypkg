@@ -93,15 +93,7 @@ async function execCmd(args: string[]) {
   }
   let shouldFix = things[0] === "fix";
 
-  // let workspacesRoot = await findWorkspacesRoot(process.cwd());
-  // let rootWorkspaceContentPromise = fs.readJson(
-  //   path.join(workspacesRoot, "package.json")
-  // );
   let { packages, root, tool } = await getPackages(process.cwd());
-  // let workspaces = (await getWorkspaces({
-  //   cwd: workspacesRoot,
-  //   tools: ["yarn", "bolt", "root"]
-  // }))!;
 
   let packagesByName = new Map<string, Package>(
     packages.map(x => [x.packageJson.name, x])
