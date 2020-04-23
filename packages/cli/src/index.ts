@@ -122,11 +122,11 @@ async function execCmd(args: string[]) {
       await spawn(
         {
           yarn: "yarn",
-          pnpm: "pnpm install",
+          pnpm: "pnpm",
           root: "yarn",
           bolt: "bolt"
         }[tool],
-        [],
+        tool === "pnpm" ? ["install"] : [],
         { cwd: root.dir, stdio: "inherit" }
       );
     }
