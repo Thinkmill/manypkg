@@ -1,4 +1,4 @@
-import { Workspace } from "get-workspaces";
+import { Package } from "@manypkg/get-packages";
 import { highest } from "sembear";
 
 export const NORMAL_DEPENDENCY_TYPES = [
@@ -17,8 +17,8 @@ export const DEPENDENCY_TYPES = [
 type RootCheck<ErrorType> = {
   type: "root";
   validate: (
-    rootWorkspace: Workspace,
-    allWorkspaces: Map<string, Workspace>
+    rootPackage: Package,
+    allPackages: Map<string, Package>
   ) => ErrorType[];
   fix?: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
@@ -27,8 +27,8 @@ type RootCheck<ErrorType> = {
 type RootCheckWithFix<ErrorType> = {
   type: "root";
   validate: (
-    rootWorkspace: Workspace,
-    allWorkspaces: Map<string, Workspace>
+    rootPackage: Package,
+    allPackages: Map<string, Package>
   ) => ErrorType[];
   fix: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
@@ -37,9 +37,9 @@ type RootCheckWithFix<ErrorType> = {
 type AllCheck<ErrorType> = {
   type: "all";
   validate: (
-    workspace: Workspace,
-    allWorkspaces: Map<string, Workspace>,
-    rootWorkspace: Workspace
+    workspace: Package,
+    allWorkspaces: Map<string, Package>,
+    rootWorkspace: Package
   ) => ErrorType[];
   fix?: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
@@ -48,9 +48,9 @@ type AllCheck<ErrorType> = {
 type AllCheckWithFix<ErrorType> = {
   type: "all";
   validate: (
-    workspace: Workspace,
-    allWorkspaces: Map<string, Workspace>,
-    rootWorkspace: Workspace
+    workspace: Package,
+    allWorkspaces: Map<string, Package>,
+    rootWorkspace: Package
   ) => ErrorType[];
   fix: (error: ErrorType) => void | { requiresInstall: boolean };
   print: (error: ErrorType) => string;
@@ -71,16 +71,16 @@ export function sortObject(prevObj: { [key: string]: string }) {
   return newObj;
 }
 
-export function sortDeps(workspace: Workspace) {
+export function sortDeps(pkg: Package) {
   for (let depType of DEPENDENCY_TYPES) {
-    let prevDeps = workspace.config[depType];
+    let prevDeps = pkg.packageJson[depType];
     if (prevDeps) {
-      workspace.config[depType] = sortObject(prevDeps);
+      pkg.packageJson[depType] = sortObject(prevDeps);
     }
   }
 }
 
-export type Workspace = Workspace;
+// export type Package = Package;
 
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   let cache = new WeakMap<any, any>();
@@ -97,15 +97,15 @@ function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
 }
 
 export let getHighestExternalRanges = weakMemoize(function getHighestVersions(
-  allWorkspaces: Map<string, Workspace>
+  allPackages: Map<string, Package>
 ) {
   let highestExternalRanges = new Map<string, string>();
-  for (let [pkgName, workspace] of allWorkspaces) {
+  for (let [pkgName, pkg] of allPackages) {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = workspace.config[depType];
+      let deps = pkg.packageJson[depType];
       if (deps) {
         for (let depName in deps) {
-          if (!allWorkspaces.has(depName)) {
+          if (!allPackages.has(depName)) {
             let highestExternalRange = highestExternalRanges.get(depName);
             if (
               !highestExternalRange ||

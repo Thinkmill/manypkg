@@ -1,26 +1,27 @@
-import { makeCheck, Workspace, sortObject } from "./utils";
+import { makeCheck, sortObject } from "./utils";
 import chalk from "chalk";
+import { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "ROOT_HAS_DEV_DEPENDENCIES";
-  workspace: Workspace;
+  workspace: Package;
 };
 
 export default makeCheck<ErrorType>({
   type: "root",
   validate: rootWorkspace => {
-    if (rootWorkspace.config.devDependencies) {
+    if (rootWorkspace.packageJson.devDependencies) {
       return [{ type: "ROOT_HAS_DEV_DEPENDENCIES", workspace: rootWorkspace }];
     }
     return [];
   },
   fix: error => {
-    error.workspace.config.dependencies = sortObject({
-      ...error.workspace.config.devDependencies,
-      ...error.workspace.config.dependencies
+    error.workspace.packageJson.dependencies = sortObject({
+      ...error.workspace.packageJson.devDependencies,
+      ...error.workspace.packageJson.dependencies
     });
 
-    delete error.workspace.config.devDependencies;
+    delete error.workspace.packageJson.devDependencies;
   },
   print: () => {
     return `the root package.json contains ${chalk.yellow(

@@ -1,21 +1,16 @@
-import {
-  makeCheck,
-  Workspace,
-  DEPENDENCY_TYPES,
-  sortDeps,
-  isArrayEqual
-} from "./utils";
+import { makeCheck, DEPENDENCY_TYPES, sortDeps, isArrayEqual } from "./utils";
+import { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";
-  workspace: Workspace;
+  workspace: Package;
 };
 
 export default makeCheck<ErrorType>({
   type: "all",
   validate: workspace => {
     for (let depType of DEPENDENCY_TYPES) {
-      let deps = workspace.config[depType];
+      let deps = workspace.packageJson[depType];
       if (deps && !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())) {
         return [
           {
@@ -31,7 +26,5 @@ export default makeCheck<ErrorType>({
     sortDeps(error.workspace);
   },
   print: error =>
-    `${
-      error.workspace.name
-    }'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`
+    `${error.workspace.packageJson.name}'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`
 });

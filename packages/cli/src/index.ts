@@ -1,20 +1,19 @@
 // @flow
 import * as logger from "./logger";
-import findWorkspacesRoot from "find-workspaces-root";
 import fs from "fs-extra";
-import getWorkspaces from "get-workspaces";
+import { getPackages, Package } from "@manypkg/get-packages";
 import path from "path";
-import { Workspace, Check } from "./checks/utils";
+import { Check } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
-import { writeWorkspace } from "./utils";
+import { writePackage } from "./utils";
 import { runCmd } from "./run";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
 let runChecks = (
-  allWorkspaces: Map<string, Workspace>,
-  rootWorkspace: Workspace,
+  allWorkspaces: Map<string, Package>,
+  rootWorkspace: Package,
   shouldFix: boolean
 ) => {
   let hasErrored = false;
@@ -62,17 +61,13 @@ let runChecks = (
 let execLimit = pLimit(4);
 
 async function execCmd(args: string[]) {
-  let workspacesRoot = await findWorkspacesRoot(process.cwd());
-  let workspaces = (await getWorkspaces({
-    cwd: workspacesRoot,
-    tools: ["yarn", "bolt", "pnpm", "root"]
-  }))!;
+  let { packages } = await getPackages(process.cwd());
   let highestExitCode = 0;
   await Promise.all(
-    workspaces.map(workspace => {
+    packages.map(pkg => {
       return execLimit(async () => {
         let { code } = await spawn(args[0], args.slice(1), {
-          cwd: workspace.dir,
+          cwd: pkg.dir,
           stdio: "inherit"
         });
         highestExitCode = Math.max(code, highestExitCode);
@@ -98,36 +93,34 @@ async function execCmd(args: string[]) {
   }
   let shouldFix = things[0] === "fix";
 
-  let workspacesRoot = await findWorkspacesRoot(process.cwd());
-  let rootWorkspaceContentPromise = fs.readJson(
-    path.join(workspacesRoot, "package.json")
+  let { packages, root, tool } = await getPackages(process.cwd());
+
+  let packagesByName = new Map<string, Package>(
+    packages.map(x => [x.packageJson.name, x])
   );
-  let workspaces = (await getWorkspaces({
-    cwd: workspacesRoot,
-    tools: ["yarn", "bolt", "root"]
-  }))!;
-  let rootWorkspace: Workspace = {
-    config: await rootWorkspaceContentPromise,
-    name: (await rootWorkspaceContentPromise).name,
-    dir: workspacesRoot
-  };
-  let workspacesByName = new Map<string, Workspace>(
-    workspaces.map(x => [x.name, x])
-  );
-  workspacesByName.set(rootWorkspace.name, rootWorkspace);
+  packagesByName.set(root.packageJson.name, root);
   let { hasErrored, requiresInstall } = runChecks(
-    workspacesByName,
-    rootWorkspace,
+    packagesByName,
+    root,
     shouldFix
   );
   if (shouldFix) {
     await Promise.all(
-      [...workspacesByName].map(async ([pkgName, workspace]) => {
-        writeWorkspace(workspace);
+      [...packagesByName].map(async ([pkgName, workspace]) => {
+        writePackage(workspace);
       })
     );
     if (requiresInstall) {
-      await spawn("yarn", [], { cwd: workspacesRoot, stdio: "inherit" });
+      await spawn(
+        {
+          yarn: "yarn",
+          pnpm: "pnpm",
+          root: "yarn",
+          bolt: "bolt"
+        }[tool],
+        tool === "pnpm" ? ["install"] : [],
+        { cwd: root.dir, stdio: "inherit" }
+      );
     }
 
     logger.success(`fixed workspaces!`);

@@ -1,18 +1,18 @@
-import { makeCheck, Workspace, sortObject } from "./utils";
-import chalk from "chalk";
+import { makeCheck, sortObject } from "./utils";
 // @ts-ignore
 import validateNpmPackageName from "validate-npm-package-name";
+import { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "INVALID_PACKAGE_NAME";
-  workspace: Workspace;
+  workspace: Package;
   errors: string[];
 };
 
 export default makeCheck<ErrorType>({
   type: "all",
   validate: workspace => {
-    if (!workspace.name) {
+    if (!workspace.packageJson.name) {
       return [
         {
           type: "INVALID_PACKAGE_NAME",
@@ -21,7 +21,7 @@ export default makeCheck<ErrorType>({
         }
       ];
     }
-    let validationErrors = validateNpmPackageName(workspace.name);
+    let validationErrors = validateNpmPackageName(workspace.packageJson.name);
     let errors = [
       ...(validationErrors.errors || []),
       ...(validationErrors.warnings || [])
@@ -38,13 +38,13 @@ export default makeCheck<ErrorType>({
     return [];
   },
   print: error => {
-    if (!error.workspace.name) {
+    if (!error.workspace.packageJson.name) {
       return `The package at ${JSON.stringify(
         error.workspace.dir
       )} does not have a name`;
     }
     return `${
-      error.workspace.name
+      error.workspace.packageJson.name
     } is an invalid package name for the following reasons:\n${error.errors.join(
       "\n"
     )}`;

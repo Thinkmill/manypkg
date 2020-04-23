@@ -7,7 +7,7 @@ describe("internal dev ep is not star", () => {
   it("should not error if internal version is *", () => {
     let ws = getWS();
     let dependsOnOne = getFakeWS("depends-on-one");
-    dependsOnOne.config.devDependencies = {
+    dependsOnOne.packageJson.devDependencies = {
       "pkg-1": "*"
     };
     ws.set("depends-on-one", dependsOnOne);
@@ -17,7 +17,7 @@ describe("internal dev ep is not star", () => {
   it("should error if internal version is not *", () => {
     let ws = getWS();
     let dependsOnOne = getFakeWS("depends-on-one");
-    dependsOnOne.config.devDependencies = {
+    dependsOnOne.packageJson.devDependencies = {
       "pkg-1": "^1.0.0"
     };
     ws.set("depends-on-one", dependsOnOne);
@@ -31,7 +31,7 @@ describe("internal dev ep is not star", () => {
   });
   it("should fix an incompatible version", () => {
     let workspace = getFakeWS("depends-on-one");
-    workspace.config.devDependencies = {
+    workspace.packageJson.devDependencies = {
       "pkg-1": "^1.0.0"
     };
     let error: ErrorType = {
@@ -41,7 +41,7 @@ describe("internal dev ep is not star", () => {
     };
     let result = makeCheck.fix!(error);
     expect(result).toMatchObject({ requiresInstall: true });
-    expect(error.workspace.config.devDependencies).toMatchObject({
+    expect(error.workspace.packageJson.devDependencies).toMatchObject({
       "pkg-1": "*"
     });
   });
