@@ -9,7 +9,7 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
-export type Tool = "yarn" | "bolt" | "pnpm" | "root";
+export type Tool = "yarn" | "bolt" | "pnpm" | "cargo" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
 
@@ -31,45 +31,87 @@ export class PackageJsonMissingNameError extends Error {
   }
 }
 
-export async function getPackages(dir: string): Promise<Packages> {
+export function determineTool(pkg: any, pkgFileType: string, sidecar: any) {
+  switch (pkgFileType) {
+
+    case 'JavaScript':
+      if (!sidecar) {
+        if (pkg.workspaces) {
+          if (Array.isArray(pkg.workspaces)) {
+            return {
+              type: "yarn",
+              packageGlobs: pkg.workspaces
+            };
+          } else if (pkg.workspaces.packages) {
+            return {
+              type: "yarn",
+              packageGlobs: pkg.workspaces.packages
+            };
+          }
+        } else if (pkg.bolt && pkg.bolt.workspaces) {
+          return {
+            type: "bolt",
+            packageGlobs: pkg.bolt.workspaces
+          };
+        }
+      } else if (sidecar && sidecar.packages) {
+        return {
+          type: "pnpm",
+          packageGlobs: sidecar.packages
+        };
+      }
+
+    case 'Rust':
+      if (pkg.workspaces) {
+      return {
+        type: 'cargo',
+        packageGlobs: pkg.workspaces
+      }
+    } else {
+      return {type: 'cargo'}
+    }
+  }
+}
+
+export async function getPackages(dir: string, toolset: string = 'default'): Promise<Packages> {
   const cwd = await findRoot(dir);
-  const pkg = await fs.readJson(path.join(cwd, "package.json"));
+  let pkg: any | undefined
 
   let tool:
     | {
-        type: Tool;
-        packageGlobs: string[];
-      }
+      type: Tool;
+      packageGlobs: string[];
+    }
     | undefined;
 
-  if (pkg.workspaces) {
-    if (Array.isArray(pkg.workspaces)) {
-      tool = {
-        type: "yarn",
-        packageGlobs: pkg.workspaces
-      };
-    } else if (pkg.workspaces.packages) {
-      tool = {
-        type: "yarn",
-        packageGlobs: pkg.workspaces.packages
-      };
+  try {
+    pkg = await fs.readJson(path.join(cwd, "package.json"));
+    tool = determineTool(pkg, 'JavaScript')
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      throw err;
     }
-  } else if (pkg.bolt && pkg.bolt.workspaces) {
-    tool = {
-      type: "bolt",
-      packageGlobs: pkg.bolt.workspaces
-    };
-  } else {
+  }
+
+  // if we found package.json, but not the tool, try pnpm
+  if (!!pkg && !tool) {
     try {
       const manifest = await readYamlFile<{ packages?: string[] }>(
         path.join(cwd, "pnpm-workspace.yaml")
       );
-      if (manifest && manifest.packages) {
-        tool = {
-          type: "pnpm",
-          packageGlobs: manifest.packages
-        };
+      tool = determineTool(pkg, 'JavaScript', manifest)
+    } catch (err) {
+      if (err.code !== "ENOENT") {
+        throw err;
       }
+    }
+  }
+
+  // if we have nothing yet, try rust
+  if (!pkg && !tool) {
+    try {
+      const manifest = await fs.readToml(path.join(cwd, "Cargo.toml"));
+      tool = determineTool(pkg, 'Rust', manifest)
     } catch (err) {
       if (err.code !== "ENOENT") {
         throw err;
@@ -97,11 +139,12 @@ export async function getPackages(dir: string): Promise<Packages> {
     onlyDirectories: true,
     absolute: true,
     expandDirectories: false,
-    ignore: ["**/node_modules"]
+    ignore: ["**/node_modules", '**/target']
   });
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
+  // TODO deal with results for Rust
   const results = (
     await Promise.all(
       directories.sort().map(dir =>
@@ -144,9 +187,9 @@ export function getPackagesSync(dir: string): Packages {
 
   let tool:
     | {
-        type: Tool;
-        packageGlobs: string[];
-      }
+      type: Tool;
+      packageGlobs: string[];
+    }
     | undefined;
 
   if (pkg.workspaces) {

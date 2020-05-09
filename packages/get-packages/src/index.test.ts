@@ -104,6 +104,11 @@ let runTests = (getPackages: GetPackages) => {
     );
     expect(allPackages.tool).toEqual("yarn");
   });
+
+  it("should find single Rust Cargo crates", async () => {
+    const allPackages = await getPackages(f.copy("rust-single"));
+    console.log(allPackages)
+  })
 };
 
 describe("getPackages", () => {
