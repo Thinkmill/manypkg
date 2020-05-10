@@ -6,16 +6,18 @@ import fs from "fs-extra";
 import path from "path";
 import globby, { sync as globbySync } from "globby";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
+import TOML from '@iarna/toml'
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
 export type Tool = "yarn" | "bolt" | "pnpm" | "cargo" | "root";
 
-export type Package = { packageJson: PackageJSON; dir: string };
+export type Package = { packageFile: PackageJSON; dir: string };
 
 export type Packages = {
   tool: Tool;
   packages: Package[];
+  missingNameField: boolean;
   root: Package;
 };
 
@@ -63,17 +65,17 @@ export function determineTool(pkg: any, pkgFileType: string, sidecar: any) {
 
     case 'Rust':
       if (pkg.workspaces) {
-      return {
-        type: 'cargo',
-        packageGlobs: pkg.workspaces
+        return {
+          type: 'cargo',
+          packageGlobs: pkg.workspaces
+        }
+      } else {
+        return { type: 'cargo' }
       }
-    } else {
-      return {type: 'cargo'}
-    }
   }
 }
 
-export async function getPackages(dir: string, toolset: string = 'default'): Promise<Packages> {
+export async function getPackages(dir: string, toolset: "default" | "extended" = 'default'): Promise<Packages> {
   const cwd = await findRoot(dir);
   let pkg: any | undefined
 
@@ -86,7 +88,7 @@ export async function getPackages(dir: string, toolset: string = 'default'): Pro
 
   try {
     pkg = await fs.readJson(path.join(cwd, "package.json"));
-    tool = determineTool(pkg, 'JavaScript')
+    tool = determineTool(pkg, 'JavaScript', null)
   } catch (err) {
     if (err.code !== "ENOENT") {
       throw err;
@@ -107,14 +109,17 @@ export async function getPackages(dir: string, toolset: string = 'default'): Pro
     }
   }
 
-  // if we have nothing yet, try rust
-  if (!pkg && !tool) {
-    try {
-      const manifest = await fs.readToml(path.join(cwd, "Cargo.toml"));
-      tool = determineTool(pkg, 'Rust', manifest)
-    } catch (err) {
-      if (err.code !== "ENOENT") {
-        throw err;
+  if (toolset === 'extended') {
+    // if we have nothing yet, and "extended", try rust
+    if (!pkg && !tool) {
+      try {
+        const cargoToml = await fs.readFile(path.join(cwd, "Cargo.toml"), "utf8");
+        pkg = TOML.parse(cargoToml)
+        tool = determineTool(pkg, 'Rust', null)
+      } catch (err) {
+        if (err.code !== "ENOENT") {
+          throw err;
+        }
       }
     }
   }
@@ -122,7 +127,7 @@ export async function getPackages(dir: string, toolset: string = 'default'): Pro
   if (!tool) {
     const root = {
       dir: cwd,
-      packageJson: pkg
+      packageFile: pkg
     };
     if (!pkg.name) {
       throw new PackageJsonMissingNameError(["package.json"]);
@@ -130,10 +135,12 @@ export async function getPackages(dir: string, toolset: string = 'default'): Pro
     return {
       tool: "root",
       root,
-      packages: [root]
+      packages: [root],
+      missingNameField: false
     };
   }
 
+  // build up array of dirs at this folder level
   const directories = await globby(tool.packageGlobs, {
     cwd,
     onlyDirectories: true,
@@ -142,42 +149,36 @@ export async function getPackages(dir: string, toolset: string = 'default'): Pro
     ignore: ["**/node_modules", '**/target']
   });
 
-  let pkgJsonsMissingNameField: Array<string> = [];
+  let pkgMissingNameField: Array<string> = [];
 
-  // TODO deal with results for Rust
-  const results = (
+  // recursively consider dirs as they may configure
+  // polyglot repos with various packages at the root
+  // or possibly no package at root
+  const results =
     await Promise.all(
-      directories.sort().map(dir =>
-        fs
-          .readJson(path.join(dir, "package.json"))
-          .then(packageJson => {
-            if (!packageJson.name) {
-              pkgJsonsMissingNameField.push(
-                path.relative(cwd, path.join(dir, "package.json"))
-              );
-            }
-            return { packageJson, dir };
-          })
-          .catch(err => {
-            if (err.code === "ENOENT") {
-              return null;
-            }
-            throw err;
-          })
+      directories.sort().map(dir => {
+        let subpkgs = getPackages(dir, toolset)
+        if (!subpkg.root && !subpkg.root.packageFile && !subpkg.root.packageFile.name) {
+          // TODO get the right filename
+          pkgMissingNameField.push(path.relative(cwd, path.join(dir, "package.json")))
+        }
+      }
       )
     )
-  ).filter(x => x);
-  if (pkgJsonsMissingNameField.length !== 0) {
-    pkgJsonsMissingNameField.sort();
-    throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
+
+  if (pkgMissingNameField.length !== 0) {
+    pkgMissingNameField.sort();
+    throw new PackageJsonMissingNameError(pkgMissingNameField);
   }
+
   return {
     tool: tool.type,
     root: {
       dir: cwd,
-      packageJson: pkg
+      packageFile: pkg
     },
-    packages: results as Package[]
+    packages: results as Package[],
+    missingNameField: false
   };
 }
 
