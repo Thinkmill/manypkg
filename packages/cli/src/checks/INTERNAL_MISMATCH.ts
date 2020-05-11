@@ -17,8 +17,6 @@ export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspaces) => {
     let errors: ErrorType[] = [];
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      // devDependencies are handled by INTERNAL_DEV_DEP_NOT_STAR
-      if (depType === "devDependencies") continue;
       let deps = workspace.packageJson[depType];
       if (deps) {
         for (let depName in deps) {
