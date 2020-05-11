@@ -115,10 +115,13 @@ async function execCmd(args: string[]) {
         {
           yarn: "yarn",
           pnpm: "pnpm",
+          lerna: "lerna",
           root: "yarn",
           bolt: "bolt"
         }[tool],
-        tool === "pnpm" ? ["install"] : [],
+          tool === "pnpm" ? ["install"]
+        : tool === "lerna" ? ["bootstrap", "--since", "HEAD"]
+        : [],
         { cwd: root.dir, stdio: "inherit" }
       );
     }

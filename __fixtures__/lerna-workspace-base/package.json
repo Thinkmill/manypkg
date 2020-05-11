@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "name": "lerna-workspace-base",
+  "description": "Base lerna workspace work",
+  "version": "1.0.0"
+}

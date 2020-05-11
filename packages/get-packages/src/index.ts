@@ -9,7 +9,7 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
-export type Tool = "yarn" | "bolt" | "pnpm" | "root";
+export type Tool = "yarn" | "bolt" | "pnpm" | "lerna" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
 
@@ -73,6 +73,24 @@ export async function getPackages(dir: string): Promise<Packages> {
     } catch (err) {
       if (err.code !== "ENOENT") {
         throw err;
+      }
+    }
+
+    if (!tool) {
+      try {
+        const lernaJson = await fs.readJson(
+          path.join(cwd, "lerna.json")
+        );
+        if (lernaJson) {
+          tool = {
+            type: "lerna",
+            packageGlobs: lernaJson.packages || ["packages/*"],
+          }
+        }
+      } catch (err) {
+        if (err.code !== "ENOENT") {
+          throw err;
+        }
       }
     }
   }
@@ -180,6 +198,24 @@ export function getPackagesSync(dir: string): Packages {
     } catch (err) {
       if (err.code !== "ENOENT") {
         throw err;
+      }
+    }
+
+    if (!tool) {
+      try {
+        const lernaJson = fs.readJsonSync(
+          path.join(cwd, "lerna.json")
+        );
+        if (lernaJson) {
+          tool = {
+            type: "lerna",
+            packageGlobs: lernaJson.packages || ["packages/*"],
+          }
+        }
+      } catch (err) {
+        if (err.code !== "ENOENT") {
+          throw err;
+        }
       }
     }
   }
