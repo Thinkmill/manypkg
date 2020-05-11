@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.13.0
+
+### Minor Changes
+
+- [`3be8695`](https://github.com/Thinkmill/manypkg/commit/3be86952c0fcdf1de6c5bd7f5b3362917d6a4546) [#61](https://github.com/Thinkmill/manypkg/pull/61) Thanks [@mitchellhamilton](https://github.com/mitchellhamilton)! - Remove check requiring that all devDependencies must be `*`. This has been removed because pre-release versions are not satisfied by `*` which means that you previously couldn't use Manypkg, have internal devDependencies and have pre-releases
+
 ## 0.12.0
 
 ### Minor Changes
