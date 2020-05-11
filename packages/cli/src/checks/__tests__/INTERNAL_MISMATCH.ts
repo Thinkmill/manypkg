@@ -49,8 +49,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^1.0.0"
     });
   });
-  it("should not check dev dependencies", () => {
-    // This is handled by INTERNAL_DEV_DEP_NOT_STAR
+  it("should check dev dependencies", () => {
     let ws = getWS();
     let dependsOnOne = getFakeWS("depends-on-one");
     dependsOnOne.packageJson.devDependencies = {
@@ -58,6 +57,30 @@ describe("internal mismatch", () => {
     };
     ws.set("depends-on-one", dependsOnOne);
     let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
-    expect(errors.length).toEqual(0);
+    expect(errors).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "dependencyRange": "^0.1.0",
+          "dependencyWorkspace": Object {
+            "dir": "some/fake/dir/pkg-1",
+            "packageJson": Object {
+              "name": "pkg-1",
+              "version": "1.0.0",
+            },
+          },
+          "type": "INTERNAL_MISMATCH",
+          "workspace": Object {
+            "dir": "some/fake/dir/depends-on-one",
+            "packageJson": Object {
+              "devDependencies": Object {
+                "pkg-1": "^0.1.0",
+              },
+              "name": "depends-on-one",
+              "version": "1.0.0",
+            },
+          },
+        },
+      ]
+    `);
   });
 });
