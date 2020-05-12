@@ -1,0 +1,7 @@
+{
+  "name": "lerna-workspace-base-pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "lerna-workspace-base-pkg-b": "1.0.0"
+  }
+}

@@ -31,6 +31,19 @@ async function hasWorkspacesConfiguredViaPkgJson(
   }
 }
 
+async function hasWorkspacesConfiguredViaLerna(directory: string) {
+  try {
+    let lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
+    if (lernaJson.useWorkspaces !== true) {
+      return directory;
+    }
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      throw err;
+    }
+  }
+}
+
 async function hasWorkspacesConfiguredViaPnpm(directory: string) {
   // @ts-ignore
   let pnpmWorkspacesFileExists = await fs.exists(
@@ -48,6 +61,7 @@ export async function findRoot(cwd: string): Promise<string> {
   let dir = await findUp(
     directory => {
       return Promise.all([
+        hasWorkspacesConfiguredViaLerna(directory),
         hasWorkspacesConfiguredViaPkgJson(directory, firstPkgJsonDirRef),
         hasWorkspacesConfiguredViaPnpm(directory)
       ]).then(x => x.find(dir => dir));
@@ -82,6 +96,19 @@ function hasWorkspacesConfiguredViaPkgJsonSync(
   }
 }
 
+function hasWorkspacesConfiguredViaLernaSync(directory: string) {
+  try {
+    let lernaJson = fs.readJsonSync(path.join(directory, "lerna.json"));
+    if (lernaJson.useWorkspaces !== true) {
+      return directory;
+    }
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      throw err;
+    }
+  }
+}
+
 function hasWorkspacesConfiguredViaPnpmSync(directory: string) {
   // @ts-ignore
   let pnpmWorkspacesFileExists = fs.existsSync(
@@ -100,6 +127,7 @@ export function findRootSync(cwd: string) {
   let dir = findUpSync(
     directory => {
       return [
+        hasWorkspacesConfiguredViaLernaSync(directory),
         hasWorkspacesConfiguredViaPkgJsonSync(directory, firstPkgJsonDirRef),
         hasWorkspacesConfiguredViaPnpmSync(directory)
       ].find(dir => dir);

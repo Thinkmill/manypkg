@@ -69,6 +69,37 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.tool).toEqual("pnpm");
   });
 
+  it("should resolve workspaces for lerna", async () => {
+    const allPackages = await getPackages(f.copy("lerna-workspace-base"));
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
+    expect(allPackages.packages[0].packageJson.name).toEqual(
+      "lerna-workspace-base-pkg-a"
+    );
+    expect(allPackages.packages[1].packageJson.name).toEqual(
+      "lerna-workspace-base-pkg-b"
+    );
+    expect(allPackages.packages).toHaveLength(2);
+    expect(allPackages.tool).toEqual("lerna");
+  });
+
+  it("should resolve workspaces for lerna without explicit packages config", async () => {
+    const allPackages = await getPackages(f.copy("basic-lerna"));
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
+    expect(allPackages.packages[0].packageJson.name).toEqual(
+      "@manypkg/basic-lerna-fixture-pkg-one"
+    );
+    expect(allPackages.packages).toHaveLength(1);
+    expect(allPackages.tool).toEqual("lerna");
+  });
+
   it("should resolve the main package", async () => {
     const path = f.copy("root-only");
     const allPackages = await getPackages(path);
