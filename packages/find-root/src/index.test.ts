@@ -7,7 +7,7 @@ let f = fixturez(__dirname);
 type FindRoot = typeof findRoot | typeof findRootSync;
 
 const runTests = (findRoot: FindRoot) => {
-  test("it returns the root of a monorepo", async () => {
+  test("it returns the root of a js monorepo", async () => {
     let tmpPath = f.copy("basic");
     let packagesRoot = await findRoot(
       path.join(tmpPath, "packages", "package-one", "src")
@@ -23,9 +23,23 @@ const runTests = (findRoot: FindRoot) => {
     expect(packagesRoot).toBe(tmpPath);
   });
 
-  test("it returns the root of a single-package repo", async () => {
-    let tmpPath = f.copy("single-pkg");
-    let packagesRoot = await findRoot(path.join(tmpPath, "src"));
+  test("it returns the root of a combo rust/js repo", async () => {
+    let tmpPath = f.copy("rust-and-js");
+    let packagesRoot = await findRoot(path.join(tmpPath, "src"), 'extended');
+    expect(packagesRoot).toBe(tmpPath);
+  });
+
+  test("it returns the root of a rust monorepo", async () => {
+    let tmpPath = f.copy("rust-multi");
+    let packagesRoot = await findRoot(
+      path.join(tmpPath, "pkg-a", "src"), 'extended'
+    );
+    expect(packagesRoot).toBe(tmpPath);
+  });
+
+  test("it returns the root of a single-package rust repo", async () => {
+    let tmpPath = f.copy("rust-single");
+    let packagesRoot = await findRoot(path.join(tmpPath, "src"), 'extended');
     expect(packagesRoot).toBe(tmpPath);
   });
 };
