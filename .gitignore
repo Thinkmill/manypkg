@@ -5,3 +5,7 @@ dist/
 .cache
 public
 scratchings.js
+
+# rust RLS adds these, not needed in fixtures
+__fixtures__/**/target
+__fixtures__/**/Cargo.lock
