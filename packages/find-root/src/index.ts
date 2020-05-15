@@ -8,7 +8,7 @@ export class NoPkgFound extends Error {
   toolset: string;
   constructor(directory: string, toolset: string = 'default') {
     super(
-      `No package.json${toolset === 'extended' ? ' or Cargo.toml' : ' '}could be found upwards from the directory ${directory}`
+      `No package.json${toolset === 'extended' ? ' or Cargo.toml ' : ' '}could be found upwards from the directory ${directory}`
     );
     this.directory = directory;
     this.toolset = toolset;
