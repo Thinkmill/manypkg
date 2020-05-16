@@ -106,7 +106,12 @@ let runTests = (getPackages: GetPackages) => {
   });
 
   it("should find single Rust Cargo crates", async () => {
-    const allPackages = await getPackages(f.copy("rust-single"));
+    const allPackages = await getPackages(f.copy("rust-single"), 'extended');
+    console.log(allPackages)
+  })
+
+  it("should find Rust Cargo.toml and package.json", async () => {
+    const allPackages = await getPackages(f.copy("rust-and-js"), 'extended');
     console.log(allPackages)
   })
 };
