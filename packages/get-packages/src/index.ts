@@ -72,14 +72,13 @@ export function determineToolJavaScript(pkg: any, sidecar: any): ToolGroup | und
 }
 
 export function determineToolRust(pkg: any, sidecar: any): ToolGroup | undefined {
-  if (pkg.workspaces) {
+  if (pkg.workspace) {
     return {
       type: 'cargo',
-      packageGlobs: pkg.workspaces
+      packageGlobs: pkg.workspace.members
     }
-  } else {
-    return { type: 'cargo', packageGlobs: undefined }
   }
+  return
 }
 
 export async function getPackages(dir: string, toolset: "default" | "extended" = 'default'): Promise<Packages | { javascript?: Packages, rust?: Packages }> {
@@ -119,8 +118,9 @@ export async function getPackages(dir: string, toolset: "default" | "extended" =
     pkgs.rust = {}
     try {
       const cargoToml: string = await fs.readFile(path.join(cwd, "Cargo.toml"), "utf8");
-      pkgs.rust.pkg = TOML.parse(cargoToml)
-      pkgs.rust.tool = determineToolRust(pkgs.rust.pkg, null)
+      const parsed = TOML.parse(cargoToml)
+      pkgs.rust.pkg = parsed.package
+      pkgs.rust.tool = determineToolRust(parsed, null)
     } catch (err) {
       if (err.code !== "ENOENT") {
         throw err;
@@ -128,7 +128,7 @@ export async function getPackages(dir: string, toolset: "default" | "extended" =
     }
   }
 
-  // early return if we do not have a tool
+  // early return if we do not have a tool in default sequence
   // this would mean it is a single package with not workspaces, et. al.
   if (toolset === 'default' && !pkgs.javascript.tool) {
     // default implementation only checks javascript
@@ -147,74 +147,68 @@ export async function getPackages(dir: string, toolset: "default" | "extended" =
       root,
       packages: [root]
     };
-  } else if (toolset === 'extended' && !pkgs.javascript.tool && !pkgs.rust.tool) {
-    // extended implementation includes other languages
-    // and returns an object "grouped" by language
-    const root: Package = {
-      dir: cwd,
-      packageFile: pkgs.javascript.pkg
-    };
+  }
 
+  let packageResults: { javascript?: Packages, rust?: Packages } = {}
+  let pkgMissingNameField: Array<string> = [];
+
+  if (toolset === 'extended' && !!pkgs.javascript.pkg && !pkgs.javascript.tool) {
     if (!!pkgs.javascript && !pkgs.javascript && !pkgs.javascript.pkg && !pkgs.javascript.pkg.name) {
       throw new PackageMissingNameError(["package.json"]);
     }
-    if (!!pkgs.rust && !pkgs.rust && !pkgs.rust.pkg && !pkgs.rust.pkg.name) {
-      throw new PackageMissingNameError(["Cargo.toml"]);
-    }
 
-    return {
-      tool: "root",
-      root,
-      packages: [root]
-    };
-  }
-
-
-  let packageResults: { javascript?: Packages, rust?: Packages } = {
-    javascript: {
-      tool: pkgs.javascript.tool.type,
-      root: {
+    packageResults.javascript = {
+      tool: 'root',
+      dir: cwd,
+      packageFile: pkgs.javascript.pkg,
+      packages: [{
         dir: cwd,
         packageFile: pkgs.javascript.pkg
-      }, packages: []
+      }]
     }
   }
 
-  // build up array of dirs at this folder level
-  const directoriesJavaScript = await globby(pkgs.javascript.tool.packageGlobs, {
-    cwd,
-    onlyDirectories: true,
-    absolute: true,
-    expandDirectories: false,
-    ignore: ["**/node_modules"]
-  });
+  if (!!pkgs.javascript.pkg && !!pkgs.javascript.tool) {
+    // build up array of dirs at this folder level
+    const directoriesJavaScript = await globby(pkgs.javascript.tool.packageGlobs, {
+      cwd,
+      onlyDirectories: true,
+      absolute: true,
+      expandDirectories: false,
+      ignore: ["**/node_modules"]
+    });
 
-  let pkgMissingNameField: Array<string> = [];
+    packageResults.javascript = {
+      tool: pkgs.javascript.tool.type,
+      dir: cwd,
+      packageFile: pkgs.javascript.pkg,
+    }
 
-  packageResults.javascript.packages = (
-    await Promise.all(
-      directoriesJavaScript.sort().map(dir =>
-        fs
-          .readJson(path.join(dir, "package.json"))
-          .then(packageJson => {
-            if (!packageJson.name) {
-              pkgMissingNameField.push(
-                path.relative(cwd, path.join(dir, "package.json"))
-              );
-            }
-            return { packageJson, dir };
-          })
-          .catch(err => {
-            if (err.code === "ENOENT") {
-              return null;
-            }
-            throw err;
-          })
+    packageResults.javascript.packages = (
+      await Promise.all(
+        directoriesJavaScript.sort().map(dir =>
+          fs
+            .readJson(path.join(dir, "package.json"))
+            .then(packageJson => {
+              if (!packageJson.name) {
+                pkgMissingNameField.push(
+                  path.relative(cwd, path.join(dir, "package.json"))
+                );
+              }
+              return { packageJson, dir };
+            })
+            .catch(err => {
+              if (err.code === "ENOENT") {
+                return null;
+              }
+              throw err;
+            })
+        )
       )
-    )
-  ).filter(x => x);
+    ).filter(x => x);
+  }
 
-  if (toolset === 'extended') {
+  if (toolset === 'extended' && !!pkgs.rust.tool) {
     const directoriesRust: string[] = await globby(pkgs.rust.tool.packageGlobs, {
       cwd,
       onlyDirectories: true,
@@ -223,13 +217,17 @@ export async function getPackages(dir: string, toolset: "default" | "extended" =
       ignore: ["**/node_modules"]
     });
 
-    let pkgMissingNameField: string[] = [];
+    packageResults.rust = {
+      tool: pkgs.rust.tool.type,
+      dir: cwd,
+      packageFile: pkgs.rust.pkg,
+    }
 
     packageResults.rust.packages = (
       await Promise.all(
         directoriesRust.sort().map((dir: string) =>
           fs.readFile(path.join(dir, "Cargo.toml"), "utf8").then(cargoToml => {
-            let parsed = TOML.parse(cargoToml)
+            let parsed = TOML.parse(cargoToml).package
             if (!parsed.name) {
               pkgMissingNameField.push(
                 path.relative(cwd, path.join(dir, "Cargo.toml"))
@@ -246,6 +244,22 @@ export async function getPackages(dir: string, toolset: "default" | "extended" =
         )
       )
     ).filter(x => x);
+  } else if (toolset === 'extended' && !!pkgs.rust.pkg && !pkgs.rust.tool) {
+    // extended implementation includes other languages
+    // and returns an object "grouped" by language
+    packageResults.rust = {
+      tool: 'root',
+      dir: cwd,
+      packageFile: pkgs.rust.pkg,
+      packages: [{
+        dir: cwd,
+        packageFile: pkgs.rust.pkg
+      }]
+    };
+
+    if (!!pkgs.rust && !pkgs.rust && !pkgs.rust.pkg && !pkgs.rust.pkg.name) {
+      throw new PackageMissingNameError(["Cargo.toml"]);
+    }
   }
 
   if (pkgMissingNameField.length !== 0) {
@@ -293,8 +307,9 @@ export function getPackagesSync(dir: string, toolset: "default" | "extended" = '
     pkgs.rust = {}
     try {
       const cargoToml: string = fs.readFileSync(path.join(cwd, "Cargo.toml"), "utf8");
-      pkgs.rust.pkg = TOML.parse(cargoToml)
-      pkgs.rust.tool = determineToolRust(pkgs.rust.pkg, null)
+      const parsed = TOML.parse(cargoToml)
+      pkgs.rust.pkg = parsed.package
+      pkgs.rust.tool = determineToolRust(parsed, null)
     } catch (err) {
       if (err.code !== "ENOENT") {
         throw err;
@@ -302,7 +317,7 @@ export function getPackagesSync(dir: string, toolset: "default" | "extended" = '
     }
   }
 
-  // early return if we do not have a tool
+  // early return if we do not have a tool in default sequence
   // this would mean it is a single package with not workspaces, et. al.
   if (toolset === 'default' && !pkgs.javascript.tool) {
     // default implementation only checks javascript
@@ -321,70 +336,64 @@ export function getPackagesSync(dir: string, toolset: "default" | "extended" = '
       root,
       packages: [root]
     };
-  } else if (toolset === 'extended' && !pkgs.javascript.tool && !pkgs.rust.tool) {
-    // extended implementation includes other languages
-    // and returns an object "grouped" by language
-    const root: Package = {
-      dir: cwd,
-      packageFile: pkgs.javascript.pkg
-    };
+  }
 
+  let packageResults: { javascript?: Packages, rust?: Packages } = {}
+  let pkgMissingNameField: Array<string> = [];
+
+  if (toolset === 'extended' && !!pkgs.javascript.pkg && !pkgs.javascript.tool) {
     if (!!pkgs.javascript && !pkgs.javascript && !pkgs.javascript.pkg && !pkgs.javascript.pkg.name) {
       throw new PackageMissingNameError(["package.json"]);
     }
-    if (!!pkgs.rust && !pkgs.rust && !pkgs.rust.pkg && !pkgs.rust.pkg.name) {
-      throw new PackageMissingNameError(["Cargo.toml"]);
-    }
 
-    return {
-      tool: "root",
-      root,
-      packages: [root]
-    };
-  }
-
-
-  let packageResults: { javascript?: Packages, rust?: Packages } = {
-    javascript: {
-      tool: pkgs.javascript.tool.type,
-      root: {
+    packageResults.javascript = {
+      tool: 'root',
+      dir: cwd,
+      packageFile: pkgs.javascript.pkg,
+      packages: [{
         dir: cwd,
         packageFile: pkgs.javascript.pkg
-      }, packages: []
+      }]
     }
   }
 
-  // build up array of dirs at this folder level
-  const directoriesJavaScript = globbySync(pkgs.javascript.tool.packageGlobs, {
-    cwd,
-    onlyDirectories: true,
-    absolute: true,
-    expandDirectories: false,
-    ignore: ["**/node_modules"]
-  });
+  if (!!pkgs.javascript.pkg && !!pkgs.javascript.tool) {
+    // build up array of dirs at this folder level
+    const directoriesJavaScript = globbySync(pkgs.javascript.tool.packageGlobs, {
+      cwd,
+      onlyDirectories: true,
+      absolute: true,
+      expandDirectories: false,
+      ignore: ["**/node_modules"]
+    });
 
-  let pkgMissingNameField: Array<string> = [];
-
-  packageResults.javascript.packages = directoriesJavaScript.sort().map(dir => {
-    try {
-      const packageJson = fs
-        .readJsonSync(path.join(dir, "package.json"))
-      if (!packageJson.name) {
-        pkgMissingNameField.push(
-          path.relative(cwd, path.join(dir, "package.json"))
-        );
-      }
-      return { packageJson, dir };
-    } catch (err) {
-      if (err.code === "ENOENT") {
-        return null;
-      }
-      throw err;
+    packageResults.javascript = {
+      tool: pkgs.javascript.tool.type,
+      dir: cwd,
+      packageFile: pkgs.javascript.pkg,
     }
-  })
-    .filter(x => x);
 
-  if (toolset === 'extended') {
+    packageResults.javascript.packages = directoriesJavaScript.sort().map(dir => {
+      try {
+        const packageJson = fs
+          .readJsonSync(path.join(dir, "package.json"))
+        if (!packageJson.name) {
+          pkgMissingNameField.push(
+            path.relative(cwd, path.join(dir, "package.json"))
+          );
+        }
+        return { packageJson, dir };
+      } catch (err) {
+        if (err.code === "ENOENT") {
+          return null;
+        }
+        throw err;
+      }
+    })
+      .filter(x => x);
+  }
+
+  if (toolset === 'extended' && !!pkgs.rust.tool) {
     const directoriesRust: string[] = globbySync(pkgs.rust.tool.packageGlobs, {
       cwd,
       onlyDirectories: true,
@@ -393,12 +402,16 @@ export function getPackagesSync(dir: string, toolset: "default" | "extended" = '
       ignore: ["**/node_modules"]
     });
 
-    let pkgMissingNameField: string[] = [];
+    packageResults.rust = {
+      tool: pkgs.rust.tool.type,
+      dir: cwd,
+      packageFile: pkgs.rust.pkg,
+    }
 
     packageResults.rust.packages = directoriesRust.sort().map((dir: string) => {
       try {
         const cargoToml = fs.readFileSync(path.join(dir, "Cargo.toml"), "utf8")
-        let parsed = TOML.parse(cargoToml)
+        let parsed = TOML.parse(cargoToml).package
         if (!parsed.name) {
           pkgMissingNameField.push(
             path.relative(cwd, path.join(dir, "Cargo.toml"))
@@ -413,6 +426,22 @@ export function getPackagesSync(dir: string, toolset: "default" | "extended" = '
       }
     }
     ).filter(x => x);
+  } else if (toolset === 'extended' && !!pkgs.rust.pkg && !pkgs.rust.tool) {
+    // extended implementation includes other languages
+    // and returns an object "grouped" by language
+    packageResults.rust = {
+      tool: 'root',
+      dir: cwd,
+      packageFile: pkgs.rust.pkg,
+      packages: [{
+        dir: cwd,
+        packageFile: pkgs.rust.pkg
+      }]
+    };
+
+    if (!!pkgs.rust && !pkgs.rust && !pkgs.rust.pkg && !pkgs.rust.pkg.name) {
+      throw new PackageMissingNameError(["Cargo.toml"]);
+    }
   }
 
   if (pkgMissingNameField.length !== 0) {

@@ -106,14 +106,50 @@ let runTests = (getPackages: GetPackages) => {
   });
 
   it("should find single Rust Cargo crates", async () => {
-    const allPackages = await getPackages(f.copy("rust-single"), 'extended');
-    console.log(allPackages)
+    const allPackages = await getPackages(f.copy("rust-single"), "extended");
+    expect(allPackages.javascript).toBeUndefined();
+
+    expect(allPackages.rust.packageFile.name).toEqual(
+      "rust-single-fixture"
+    );
   })
 
   it("should find Rust Cargo.toml and package.json", async () => {
-    const allPackages = await getPackages(f.copy("rust-and-js"), 'extended');
-    console.log(allPackages)
+    const allPackages = await getPackages(f.copy("rust-and-js"), "extended");
+
+    if (allPackages.javascript.packages === null) {
+      return expect(allPackages.javascript.packages).not.toBeNull();
+    }
+    if (allPackages.rust.packages === null) {
+      return expect(allPackages.rust.packages).not.toBeNull();
+    }
+
+    expect(allPackages.javascript.packageFile.name).toEqual(
+      "rust-and-js-package-fixture"
+    );
+
+    expect(allPackages.javascript.tool).toEqual("root");
+
+    expect(allPackages.rust.packageFile.name).toEqual(
+      "rust-and-js-crate-fixture"
+    );
+
+    expect(allPackages.rust.tool).toEqual("root");
   })
+
+  it("should resolve cargo workspaces", async () => {
+    const allPackages = await getPackages(f.copy("rust-multi"), "extended");
+
+    if (allPackages.rust.packages === null) {
+      return expect(allPackages.rust.packages).not.toBeNull();
+    }
+
+    expect(allPackages.rust.packages[0].package.name).toEqual(
+      "rust-pkg-a-fixture"
+    );
+
+    expect(allPackages.rust.tool).toEqual("cargo");
+  });
 };
 
 describe("getPackages", () => {
