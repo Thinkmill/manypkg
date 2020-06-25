@@ -11,7 +11,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^1.0.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
     expect(errors.length).toEqual(0);
   });
   it("should error if internal version is not compatible", () => {
@@ -21,7 +21,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^0.1.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
     expect(errors[0]).toMatchObject({
       type: "INTERNAL_MISMATCH",
       dependencyWorkspace: ws.get("pkg-1"),
@@ -43,7 +43,7 @@ describe("internal mismatch", () => {
       dependencyRange: "^0.1.0"
     };
 
-    let fixed = makeCheck.fix!(error);
+    let fixed = makeCheck.fix!(error, {});
     expect(fixed).toMatchObject({ requiresInstall: true });
     expect(workspace.packageJson.dependencies).toMatchObject({
       "pkg-1": "^1.0.0"
@@ -56,7 +56,7 @@ describe("internal mismatch", () => {
       "pkg-1": "^0.1.0"
     };
     ws.set("depends-on-one", dependsOnOne);
-    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
     expect(errors).toMatchInlineSnapshot(`
       Array [
         Object {

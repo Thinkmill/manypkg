@@ -1,9 +1,9 @@
 // @flow
 import * as logger from "./logger";
 import fs from "fs-extra";
-import { getPackages, Package } from "@manypkg/get-packages";
+import { getPackages, Packages, Package } from "@manypkg/get-packages";
 import path from "path";
-import { Check } from "./checks/utils";
+import { Check, Options } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writePackage } from "./utils";
@@ -11,10 +11,23 @@ import { runCmd } from "./run";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
+type PackagesWithConfig = Packages & {
+  root: Packages["root"] & {
+    packageJson: Packages["root"]["packageJson"] & {
+      manypkg?: Options;
+    };
+  };
+};
+
+let defaultOptions = {
+  defaultBranch: "master"
+};
+
 let runChecks = (
   allWorkspaces: Map<string, Package>,
   rootWorkspace: Package,
-  shouldFix: boolean
+  shouldFix: boolean,
+  options: Options
 ) => {
   let hasErrored = false;
   let requiresInstall = false;
@@ -22,10 +35,17 @@ let runChecks = (
   for (let check of checks) {
     if (check.type === "all") {
       for (let [, workspace] of allWorkspaces) {
-        let errors = check.validate(workspace, allWorkspaces, rootWorkspace);
+        let errors = check.validate(
+          workspace,
+          allWorkspaces,
+          rootWorkspace,
+          options
+        );
         if (shouldFix && check.fix !== undefined) {
           for (let error of errors) {
-            let output = check.fix(error as any) || { requiresInstall: false };
+            let output = check.fix(error as any, options) || {
+              requiresInstall: false
+            };
             if (output.requiresInstall) {
               requiresInstall = true;
             }
@@ -33,16 +53,23 @@ let runChecks = (
         } else {
           for (let error of errors) {
             hasErrored = true;
-            logger.error(check.print(error as any));
+            logger.error(check.print(error as any, options));
           }
         }
       }
     }
     if (check.type === "root") {
-      let errors = check.validate(rootWorkspace, allWorkspaces);
+      let errors = check.validate(
+        rootWorkspace,
+        allWorkspaces,
+        rootWorkspace,
+        options
+      );
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
-          let output = check.fix(error as any) || { requiresInstall: false };
+          let output = check.fix(error as any, options) || {
+            requiresInstall: false
+          };
           if (output.requiresInstall) {
             requiresInstall = true;
           }
@@ -50,7 +77,7 @@ let runChecks = (
       } else {
         for (let error of errors) {
           hasErrored = true;
-          logger.error(check.print(error as any));
+          logger.error(check.print(error as any, options));
         }
       }
     }
@@ -93,7 +120,14 @@ async function execCmd(args: string[]) {
   }
   let shouldFix = things[0] === "fix";
 
-  let { packages, root, tool } = await getPackages(process.cwd());
+  let { packages, root, tool }: PackagesWithConfig = await getPackages(
+    process.cwd()
+  );
+
+  let options: Options = {
+    ...defaultOptions,
+    ...root.packageJson.manypkg
+  };
 
   let packagesByName = new Map<string, Package>(
     packages.map(x => [x.packageJson.name, x])
@@ -102,7 +136,8 @@ async function execCmd(args: string[]) {
   let { hasErrored, requiresInstall } = runChecks(
     packagesByName,
     root,
-    shouldFix
+    shouldFix,
+    options
   );
   if (shouldFix) {
     await Promise.all(
