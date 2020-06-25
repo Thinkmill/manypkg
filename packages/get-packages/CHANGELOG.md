@@ -1,5 +1,16 @@
 # @manypkg/get-packages
 
+## 1.1.0
+
+### Minor Changes
+
+- [`a4db72a`](https://github.com/Thinkmill/manypkg/commit/a4db72a8b272f1b642fa751639d7840f4fa3658c) [#63](https://github.com/Thinkmill/manypkg/pull/63) Thanks [@evocateur](https://github.com/evocateur)! - Add support for Lerna monorepos
+
+### Patch Changes
+
+- Updated dependencies [[`a4db72a`](https://github.com/Thinkmill/manypkg/commit/a4db72a8b272f1b642fa751639d7840f4fa3658c)]:
+  - @manypkg/find-root@1.1.0
+
 ## 1.0.1
 
 ### Patch Changes

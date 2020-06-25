@@ -1,5 +1,36 @@
 # @manypkg/cli
 
+## 0.14.0
+
+### Minor Changes
+
+- [`f8f60d9`](https://github.com/Thinkmill/manypkg/commit/f8f60d9bd968cf2c7bef2a1e7c257398316ee12c) [#67](https://github.com/Thinkmill/manypkg/pull/67) Thanks [@jesstelford](https://github.com/jesstelford)! - Add package.json#manypkg config object:
+
+  ```
+  {
+    "manypkg": {}
+  }
+  ```
+
+  To support setting a default branch for the INCORRECT_REPOSITORY_FIELD check/fix, a new config option can be set:
+
+  ```
+  {
+    "manypkg": {
+      "defaultBranch": "master"
+    }
+  }
+  ```
+
+  The default `defaultBranch` is `"master"`.
+
+### Patch Changes
+
+- [`a4db72a`](https://github.com/Thinkmill/manypkg/commit/a4db72a8b272f1b642fa751639d7840f4fa3658c) [#63](https://github.com/Thinkmill/manypkg/pull/63) Thanks [@evocateur](https://github.com/evocateur)! - Add support for Lerna monorepos
+
+- Updated dependencies [[`a4db72a`](https://github.com/Thinkmill/manypkg/commit/a4db72a8b272f1b642fa751639d7840f4fa3658c)]:
+  - @manypkg/get-packages@1.1.0
+
 ## 0.13.0
 
 ### Minor Changes
