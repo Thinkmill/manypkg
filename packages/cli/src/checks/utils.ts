@@ -14,24 +14,36 @@ export const DEPENDENCY_TYPES = [
   "peerDependencies"
 ] as const;
 
+export type Options = { defaultBranch?: string };
+
 type RootCheck<ErrorType> = {
   type: "root";
   validate: (
     rootPackage: Package,
-    allPackages: Map<string, Package>
+    allPackages: Map<string, Package>,
+    rootWorkspace: Package,
+    options: Options
   ) => ErrorType[];
-  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
-  print: (error: ErrorType) => string;
+  fix?: (
+    error: ErrorType,
+    options: Options
+  ) => void | { requiresInstall: boolean };
+  print: (error: ErrorType, options: Options) => string;
 };
 
 type RootCheckWithFix<ErrorType> = {
   type: "root";
   validate: (
     rootPackage: Package,
-    allPackages: Map<string, Package>
+    allPackages: Map<string, Package>,
+    rootWorkspace: Package,
+    options: Options
   ) => ErrorType[];
-  fix: (error: ErrorType) => void | { requiresInstall: boolean };
-  print: (error: ErrorType) => string;
+  fix: (
+    error: ErrorType,
+    options: Options
+  ) => void | { requiresInstall: boolean };
+  print: (error: ErrorType, options: Options) => string;
 };
 
 type AllCheck<ErrorType> = {
@@ -39,10 +51,14 @@ type AllCheck<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package
+    rootWorkspace: Package,
+    options: Options
   ) => ErrorType[];
-  fix?: (error: ErrorType) => void | { requiresInstall: boolean };
-  print: (error: ErrorType) => string;
+  fix?: (
+    error: ErrorType,
+    options: Options
+  ) => void | { requiresInstall: boolean };
+  print: (error: ErrorType, options: Options) => string;
 };
 
 type AllCheckWithFix<ErrorType> = {
@@ -50,10 +66,14 @@ type AllCheckWithFix<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package
+    rootWorkspace: Package,
+    options: Options
   ) => ErrorType[];
-  fix: (error: ErrorType) => void | { requiresInstall: boolean };
-  print: (error: ErrorType) => string;
+  fix: (
+    error: ErrorType,
+    options: Options
+  ) => void | { requiresInstall: boolean };
+  print: (error: ErrorType, options: Options) => string;
 };
 
 export type Check<ErrorType> =

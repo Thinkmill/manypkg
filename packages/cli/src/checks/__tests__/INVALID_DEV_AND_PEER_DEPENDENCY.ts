@@ -15,7 +15,7 @@ describe("invalid dev and peer dependency", () => {
         "pkg-1": "^1.0.0"
       };
       ws.set("depends-on-one", dependsOnOne);
-      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
       expect(errors.length).toEqual(0);
     });
     it("should not error if the dependencies match", () => {
@@ -30,7 +30,7 @@ describe("invalid dev and peer dependency", () => {
         "pkg-1": "*"
       };
       ws.set("depends-on-one", dependsOnOne);
-      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
       expect(errors.length).toEqual(0);
     });
     it("should error if the devDependency is missing", () => {
@@ -41,7 +41,7 @@ describe("invalid dev and peer dependency", () => {
         "pkg-1": "^1.0.0"
       };
       ws.set("depends-on-one", dependsOnOne);
-      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace);
+      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
 
       expect(errors[0]).toMatchObject({
         type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
@@ -60,7 +60,7 @@ describe("invalid dev and peer dependency", () => {
       pkg1.packageJson.peerDependencies = {
         "external-dep": "^1.0.0"
       };
-      let errors = makeCheck.validate(pkg1, ws, rootWorkspace);
+      let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
 
       expect(errors[0]).toMatchObject({
         type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
@@ -86,7 +86,7 @@ describe("invalid dev and peer dependency", () => {
       };
 
       ws.set("pkg-2", pkg2);
-      let errors = makeCheck.validate(pkg1, ws, rootWorkspace);
+      let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
 
       expect(errors[0]).toMatchObject({
         type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
@@ -113,7 +113,7 @@ describe("invalid dev and peer dependency", () => {
       };
 
       ws.set("pkg-2", pkg2);
-      let errors = makeCheck.validate(pkg1, ws, rootWorkspace);
+      let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
 
       expect(errors[0]).not.toMatchObject({
         type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
@@ -131,10 +131,10 @@ describe("invalid dev and peer dependency", () => {
     pkg1.packageJson.peerDependencies = {
       "external-dep": "^1.0.0"
     };
-    let errors = makeCheck.validate(pkg1, ws, rootWorkspace);
+    let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
     let error = errors[0]!;
 
-    let fixed = makeCheck.fix!(error);
+    let fixed = makeCheck.fix!(error, {});
     expect(fixed).toMatchObject({ requiresInstall: true });
     expect(pkg1.packageJson.devDependencies).toMatchObject({
       "external-dep": "^1.0.0"
@@ -150,7 +150,7 @@ describe("invalid dev and peer dependency", () => {
     pkg1.packageJson.devDependencies = {
       "external-dep": "^1.1.0"
     };
-    let errors = makeCheck.validate(pkg1, ws, rootWorkspace);
+    let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
     expect(errors).toHaveLength(0);
   });
 });

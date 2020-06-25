@@ -14,7 +14,7 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: (workspace, allWorkspaces, rootWorkspace) => {
+  validate: (workspace, allWorkspaces, rootWorkspace, options) => {
     let rootRepositoryField = (rootWorkspace.packageJson as any).repository;
 
     if (typeof rootRepositoryField === "string") {
@@ -43,17 +43,18 @@ export default makeCheck<ErrorType>({
             ];
           }
         } else {
-          // TODO: handle default branches that aren't master
           let correctRepositoryField = "";
 
           if (result.host === "github.com") {
-            correctRepositoryField = `${baseRepositoryUrl}/tree/master/${normalizePath(
+            correctRepositoryField = `${baseRepositoryUrl}/tree/${
+              options.defaultBranch
+            }/${normalizePath(
               path.relative(rootWorkspace.dir, workspace.dir)
             )}`;
           } else if (result.host === "dev.azure.com") {
             correctRepositoryField = `${baseRepositoryUrl}?path=${normalizePath(
               path.relative(rootWorkspace.dir, workspace.dir)
-            )}&version=GBmaster&_a=contents`;
+            )}&version=GB${options.defaultBranch}&_a=contents`;
           }
 
           let currentRepositoryField = (workspace.packageJson as any)

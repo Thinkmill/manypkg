@@ -5,6 +5,7 @@
 // Who can say? ¯\_(ツ)_/¯
 
 import { Package } from "@manypkg/get-packages";
+import crypto from "crypto";
 
 export let getFakeWS = (
   name: string = "pkg-1",
@@ -23,4 +24,16 @@ export let getWS = (): Map<string, Package> => {
   let pkg = new Map();
   pkg.set("pkg-1", getFakeWS());
   return pkg;
+};
+
+export let getFakeString = (length: number): string => {
+  return (
+    crypto
+      // converting to hex doubles the length, so we request half as many bytes
+      .randomBytes(Math.ceil(length / 2))
+      .toString("hex")
+      // if length is odd, Math.ceil() will have requested too many bytes, so we
+      // chop them off by only grabbing `length` characters
+      .substring(-length)
+  );
 };

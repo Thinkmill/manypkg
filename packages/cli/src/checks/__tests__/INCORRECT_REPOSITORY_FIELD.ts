@@ -1,12 +1,13 @@
 import path from "path";
 import check from "../INCORRECT_REPOSITORY_FIELD";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getFakeString } from "../../test-helpers";
 
 describe("incorrect repository field", () => {
   describe("github", () => {
     it("should work", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg";
@@ -15,27 +16,30 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(workspace, ws, rootWorkspace);
+      let errors = check.validate(workspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
                       Array [
                         Object {
-                          "correctRepositoryField": "https://github.com/Thinkmill/manypkg/tree/master/packages/no-repository-field",
+                          "correctRepositoryField": "https://github.com/Thinkmill/manypkg/tree/${defaultBranch}/packages/no-repository-field",
                           "currentRepositoryField": undefined,
                           "type": "INCORRECT_REPOSITORY_FIELD",
                         },
                       ]
                 `);
 
-      check.fix(errors[0]);
+      check.fix(errors[0], {});
 
       expect((workspace.packageJson as any).repository).toBe(
-        "https://github.com/Thinkmill/manypkg/tree/master/packages/no-repository-field"
+        `https://github.com/Thinkmill/manypkg/tree/${defaultBranch}/packages/no-repository-field`
       );
     });
     it("should fix root in a different format", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg.git";
@@ -45,7 +49,9 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(rootWorkspace, ws, rootWorkspace);
+      let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
                       Array [
@@ -57,7 +63,7 @@ describe("incorrect repository field", () => {
                       ]
                 `);
 
-      check.fix(errors[0]);
+      check.fix(errors[0], {});
 
       expect((rootWorkspace.packageJson as any).repository).toBe(
         "https://github.com/Thinkmill/manypkg"
@@ -66,6 +72,7 @@ describe("incorrect repository field", () => {
     it("should do nothing if already in good format", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg";
@@ -75,7 +82,9 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(rootWorkspace, ws, rootWorkspace);
+      let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
         `Array []`
       );
@@ -90,6 +99,7 @@ describe("incorrect repository field", () => {
     it("should work", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg";
@@ -98,27 +108,30 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(workspace, ws, rootWorkspace);
+      let errors = check.validate(workspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
                       Array [
                         Object {
-                          "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GBmaster&_a=contents",
+                          "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GB${defaultBranch}&_a=contents",
                           "currentRepositoryField": undefined,
                           "type": "INCORRECT_REPOSITORY_FIELD",
                         },
                       ]
                 `);
 
-      check.fix(errors[0]);
+      check.fix(errors[0], {});
 
       expect((workspace.packageJson as any).repository).toBe(
-        "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GBmaster&_a=contents"
+        `https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GB${defaultBranch}&_a=contents`
       );
     });
     it("should fix root in a different format", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://Thinkmill@dev.azure.com/Thinkmill/monorepos/_git/manypkg";
@@ -128,7 +141,9 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(rootWorkspace, ws, rootWorkspace);
+      let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
                       Array [
@@ -140,7 +155,7 @@ describe("incorrect repository field", () => {
                       ]
                 `);
 
-      check.fix(errors[0]);
+      check.fix(errors[0], {});
 
       expect((rootWorkspace.packageJson as any).repository).toBe(
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg"
@@ -149,6 +164,7 @@ describe("incorrect repository field", () => {
     it("should do nothing if already in good format", () => {
       let ws = getWS();
       let rootWorkspace = getFakeWS("root");
+      let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg";
@@ -158,7 +174,9 @@ describe("incorrect repository field", () => {
       workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
-      let errors = check.validate(rootWorkspace, ws, rootWorkspace);
+      let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
+        defaultBranch
+      });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
         `Array []`
       );
