@@ -153,4 +153,32 @@ describe("invalid dev and peer dependency", () => {
     let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
     expect(errors).toHaveLength(0);
   });
+
+  it("invalid range on peerDependencies", () => {
+    let ws = getWS();
+    let pkg1 = ws.get("pkg-1")!;
+
+    pkg1.packageJson.peerDependencies = {
+      "external-dep": "not a range"
+    };
+    pkg1.packageJson.devDependencies = {
+      "external-dep": "^1.1.0"
+    };
+    let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
+    expect(errors).toHaveLength(0);
+  });
+
+  it("invalid range on devDependencies", () => {
+    let ws = getWS();
+    let pkg1 = ws.get("pkg-1")!;
+
+    pkg1.packageJson.peerDependencies = {
+      "external-dep": "^1.0.0"
+    };
+    pkg1.packageJson.devDependencies = {
+      "external-dep": "not a range"
+    };
+    let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
+    expect(errors).toHaveLength(0);
+  });
 });
