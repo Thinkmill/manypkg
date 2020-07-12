@@ -1,4 +1,5 @@
 import { Package } from "@manypkg/get-packages";
+import * as semver from "semver";
 import { highest } from "sembear";
 
 export const NORMAL_DEPENDENCY_TYPES = [
@@ -126,6 +127,9 @@ export let getHighestExternalRanges = weakMemoize(function getHighestVersions(
       if (deps) {
         for (let depName in deps) {
           if (!allPackages.has(depName)) {
+            if (!semver.validRange(deps[depName])) {
+              continue;
+            }
             let highestExternalRange = highestExternalRanges.get(depName);
             if (
               !highestExternalRange ||
