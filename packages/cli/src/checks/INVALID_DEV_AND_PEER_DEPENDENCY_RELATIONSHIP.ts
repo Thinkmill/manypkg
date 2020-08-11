@@ -1,6 +1,7 @@
 import { makeCheck, getHighestExternalRanges } from "./utils";
 import { Package } from "@manypkg/get-packages";
 import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
+import semver from "semver";
 
 type ErrorType = {
   type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
@@ -38,6 +39,10 @@ export default makeCheck<ErrorType>({
             idealDevVersion
           });
         } else if (
+          semver.validRange(devDeps[depName]) &&
+          // TODO: we should probably error when a peer dep has an invalid range (in a seperate rule)
+          // (also would be good to do a bit more validation instead of just ignoring invalid ranges for normal dep types)
+          semver.validRange(peerDeps[depName]) &&
           !upperBoundOfRangeAWithinBoundsOfB(
             devDeps[depName],
             peerDeps[depName]

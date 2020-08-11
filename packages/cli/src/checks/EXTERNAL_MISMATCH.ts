@@ -4,6 +4,7 @@ import {
   NORMAL_DEPENDENCY_TYPES
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
+import { validRange } from "semver";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
@@ -19,11 +20,16 @@ export default makeCheck<ErrorType>({
     let highestExternalRanges = getHighestExternalRanges(allWorkspace);
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = workspace.packageJson[depType];
+
       if (deps) {
         for (let depName in deps) {
           let range = deps[depName];
           let highestRange = highestExternalRanges.get(depName);
-          if (highestRange !== undefined && highestRange !== range) {
+          if (
+            highestRange !== undefined &&
+            highestRange !== range &&
+            validRange(range)
+          ) {
             errors.push({
               type: "EXTERNAL_MISMATCH",
               workspace,

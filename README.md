@@ -159,6 +159,12 @@ This example will not cause an error because the range `1.0.0` for `some-externa
 
 </details>
 
+### Ignoring this rule
+
+There are some cases where you might want to intentionally have conflicts between versions. To do this, you can use something that isn't a valid semver range instead of a range such as a git url or etc. If you'd like a conflicting version of an npm package, you can use `npm:your-range-here`.
+
+> Note: Do this with care, having different versions of the same package can lead to strange bugs
+
 ## Internal mismatch
 
 The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package.
