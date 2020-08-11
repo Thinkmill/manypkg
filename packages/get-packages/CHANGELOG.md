@@ -1,5 +1,11 @@
 # @manypkg/get-packages
 
+## 1.1.1
+
+### Patch Changes
+
+- [`35fcc9c`](https://github.com/Thinkmill/manypkg/commit/35fcc9cba7ccec6667826da84ed02dff166c50a3) [#70](https://github.com/Thinkmill/manypkg/pull/70) Thanks [@jesstelford](https://github.com/jesstelford)! - Add missing license field
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @manypkg/cli
 
+## 0.15.0
+
+### Minor Changes
+
+- [`f2e890e`](https://github.com/Thinkmill/manypkg/commit/f2e890e76b718c36c8d08b49a54288cd2aecedfd) [#68](https://github.com/Thinkmill/manypkg/pull/68) Thanks [@mitchellhamilton](https://github.com/mitchellhamilton)! - Ignore invalid ranges on external dependencies to allow git and other types of dependencies and allow people to ignore the external mismatch rule for certain dependencies by making dependencies `npm:^1.0.0` instead of `^1.0.0`.
+
+### Patch Changes
+
+- Updated dependencies [[`35fcc9c`](https://github.com/Thinkmill/manypkg/commit/35fcc9cba7ccec6667826da84ed02dff166c50a3)]:
+  - @manypkg/get-packages@1.1.1
+
 ## 0.14.0
 
 ### Minor Changes
