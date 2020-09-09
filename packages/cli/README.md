@@ -36,7 +36,7 @@ You can also specify a version or version range such as:
 
 `manypkg upgrade react ^16.3.0`
 
-### Upgrading all dependencies in a scope
+#### Upgrading all dependencies in a scope
 
 If you specify a scope, rather than a package name, you can upgrade all packages within a scope, for example:
 
@@ -45,6 +45,14 @@ If you specify a scope, rather than a package name, you can upgrade all packages
 This would upgrade all packages in the `keystone` scope to latest across your repository. You can specify a tag, or a version range. If you specify a tag, it will update every package that has a tag at this scope.
 
 If you specify a version range, all packages in the scope will be updated to that version range and then an install will be attempted, but you will have errors if not all packages in the scope have that version.
+
+### `manypkg npm-tag Tagname (--otp OTP_CODE)`
+
+This gets each public package in the repo, and adds the npm tag specified to the current version of each. This can be run after publish to give a particular release a name.
+
+`manypkg npm-tag charmander`
+
+> WARNING - npm-tag is not currently particularly robust in its implementation. The logging and feedback are likely to be poor
 
 ### `manypkg run <partial package name or directory> <script>`
 

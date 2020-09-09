@@ -7,6 +7,7 @@ import { ExitError } from "./errors";
 import { writePackage } from "./utils";
 import { runCmd } from "./run";
 import { upgradeDependency } from "./upgrade";
+import { npmTagAll } from "./npm-tag";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
@@ -114,9 +115,12 @@ async function execCmd(args: string[]) {
   if (things[0] === "upgrade") {
     return upgradeDependency(things.slice(1));
   }
+  if (things[0] === "npm-tag") {
+    return npmTagAll(things.slice(1));
+  }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(
-      `command ${things[0]} not found, only check, exec, run and fix exist`
+      `command ${things[0]} not found, only check, exec, run, upgrade, npm-tag and fix exist`
     );
     throw new ExitError(1);
   }
