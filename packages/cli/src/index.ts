@@ -6,7 +6,7 @@ import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writePackage } from "./utils";
 import { runCmd } from "./run";
-import { updateDependency } from "./update";
+import { upgradeDependency } from "./upgrade";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
@@ -111,8 +111,8 @@ async function execCmd(args: string[]) {
   if (things[0] === "run") {
     return runCmd(things.slice(1), process.cwd());
   }
-  if (things[0] === "update") {
-    return updateDependency(things.slice(1));
+  if (things[0] === "upgrade") {
+    return upgradeDependency(things.slice(1));
   }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(

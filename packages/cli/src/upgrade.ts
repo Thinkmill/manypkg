@@ -6,7 +6,7 @@ import pLimit from "p-limit";
 
 import { writePackage } from "./utils";
 
-export async function updateDependency([name, tag = "latest"]: string[]) {
+export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing
   let { packages, tool, root }: Packages = await getPackages(process.cwd());
   let isScope = name.substring(0, 1) === "@";
@@ -33,12 +33,30 @@ export async function updateDependency([name, tag = "latest"]: string[]) {
     return requiresUpdate;
   });
 
+  let rootRequiresUpdate = false;
+  DEPENDENCY_TYPES.forEach(t => {
+    let deps = root.packageJson[t];
+    if (!deps) return;
+
+    let packageNames = Object.keys(deps);
+    packageNames.forEach(pkgName => {
+      if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
+        rootRequiresUpdate = true;
+        packagesToUpdate.add(pkgName);
+      }
+    });
+
+    if (rootRequiresUpdate) {
+      filteredPackages.push(root);
+    }
+  });
+
   let newVersions = await Promise.all(
     [...packagesToUpdate].map(async pkgName => {
       if (!newVersion) {
-        let info: any = await getPackageInfo(name);
+        let info: any = await getPackageInfo(pkgName);
         let distTags = info["dist-tags"];
-        let version = (newVersion = distTags[tag]);
+        let version = distTags[tag];
 
         return { pkgName, version };
       } else {
@@ -53,7 +71,7 @@ export async function updateDependency([name, tag = "latest"]: string[]) {
 
       if (deps) {
         newVersions.forEach(({ pkgName, version }) => {
-          if (deps![pkgName]) {
+          if (deps![pkgName] && version) {
             if (!newVersion) {
               deps![pkgName] = `${versionRangeToRangeType(
                 deps![pkgName]
