@@ -1,13 +1,12 @@
 // @flow
 import * as logger from "./logger";
-import fs from "fs-extra";
 import { getPackages, Packages, Package } from "@manypkg/get-packages";
-import path from "path";
-import { Check, Options } from "./checks/utils";
+import { Options } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
 import { writePackage } from "./utils";
 import { runCmd } from "./run";
+import { updateDependency } from "./update";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 
@@ -112,6 +111,9 @@ async function execCmd(args: string[]) {
   if (things[0] === "run") {
     return runCmd(things.slice(1), process.cwd());
   }
+  if (things[0] === "update") {
+    return updateDependency(things.slice(1));
+  }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(
       `command ${things[0]} not found, only check, exec, run and fix exist`
@@ -154,9 +156,11 @@ async function execCmd(args: string[]) {
           root: "yarn",
           bolt: "bolt"
         }[tool],
-          tool === "pnpm" ? ["install"]
-        : tool === "lerna" ? ["bootstrap", "--since", "HEAD"]
-        : [],
+        tool === "pnpm"
+          ? ["install"]
+          : tool === "lerna"
+          ? ["bootstrap", "--since", "HEAD"]
+          : [],
         { cwd: root.dir, stdio: "inherit" }
       );
     }
