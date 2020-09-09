@@ -9,8 +9,8 @@ import { writePackage } from "./utils";
 export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing
   let { packages, tool, root }: Packages = await getPackages(process.cwd());
-  let isScope = name.substring(0, 1) === "@";
-  let newVersion = semver.validRange(tag);
+  let isScope = name.startsWith("@") && name.endsWith("/");
+  let newVersion = semver.validRange(tag) ? tag : null;
 
   let packagesToUpdate = new Set<string>();
 
