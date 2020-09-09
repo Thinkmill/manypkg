@@ -4,13 +4,12 @@ import { getPackages, Packages, Package } from "@manypkg/get-packages";
 import { Options } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
-import { writePackage } from "./utils";
+import { writePackage, install } from "./utils";
 import { runCmd } from "./run";
 import { upgradeDependency } from "./upgrade";
 import { npmTagAll } from "./npm-tag";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
-
 type PackagesWithConfig = Packages & {
   root: Packages["root"] & {
     packageJson: Packages["root"]["packageJson"] & {
@@ -152,21 +151,7 @@ async function execCmd(args: string[]) {
       })
     );
     if (requiresInstall) {
-      await spawn(
-        {
-          yarn: "yarn",
-          pnpm: "pnpm",
-          lerna: "lerna",
-          root: "yarn",
-          bolt: "bolt"
-        }[tool],
-        tool === "pnpm"
-          ? ["install"]
-          : tool === "lerna"
-          ? ["bootstrap", "--since", "HEAD"]
-          : [],
-        { cwd: root.dir, stdio: "inherit" }
-      );
+      await install(tool, root.dir);
     }
 
     logger.success(`fixed workspaces!`);
