@@ -1,5 +1,13 @@
 # @manypkg/cli
 
+## 0.16.0
+
+### Minor Changes
+
+- [`3f8eb78`](https://github.com/Thinkmill/manypkg/commit/3f8eb788c4c1682424c14b9f5eeb40ac15a0af0b) [#73](https://github.com/Thinkmill/manypkg/pull/73) Thanks [@Noviny](https://github.com/Noviny)! - Add new command to upgrade packages easily with manypkg
+
+* [`3f8eb78`](https://github.com/Thinkmill/manypkg/commit/3f8eb788c4c1682424c14b9f5eeb40ac15a0af0b) [#73](https://github.com/Thinkmill/manypkg/pull/73) Thanks [@Noviny](https://github.com/Noviny)! - Add new command 'npm-tag'
+
 ## 0.15.0
 
 ### Minor Changes
