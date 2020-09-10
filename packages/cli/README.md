@@ -40,7 +40,7 @@ You can also specify a version or version range such as:
 
 If you specify a scope, rather than a package name, you can upgrade all packages within a scope, for example:
 
-`manypkg upgrade @keystone`
+`manypkg upgrade @keystonejs`
 
 This would upgrade all packages in the `keystone` scope to latest across your repository. You can specify a tag, or a version range. If you specify a tag, it will update every package that has a tag at this scope.
 
