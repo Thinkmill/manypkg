@@ -1,16 +1,15 @@
 // @flow
 import * as logger from "./logger";
-import fs from "fs-extra";
 import { getPackages, Packages, Package } from "@manypkg/get-packages";
-import path from "path";
-import { Check, Options } from "./checks/utils";
+import { Options } from "./checks/utils";
 import { checks } from "./checks";
 import { ExitError } from "./errors";
-import { writePackage } from "./utils";
+import { writePackage, install } from "./utils";
 import { runCmd } from "./run";
+import { upgradeDependency } from "./upgrade";
+import { npmTagAll } from "./npm-tag";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
-
 type PackagesWithConfig = Packages & {
   root: Packages["root"] & {
     packageJson: Packages["root"]["packageJson"] & {
@@ -112,9 +111,15 @@ async function execCmd(args: string[]) {
   if (things[0] === "run") {
     return runCmd(things.slice(1), process.cwd());
   }
+  if (things[0] === "upgrade") {
+    return upgradeDependency(things.slice(1));
+  }
+  if (things[0] === "npm-tag") {
+    return npmTagAll(things.slice(1));
+  }
   if (things[0] !== "check" && things[0] !== "fix") {
     logger.error(
-      `command ${things[0]} not found, only check, exec, run and fix exist`
+      `command ${things[0]} not found, only check, exec, run, upgrade, npm-tag and fix exist`
     );
     throw new ExitError(1);
   }
@@ -146,19 +151,7 @@ async function execCmd(args: string[]) {
       })
     );
     if (requiresInstall) {
-      await spawn(
-        {
-          yarn: "yarn",
-          pnpm: "pnpm",
-          lerna: "lerna",
-          root: "yarn",
-          bolt: "bolt"
-        }[tool],
-          tool === "pnpm" ? ["install"]
-        : tool === "lerna" ? ["bootstrap", "--since", "HEAD"]
-        : [],
-        { cwd: root.dir, stdio: "inherit" }
-      );
+      await install(tool, root.dir);
     }
 
     logger.success(`fixed workspaces!`);
