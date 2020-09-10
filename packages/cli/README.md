@@ -46,7 +46,7 @@ This would upgrade all packages in the `keystone` scope to latest across your re
 
 If you specify a version range, all packages in the scope will be updated to that version range and then an install will be attempted, but you will have errors if not all packages in the scope have that version.
 
-### `manypkg npm-tag Tagname (--otp OTP_CODE)`
+### `manypkg npm-tag tagname (--otp OTP_CODE)`
 
 This gets each public package in the repo, and adds the npm tag specified to the current version of each. This can be run after publish to give a particular release a name.
 
