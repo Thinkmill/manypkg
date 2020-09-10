@@ -40,14 +40,15 @@ async function tagApackage(
       ...flags
     ],
     {
+      stdio: "inherit",
       env: Object.assign({}, process.env, envOverride)
     }
   );
 }
 
-export async function npmTagAll([tag, hasOtp, otp]: string[]) {
+export async function npmTagAll([tag, _, otp]: string[]) {
   let { packages } = await getPackages(process.cwd());
-  let responses = await Promise.all(
+  await Promise.all(
     packages
       .filter(({ packageJson }) => packageJson.private !== true)
       .map(({ packageJson }) =>

@@ -9,7 +9,7 @@ import { writePackage, install } from "./utils";
 export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing
   let { packages, tool, root } = await getPackages(process.cwd());
-  let isScope = name.startsWith("@") && name.endsWith("/");
+  let isScope = name.startsWith("@") && !name.includes("/");
   let newVersion = semver.validRange(tag) ? tag : null;
 
   let packagesToUpdate = new Set<string>();
