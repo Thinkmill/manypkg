@@ -18,7 +18,7 @@ yarn add @manypkg/cli
 
 `manypkg check` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
 
-### `manypkg upgrade <packageName> <tag or version>
+### `manypkg upgrade <packageName> <tag or version>`
 
 This command helps you quickly upgrade your dependencies in a monorepo, or for packages from another scope. This is similar to `yarn upgrade` with slightly different ergonomics. At its most basic:
 
