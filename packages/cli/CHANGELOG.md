@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.16.1
+
+### Patch Changes
+
+- [`0f46c0f`](https://github.com/Thinkmill/manypkg/commit/0f46c0fd3c2fd5da5de5dcd3663ea8a2241989d6) [#75](https://github.com/Thinkmill/manypkg/pull/75) Thanks [@Noviny](https://github.com/Noviny)! - Update README.md - small typo
+
 ## 0.16.0
 
 ### Minor Changes
