@@ -78,6 +78,6 @@ export default makeCheck<ErrorType>({
     if (error.devVersion === null) {
       return `${error.workspace.packageJson.name} has a peerDependency on ${error.dependencyName} but it is not also specified in devDependencies, please add it there.`;
     }
-    return `${error.workspace.packageJson.name} has a peerDependency on ${error.dependencyName} but the range specified in devDependency is not greator than or equal to the range specified in peerDependencies`;
+    return `${error.workspace.packageJson.name} has a peerDependency on ${error.dependencyName} but the range specified in devDependency is not greater than or equal to the range specified in peerDependencies`;
   }
 });
