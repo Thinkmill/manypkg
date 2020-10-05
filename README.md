@@ -167,7 +167,7 @@ There are some cases where you might want to intentionally have conflicts betwee
 
 ## Internal mismatch
 
-The ranges for all regular dependencies and optionalDependencies(not peerDependencies or devDependencies) on internal packages should include the version of the internal package.
+The ranges for all regular dependencies, devDependencies and optionalDependencies(not peerDependencies) on internal packages should include the version of the internal package.
 
 ### Why it's a rule
 
@@ -176,18 +176,6 @@ So that an internal package that depends on another internal package will always
 ### How it's fixed
 
 If the range is a [caret range](https://github.com/npm/node-semver#caret-ranges-123-025-004) or a [tilde range](https://github.com/npm/node-semver#tilde-ranges-123-12-1) with no other comparators, the range is set as a caret or tilde range respectively with the version of the internal package. If it is any other range, the range is set to the exact version of the internal package.
-
-## Internal devDependencies are not `*`
-
-Internal packages that have `devDependencies` on other internal packages must have the range set to `*`.
-
-### Why it's a rule
-
-The ranges for internal `devDependencies` do not matter since they will be using the local version anyway, and having non-star versions causes accidental patching of packages when no changes have been made which creates lots of unnecessary versions of packages in large repos.
-
-### How it's fixed
-
-Change whatever other range is specified to be `*`
 
 ## Invalid dev and peer dependency relationship
 
