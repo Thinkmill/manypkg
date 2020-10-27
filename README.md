@@ -16,7 +16,7 @@ yarn add @manypkg/cli
 
 ### `manypkg fix`
 
-`manypkg check` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
+`manypkg fix` runs all of the [checks](#checks) against your repo and fixes any of problems that can be fixed.
 
 ### `manypkg run <partial package name or directory> <script>`
 
