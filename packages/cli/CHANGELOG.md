@@ -1,5 +1,13 @@
 # @manypkg/cli
 
+## 0.16.2
+
+### Patch Changes
+
+- [`7d421b2`](https://github.com/Thinkmill/manypkg/commit/7d421b2074b3d7f3077a542428448c26b5d563a8) [#79](https://github.com/Thinkmill/manypkg/pull/79) Thanks [@zzarcon](https://github.com/zzarcon)! - Bump meow to ^6.0.0
+
+* [`3f0ac13`](https://github.com/Thinkmill/manypkg/commit/3f0ac130f836700cb48202f3b16dfa042701e226) [#77](https://github.com/Thinkmill/manypkg/pull/77) Thanks [@Andarist](https://github.com/Andarist)! - Fixed a typo in the reported error message for the peer and dev dep check
+
 ## 0.16.1
 
 ### Patch Changes
