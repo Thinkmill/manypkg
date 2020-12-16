@@ -9,6 +9,7 @@ describe("Run command", () => {
   it.each([
     ["package-one", "start", 0],
     ["package-one", "test", 0],
+    ["packages/package-two", "start", 0],
     ["package-two-one", "start", 0],
     ["package", "start", 1],
     ["package-two", "start", 1],
@@ -16,6 +17,7 @@ describe("Run command", () => {
     ["package-three", "start", 1],
     ["pkg-one", "start", 0],
     ["pkg-two", "start", 1],
+    ["@manypkg/basic-fixture-pkg-two", "start", 0],
     ["pkg-two-one", "start", 0]
     // @ts-ignore
   ])(
