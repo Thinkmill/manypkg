@@ -13,7 +13,8 @@ describe("Run command", () => {
     ["package", "start", 1],
     ["package-two", "something", 1],
     ["package-three", "start", 1],
-    ["pkg-one", "start", 0]
+    ["pkg-one", "start", 0],
+    ["pkg-two", "start", 0]
     // @ts-ignore
   ])(
     'should execute "%s %s" and exit with %i',

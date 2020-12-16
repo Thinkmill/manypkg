@@ -82,3 +82,16 @@ exports[`Run command should execute "pkg-one start" and exit with 0: stdout 1`] 
 hello start
 "
 `;
+
+exports[`Run command should execute "pkg-two start" and exit with 0: stderr 1`] = `
+"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
+warning package.json: No license field
+warning ../../package.json: No license field
+"
+`;
+
+exports[`Run command should execute "pkg-two start" and exit with 0: stdout 1`] = `
+"$ echo hello start
+hello start
+"
+`;
