@@ -1,5 +1,23 @@
 # @manypkg/cli
 
+## 0.17.0
+
+### Minor Changes
+
+- [`ad6dbf1`](https://github.com/Thinkmill/manypkg/commit/ad6dbf11d0e17a61d06cb77a89312d875e2b7511) [#85](https://github.com/Thinkmill/manypkg/pull/85) Thanks [@with-heart](https://github.com/with-heart)! - Added the ability to use the exact package or directory name to target a package that is a substring of another with for the `run` command:
+
+  If packages exist at `packages/pkg-a` and `packages/pkg-a-1`, target `pkg-a` using the exact directory name:
+
+  ```bash
+  yarn manypkg run packages/pkg-a
+  ```
+
+  If packages are named `@project/package-a` and `@project/package-a-1`, target `package-a` using the exact package name:
+
+  ```bash
+  yarn manypkg run @project/package-a
+  ```
+
 ## 0.16.2
 
 ### Patch Changes
