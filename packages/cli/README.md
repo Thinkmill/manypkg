@@ -76,3 +76,10 @@ The following wouldn't work though because the `package` and `pkg` aren't unique
 yarn manypkg run package start
 yarn manypkg run pkg start
 ```
+
+In order to target a package with a name that is a substring of another (`@project/package-a` at `packages/pkg-a` and `@project/package-a-1` at `packages/pkg-a-1`), use the exact package or directory name:
+
+```bash
+yarn manypkg run @project/package-a start
+yarn manypkg run packages/pkg-a start
+```

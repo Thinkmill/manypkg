@@ -6,6 +6,22 @@ import { ExitError } from "./errors";
 
 export async function runCmd(args: string[], cwd: string) {
   let { packages, root } = await getPackages(cwd);
+
+  const exactMatchingPackage = packages.find(pkg => {
+    return (
+      pkg.packageJson.name === args[0] ||
+      path.relative(root.dir, pkg.dir) === args[0]
+    );
+  });
+
+  if (exactMatchingPackage) {
+    const { code } = await spawn("yarn", args.slice(1), {
+      cwd: exactMatchingPackage.dir,
+      stdio: "inherit"
+    });
+    throw new ExitError(code);
+  }
+
   const matchingPackages = packages.filter(pkg => {
     return (
       pkg.packageJson.name.includes(args[0]) ||

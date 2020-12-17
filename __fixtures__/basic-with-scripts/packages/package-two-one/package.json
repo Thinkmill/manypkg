@@ -1,0 +1,8 @@
+{
+  "name": "@manypkg/basic-fixture-pkg-two-one",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "echo hello start",
+    "test": "echo testing"
+  }
+}
