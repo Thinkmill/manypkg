@@ -1,5 +1,15 @@
 # @manypkg/cli
 
+## 0.18.0
+
+### Minor Changes
+
+- [`dc2b0f9`](https://github.com/Thinkmill/manypkg/commit/dc2b0f90cf208f997be91adf419501d976f0cf78) Thanks [@mitchellhamilton](https://github.com/mitchellhamilton)! - Added `manypkg.ignoredRules` config option
+
+### Patch Changes
+
+- [`72227d5`](https://github.com/Thinkmill/manypkg/commit/72227d51eb681c13760f7325bce324b46a179eaf) [#90](https://github.com/Thinkmill/manypkg/pull/90) Thanks [@jroebu14](https://github.com/jroebu14)! - Removes vulnerable and unused package meow
+
 ## 0.17.0
 
 ### Minor Changes
