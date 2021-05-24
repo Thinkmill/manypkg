@@ -20,7 +20,6 @@
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0",
     "get-workspaces": "^0.6.0",
-    "meow": "^6.0.0",
     "normalize-path": "^3.0.0",
     "p-limit": "^2.2.1",
     "package-json": "^6.5.0",
