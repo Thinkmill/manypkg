@@ -15,7 +15,7 @@ export const DEPENDENCY_TYPES = [
   "peerDependencies"
 ] as const;
 
-export type Options = { defaultBranch?: string };
+export type Options = { defaultBranch?: string; ignoredRules?: string[] };
 
 type RootCheck<ErrorType> = {
   type: "root";

@@ -10,12 +10,14 @@ import { upgradeDependency } from "./upgrade";
 import { npmTagAll } from "./npm-tag";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
-type PackagesWithConfig = Packages & {
-  root: Packages["root"] & {
-    packageJson: Packages["root"]["packageJson"] & {
-      manypkg?: Options;
-    };
+
+type RootPackage = Package & {
+  packageJson: {
+    manypkg?: Options;
   };
+};
+type PackagesWithConfig = Packages & {
+  root: RootPackage;
 };
 
 let defaultOptions = {
@@ -24,14 +26,22 @@ let defaultOptions = {
 
 let runChecks = (
   allWorkspaces: Map<string, Package>,
-  rootWorkspace: Package,
+  rootWorkspace: RootPackage,
   shouldFix: boolean,
   options: Options
 ) => {
   let hasErrored = false;
   let requiresInstall = false;
+  let ignoredRules = new Set(
+    (rootWorkspace.packageJson.manypkg &&
+      rootWorkspace.packageJson.manypkg.ignoredRules) ||
+      []
+  );
+  for (let [ruleName, check] of Object.entries(checks)) {
+    if (ignoredRules.has(ruleName)) {
+      continue;
+    }
 
-  for (let check of checks) {
     if (check.type === "all") {
       for (let [, workspace] of allWorkspaces) {
         let errors = check.validate(
@@ -124,10 +134,9 @@ async function execCmd(args: string[]) {
     throw new ExitError(1);
   }
   let shouldFix = things[0] === "fix";
-
-  let { packages, root, tool }: PackagesWithConfig = await getPackages(
+  let { packages, root, tool } = (await getPackages(
     process.cwd()
-  );
+  )) as PackagesWithConfig;
 
   let options: Options = {
     ...defaultOptions,
