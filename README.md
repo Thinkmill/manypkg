@@ -196,7 +196,7 @@ This is so that `peerDependencies` are available in the package during developme
 
 The range for the dependency specified in `peerDependencies` is added to `devDependencies` unless the package is already a non-peer dependency elsewhere in the repo in which, that range is used instead.
 
-### Root has devDependencies
+## Root has devDependencies
 
 The root package should not have any `devDependencies`, instead all dependencies should be in `dependencies`
 
@@ -204,31 +204,31 @@ The root package should not have any `devDependencies`, instead all dependencies
 
 The root `package.json` of a monorepo is not published so whether a dependency is in `devDependencies` or `dependencies` does not make a difference and having one place to put dependencies in the root means that people do not have to arbitrarily decide where a dependency should go every time they install one.
 
-#### How it's fixed
+### How it's fixed
 
 All `devDependencies` in the root `package.json` are moved to `dependencies`.
 
-### Multiple dependency types
+## Multiple dependency types
 
 A dependency shouldn't be specified in more than one of `dependencies`, `devDependencies` or `optionalDependencies`.
 
-#### How it's fixed
+### How it's fixed
 
 The dep is removed from `devDependencies` or `optionalDependencies` if it's also in `dependencies`, if it's in `devDependencies` and `optionalDependencies`, it is removed from `dependencies`.
 
-### Invalid package name
+## Invalid package name
 
 There are rules from npm about what a package name can be and a package will fail to publish if those rules are not met.
 
-#### Why it's a rule
+### Why it's a rule
 
 All packages will be published together so some packages may depend on a package which can't be published. Checking for invalid package names prevents this kind of publish failure.
 
-#### How it's fixed
+### How it's fixed
 
 This requires manual fixing as automatically fixing this may lead to valid but incorrect package names.
 
-### Unsorted dependencies
+## Unsorted dependencies
 
 Dependencies in the dependency fields(`dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`) should be sorted alphabetically.
 
@@ -236,11 +236,11 @@ Dependencies in the dependency fields(`dependencies`, `devDependencies`, `peerDe
 
 When you add a package with `yarn add` or etc. dependencies are sorted, and this can cause confusing diffs if the dependencies were not previously sorted.
 
-#### How it's fixed
+### How it's fixed
 
 This is fixed by sorting deps by key alphabetically.
 
-### Incorrect `repository` field
+## Incorrect `repository` field
 
 If a GitHub repo URL is in the `repository` field in the root `package.json`, all of the packages should have a `repository` field which goes into the directory of the package.
 
