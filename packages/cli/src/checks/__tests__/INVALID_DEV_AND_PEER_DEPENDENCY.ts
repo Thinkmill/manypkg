@@ -182,7 +182,7 @@ describe("invalid dev and peer dependency", () => {
     expect(errors).toHaveLength(0);
   });
 
-  it("should work when peer dependency is in root dependency", () => {
+  it("should work when peer dependency is in root dependencies", () => {
     let ws = getWS();
     let pkg1 = ws.get("pkg-1")!;
 
