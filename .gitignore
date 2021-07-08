@@ -5,3 +5,6 @@ dist/
 .cache
 public
 scratchings.js
+
+# IDEs
+.idea

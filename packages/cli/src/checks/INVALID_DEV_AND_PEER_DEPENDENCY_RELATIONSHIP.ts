@@ -14,13 +14,17 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: (workspace, allWorkspaces) => {
-    let errors: ErrorType[] = [];
-    let peerDeps = workspace.packageJson.peerDependencies;
-    let devDeps = workspace.packageJson.devDependencies || {};
+  validate: (workspace, allWorkspaces, rootWorkspace) => {
+    const errors: ErrorType[] = [];
+    const peerDeps = workspace.packageJson.peerDependencies;
+    const devDeps = workspace.packageJson.devDependencies || {};
+    const rootDeps = rootWorkspace.packageJson.dependencies || {};
+
     if (peerDeps) {
       for (let depName in peerDeps) {
-        if (!devDeps[depName]) {
+        const devOrRootDep = devDeps[depName] || rootDeps[depName];
+
+        if (!devOrRootDep) {
           let highestRanges = getHighestExternalRanges(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
           let isInternalDependency = allWorkspaces.has(depName);
@@ -39,12 +43,12 @@ export default makeCheck<ErrorType>({
             idealDevVersion
           });
         } else if (
-          semver.validRange(devDeps[depName]) &&
+          semver.validRange(devOrRootDep) &&
           // TODO: we should probably error when a peer dep has an invalid range (in a seperate rule)
           // (also would be good to do a bit more validation instead of just ignoring invalid ranges for normal dep types)
           semver.validRange(peerDeps[depName]) &&
           !upperBoundOfRangeAWithinBoundsOfB(
-            devDeps[depName],
+            devOrRootDep,
             peerDeps[depName]
           )
         ) {
@@ -58,7 +62,7 @@ export default makeCheck<ErrorType>({
             workspace,
             dependencyName: depName,
             peerVersion: peerDeps[depName],
-            devVersion: devDeps[depName],
+            devVersion: devOrRootDep,
             idealDevVersion
           });
         }
