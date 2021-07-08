@@ -181,4 +181,19 @@ describe("invalid dev and peer dependency", () => {
     let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
     expect(errors).toHaveLength(0);
   });
+
+  it("should work when peer dependency is in root dependency", () => {
+    let ws = getWS();
+    let pkg1 = ws.get("pkg-1")!;
+
+    pkg1.packageJson.peerDependencies = {
+      "external-dep": "^1.0.0"
+    };
+    rootWorkspace.packageJson.dependencies = {
+      "external-dep": "^1.0.0"
+    };
+
+    let errors = makeCheck.validate(pkg1, ws, rootWorkspace, {});
+    expect(errors).toHaveLength(0);
+  });
 });
