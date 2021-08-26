@@ -2,6 +2,7 @@ import { getPackages } from "@manypkg/get-packages";
 import path from "path";
 import spawn from "spawndamnit";
 import * as logger from "./logger";
+import { GetPrefix } from "./utils";
 import { ExitError } from "./errors";
 
 export async function runCmd(args: string[], cwd: string) {
@@ -23,10 +24,10 @@ export async function runCmd(args: string[], cwd: string) {
   }
 
   const matchingPackages = packages.filter(pkg => {
-    return (
-      pkg.packageJson.name.includes(args[0]) ||
-      path.relative(root.dir, pkg.dir).includes(args[0])
-    );
+    const prefixed = `${GetPrefix(pkg.packageJson)}/${args[0]}`
+
+    if (prefixed === pkg.packageJson.name)
+      return prefixed
   });
 
   if (matchingPackages.length > 1) {

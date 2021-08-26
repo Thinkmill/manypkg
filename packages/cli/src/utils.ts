@@ -31,3 +31,14 @@ export async function install(tool: Tool, cwd: string) {
     { cwd, stdio: "inherit" }
   );
 }
+
+export function GetPrefix(packagejson: Package["packageJson"]){
+  const name = packagejson.name
+  const splitName = name.split("/")
+
+
+  if(splitName.length === 0)
+  throw new Error("Invalid package name. Please use '/' to separate the package with it's scope")
+
+  return splitName[0]
+}
