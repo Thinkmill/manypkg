@@ -1310,13 +1310,13 @@
     "@changesets/types" "^0.4.0"
     semver "^5.4.1"
 
-"@changesets/changelog-github@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@changesets/changelog-github/-/changelog-github-0.2.1.tgz#59b723958c6293618de278f48ed15af740d9ed2a"
-  integrity sha512-9rtct8gcbORJH7fmNhSOCgOyETk8JEoXFIC8PnFrdpQPuweknOORMKrsItfUnuYqRuSf0P13P1HCXgZFqBCPmg==
+"@changesets/changelog-github@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@changesets/changelog-github/-/changelog-github-0.4.1.tgz#880cb624477972ea103abf6942cf4ee3106f682b"
+  integrity sha512-WK9DzS3i0wa2doEnOr4sm/FMnNtxzCCAKP7dEcWvhYkgXYX5R6jmfHAcDstmjAhiuvbhoHYom4MOC1tIzgwnfA==
   dependencies:
-    "@changesets/get-github-info" "^0.4.1"
-    "@changesets/types" "^0.4.0"
+    "@changesets/get-github-info" "^0.5.0"
+    "@changesets/types" "^4.0.1"
     dotenv "^8.1.0"
 
 "@changesets/cli@^2.5.0":
@@ -1370,10 +1370,10 @@
   dependencies:
     extendable-error "^0.1.5"
 
-"@changesets/get-github-info@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@changesets/get-github-info/-/get-github-info-0.4.1.tgz#359562fb9ad1ba38b90f8d097337c8e36372d96c"
-  integrity sha512-UtBaB7rS2mvEvvsJCpNsR86wLd5dPaupXBCHDdcYY1kDATpLBrvCNj+Qq8HVDQeaYb4BnTOVl7sGjtnzGEMaxQ==
+"@changesets/get-github-info@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@changesets/get-github-info/-/get-github-info-0.5.0.tgz#b91ceb2d82edef78ae1598ea9fc335a012250295"
+  integrity sha512-vm5VgHwrxkMkUjFyn3UVNKLbDp9YMHd3vMf1IyJoa/7B+6VpqmtAaXyDS0zBLfN5bhzVCHrRnj4GcZXXcqrFTw==
   dependencies:
     dataloader "^1.4.0"
     node-fetch "^2.5.0"
