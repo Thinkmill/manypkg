@@ -1,4 +1,4 @@
-import { makeCheck, getHighestExternalRanges } from "./utils";
+import { makeCheck, getMostCommonRangeMap } from "./utils";
 import { Package } from "@manypkg/get-packages";
 import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
 import semver from "semver";
@@ -21,7 +21,7 @@ export default makeCheck<ErrorType>({
     if (peerDeps) {
       for (let depName in peerDeps) {
         if (!devDeps[depName]) {
-          let highestRanges = getHighestExternalRanges(allWorkspaces);
+          let highestRanges = getMostCommonRangeMap(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
           let isInternalDependency = allWorkspaces.has(depName);
           if (isInternalDependency) {
@@ -48,7 +48,7 @@ export default makeCheck<ErrorType>({
             peerDeps[depName]
           )
         ) {
-          let highestRanges = getHighestExternalRanges(allWorkspaces);
+          let highestRanges = getMostCommonRangeMap(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
           if (idealDevVersion === undefined) {
             idealDevVersion = peerDeps[depName];

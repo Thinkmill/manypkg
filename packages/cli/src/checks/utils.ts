@@ -117,32 +117,55 @@ function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   };
 }
 
-export let getHighestExternalRanges = weakMemoize(function getHighestVersions(
+export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   allPackages: Map<string, Package>
 ) {
-  let highestExternalRanges = new Map<string, string>();
+  let dependencyRangesMapping = new Map<string, {[key: string]: number}>();
+
   for (let [pkgName, pkg] of allPackages) {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = pkg.packageJson[depType];
       if (deps) {
         for (let depName in deps) {
+          const depSpecifier = deps[depName];
           if (!allPackages.has(depName)) {
             if (!semver.validRange(deps[depName])) {
               continue;
             }
-            let highestExternalRange = highestExternalRanges.get(depName);
-            if (
-              !highestExternalRange ||
-              highest([highestExternalRange, deps[depName]]) === deps[depName]
-            ) {
-              highestExternalRanges.set(depName, deps[depName]);
-            }
+            let dependencyRanges = dependencyRangesMapping.get(depName) || {};
+            const specifierCount = dependencyRanges[depSpecifier] || 0;
+            dependencyRanges[depSpecifier] = specifierCount + 1;
+            dependencyRangesMapping.set(depName, dependencyRanges);
           }
         }
       }
     }
   }
-  return highestExternalRanges;
+
+  let mostCommonRangeMap = new Map<string, string>();
+  
+  for (let [depName, specifierMap] of dependencyRangesMapping) {
+    const specifierMapEntryArray = Object.entries(specifierMap);
+
+    const [first] = specifierMapEntryArray;
+    const maxValue = specifierMapEntryArray.reduce((acc, value) => {
+      if(acc[1] === value[1]) {
+        // If both dependency ranges occurances are equal, pick the highest.
+        // It's impossible to infer intention of the developer 
+        // when the range only occurs once in the workspace
+        const highestRange = highest([acc[0], value[0]]);
+        return [ highestRange, acc[1] ];
+      }
+      
+      if(Math.max(acc[1], value[1])) {
+        return acc;
+      }
+      return value;
+    }, first);
+
+    mostCommonRangeMap.set(depName, maxValue[0])
+  }
+  return mostCommonRangeMap;
 });
 
 export function versionRangeToRangeType(versionRange: string) {
