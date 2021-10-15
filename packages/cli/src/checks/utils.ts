@@ -152,7 +152,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
       if(acc[1] === value[1]) {
         // If all dependency ranges occurances are equal, pick the highest.
         // It's impossible to infer intention of the developer 
-        // when the range only occurs once in the workspace
+        // when all ranges occur an equal amount of times
         const highestRange = highest([acc[0], value[0]]);
         return [ highestRange, acc[1] ];
       }
