@@ -10,6 +10,11 @@
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkmill/manypkg.git",
+    "directory": "packages/find-root"
+  },
   "devDependencies": {
     "fixturez": "^1.1.0"
   }
