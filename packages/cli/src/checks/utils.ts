@@ -157,7 +157,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
         return [ highestRange, acc[1] ];
       }
       
-      if(Math.max(acc[1], value[1])) {
+      if(acc[1] > value[1]) {
         return acc;
       }
       return value;
