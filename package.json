@@ -11,7 +11,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@changesets/changelog-github": "^0.2.1",
+    "@changesets/changelog-github": "^0.4.1",
     "@changesets/cli": "^2.5.0",
     "@types/fs-extra": "^8.0.1",
     "@types/jest": "^26.0.4",
