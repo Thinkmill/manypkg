@@ -5,7 +5,7 @@
     "url": "https://github.com/Thinkmill/manypkg.git",
     "directory": "packages/cli"
   },
-  "version": "0.18.0",
+  "version": "0.19.0",
   "main": "dist/cli.cjs.js",
   "module": "dist/cli.esm.js",
   "license": "MIT",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@manypkg/get-packages": "^1.1.1",
+    "@manypkg/get-packages": "^1.1.2",
     "chalk": "^2.4.2",
     "detect-indent": "^6.0.0",
     "find-up": "^4.1.0",
