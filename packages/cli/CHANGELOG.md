@@ -1,5 +1,16 @@
 # @manypkg/cli
 
+## 0.19.0
+
+### Minor Changes
+
+- [#119](https://github.com/Thinkmill/manypkg/pull/119) [`256297b`](https://github.com/Thinkmill/manypkg/commit/256297b9bf1368252214637fec1811ce868a71c9) Thanks [@marcodejongh](https://github.com/marcodejongh)! - Change external mismatch behaviour to suggest and fix to the most commonly used dependency range in the workspace. If all ranges are only used once it will pick the highest.
+
+### Patch Changes
+
+- Updated dependencies [[`5f6cded`](https://github.com/Thinkmill/manypkg/commit/5f6cdedf6843d60144c1ea65b5a8ef0c4b7f0bd5)]:
+  - @manypkg/get-packages@1.1.2
+
 ## 0.18.0
 
 ### Minor Changes
