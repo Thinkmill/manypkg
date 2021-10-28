@@ -78,7 +78,8 @@ So that only a single version of an external package will be installed because h
 
 ### How it's fixed
 
-The highest range of the dependency is set as the range at every non-peer dependency place it is depended on.
+The most commonly used range of the dependency is set as the range at every non-peer dependency place it is depended on.
+If for some reason, every range is used the same amount of times, they'll all be fixed to the highest version.
 
 ### Examples
 
@@ -120,7 +121,19 @@ The highest range of the dependency is set as the range at every non-peer depend
 }
 ```
 
-This example will cause an error because the range `1.0.0` for `some-external-package` specified in `@manypkg-example/pkg-a` is not equal(`===`) to the range `2.0.0` specified in `@manypkg-example/pkg-b`.
+`packages/pkg-c/package.json`
+
+```json
+{
+  "name": "@manypkg-example/pkg-c",
+  "version": "1.0.0",
+  "dependencies": {
+    "some-external-package": "1.0.0"
+  }
+}
+```
+
+This example will cause an error because the range `2.0.0` for `some-external-package` specified in `@manypkg-example/pkg-b` is not equal(`===`) to the range `1.0.0` specified in `@manypkg-example/pkg-a` and `@manypkg-example/pkg-c`.
 
 </details>
 

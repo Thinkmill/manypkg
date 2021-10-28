@@ -1,6 +1,6 @@
 import {
   makeCheck,
-  getHighestExternalRanges,
+  getMostCommonRangeMap,
   NORMAL_DEPENDENCY_TYPES
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
@@ -11,23 +11,23 @@ type ErrorType = {
   workspace: Package;
   dependencyName: string;
   dependencyRange: string;
-  highestDependencyRange: string;
+  mostCommonDependencyRange: string;
 };
 
 export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspace) => {
     let errors: ErrorType[] = [];
-    let highestExternalRanges = getHighestExternalRanges(allWorkspace);
+    let mostCommonRangeMap = getMostCommonRangeMap(allWorkspace);
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = workspace.packageJson[depType];
 
       if (deps) {
         for (let depName in deps) {
           let range = deps[depName];
-          let highestRange = highestExternalRanges.get(depName);
+          let mostCommonRange = mostCommonRangeMap.get(depName);
           if (
-            highestRange !== undefined &&
-            highestRange !== range &&
+            mostCommonRange !== undefined &&
+            mostCommonRange !== range &&
             validRange(range)
           ) {
             errors.push({
@@ -35,7 +35,7 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyName: depName,
               dependencyRange: range,
-              highestDependencyRange: highestRange
+              mostCommonDependencyRange: mostCommonRange
             });
           }
         }
@@ -47,12 +47,12 @@ export default makeCheck<ErrorType>({
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
       if (deps && deps[error.dependencyName]) {
-        deps[error.dependencyName] = error.highestDependencyRange;
+        deps[error.dependencyName] = error.mostCommonDependencyRange;
       }
     }
     return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the highest range in the repo is ${error.highestDependencyRange}, the range should be set to ${error.highestDependencyRange}`,
+    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the most common range in the repo is ${error.mostCommonDependencyRange}, the range should be set to ${error.mostCommonDependencyRange}`,
   type: "all"
 });
