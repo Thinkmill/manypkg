@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "name": "pnpm-exclude-workspace-case",
+  "description": "pnpm exclude rule workspace work",
+  "version": "1.0.0"
+}

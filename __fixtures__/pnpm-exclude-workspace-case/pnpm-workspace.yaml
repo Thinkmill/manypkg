@@ -1,0 +1,5 @@
+packages:
+  - 'packages/**'
+  # exclude packages that are inside myself name directories
+  - '!**/pnpm-exclude-workspace-case/**'
+  

@@ -1,0 +1,7 @@
+{
+  "name": "pnpm-exclude-workspace-case-pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "pnpm-exclude-workspace-case-pkg-b": "1.0.0"
+  }
+}
