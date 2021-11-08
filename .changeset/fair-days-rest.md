@@ -3,4 +3,4 @@
 "@manypkg/get-packages": patch
 ---
 
-fix absolute cwd path matched pnpm worksapce exclude rules
+Fixed getting correct packages in pnpm workspaces with exclude rules.
