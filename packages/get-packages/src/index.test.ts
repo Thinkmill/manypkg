@@ -69,6 +69,19 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.tool).toEqual("pnpm");
   });
 
+  it("should resolve workspace for pnpm with exclude rules", async () => {
+    const allPackages = await getPackages(f.copy("pnpm-exclude-workspace-case"));
+
+    expect(allPackages.packages[0].packageJson.name).toEqual(
+      "pnpm-exclude-workspace-case-pkg-a"
+    );
+    expect(allPackages.packages[1].packageJson.name).toEqual(
+      "pnpm-exclude-workspace-case-pkg-b"
+    );
+    expect(allPackages.packages.length).toEqual(2);
+    expect(allPackages.tool).toEqual("pnpm");
+  })
+
   it("should resolve workspaces for lerna", async () => {
     const allPackages = await getPackages(f.copy("lerna-workspace-base"));
 
