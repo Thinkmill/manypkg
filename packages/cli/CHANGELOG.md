@@ -1,5 +1,14 @@
 # @manypkg/cli
 
+## 0.19.1
+
+### Patch Changes
+
+- [#122](https://github.com/Thinkmill/manypkg/pull/122) [`7bd4f34`](https://github.com/Thinkmill/manypkg/commit/7bd4f344e1024e880a2de6b571d556adf200f0b6) Thanks [@fz6m](https://github.com/fz6m)! - Fixed getting correct packages in pnpm workspaces with exclude rules.
+
+- Updated dependencies [[`7bd4f34`](https://github.com/Thinkmill/manypkg/commit/7bd4f344e1024e880a2de6b571d556adf200f0b6)]:
+  - @manypkg/get-packages@1.1.3
+
 ## 0.19.0
 
 ### Minor Changes
