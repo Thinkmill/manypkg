@@ -10,6 +10,7 @@ import { upgradeDependency } from "./upgrade";
 import { npmTagAll } from "./npm-tag";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
+import { Command } from 'commander';
 
 type RootPackage = Package & {
   packageJson: {
@@ -113,27 +114,9 @@ async function execCmd(args: string[]) {
   throw new ExitError(highestExitCode);
 }
 
-(async () => {
-  let things = process.argv.slice(2);
-  if (things[0] === "exec") {
-    return execCmd(things.slice(1));
-  }
-  if (things[0] === "run") {
-    return runCmd(things.slice(1), process.cwd());
-  }
-  if (things[0] === "upgrade") {
-    return upgradeDependency(things.slice(1));
-  }
-  if (things[0] === "npm-tag") {
-    return npmTagAll(things.slice(1));
-  }
-  if (things[0] !== "check" && things[0] !== "fix") {
-    logger.error(
-      `command ${things[0]} not found, only check, exec, run, upgrade, npm-tag and fix exist`
-    );
-    throw new ExitError(1);
-  }
-  let shouldFix = things[0] === "fix";
+const checkCmd = async () => {
+
+  let shouldFix = false;
   let { packages, root, tool } = (await getPackages(
     process.cwd()
   )) as PackagesWithConfig;
@@ -170,11 +153,91 @@ async function execCmd(args: string[]) {
   } else {
     logger.success(`workspaces valid!`);
   }
-})().catch(err => {
-  if (err instanceof ExitError) {
-    process.exit(err.code);
+};
+
+const fixCmd = async () => {
+  let shouldFix = true;
+  let { packages, root, tool } = (await getPackages(
+    process.cwd()
+  )) as PackagesWithConfig;
+
+  let options: Options = {
+    ...defaultOptions,
+    ...root.packageJson.manypkg
+  };
+
+  let packagesByName = new Map<string, Package>(
+    packages.map(x => [x.packageJson.name, x])
+  );
+  packagesByName.set(root.packageJson.name, root);
+  let { hasErrored, requiresInstall } = runChecks(
+    packagesByName,
+    root,
+    shouldFix,
+    options
+  );
+  if (shouldFix) {
+    await Promise.all(
+      [...packagesByName].map(async ([pkgName, workspace]) => {
+        writePackage(workspace);
+      })
+    );
+    if (requiresInstall) {
+      await install(tool, root.dir);
+    }
+
+    logger.success(`fixed workspaces!`);
+  } else if (hasErrored) {
+    logger.info(`the above errors may be fixable with yarn manypkg fix`);
+    throw new ExitError(1);
   } else {
-    logger.error(err);
-    process.exit(1);
+    logger.success(`workspaces valid!`);
   }
-});
+};
+
+/**
+ * start parsing the command line to run the appropriate command
+ */
+const program = new Command();
+
+program
+  .command('exec <cli-command...>')
+  .description('execute a command for every package in the monorepo')
+  .action(execCmd);
+
+program
+  .command('fix')
+  .description('runs checks and fixes everything it is able to')
+  .action(fixCmd);
+
+program
+  .command('run <pkg-name> <script>')
+  .description('runs a single script in a single package')
+  .action((pkg, scr) => runCmd([pkg, scr], process.cwd()));
+
+program
+  .command('check')
+  .description('runs all the checks against your repo')
+  .action(checkCmd);
+
+program
+  .command('upgrade <package-name> <tag-version>')
+  .description('probably upgrades a dependency')
+  .action(upgradeDependency);
+
+program
+  .command('npm-tag <tag-name>')
+  .description('adds the npm tag to each public package in the repo')
+  .option('--otp', 'a otp code to use for something')
+  .action(npmTagAll);
+
+program
+  .parseAsync(process.argv)
+  .catch(err => {
+    if (err instanceof ExitError) {
+      process.exit(err.code);
+    } else {
+      logger.error(err);
+      process.exit(1);
+    }
+  });
