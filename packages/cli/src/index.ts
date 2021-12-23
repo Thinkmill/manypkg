@@ -114,7 +114,7 @@ async function execCmd(args: string[]) {
 }
 
 import meow from 'meow';
-const { input, flags } = meow(`
+const { input } = meow(`
 Usage: manypkg [options] [command]
 
 Options:
@@ -127,30 +127,29 @@ Commands:
   check                                 runs all the checks against your repo
   upgrade <package-name> <tag-version>  probably upgrades a dependency
   npm-tag [options] <tag-name>          adds the npm tag to each public package in the repo
-  help [command]                        display help for command
 `);
 
 (async () => {
   let things = process.argv.slice(2);
-  if (things[0] === "exec") {
+  if (input[0] === "exec") {
     return execCmd(things.slice(1));
   }
-  if (things[0] === "run") {
+  if (input[0] === "run") {
     return runCmd(things.slice(1), process.cwd());
   }
-  if (things[0] === "upgrade") {
+  if (input[0] === "upgrade") {
     return upgradeDependency(things.slice(1));
   }
-  if (things[0] === "npm-tag") {
+  if (input[0] === "npm-tag") {
     return npmTagAll(things.slice(1));
   }
-  if (things[0] !== "check" && things[0] !== "fix") {
+  if (input[0] !== "check" && input[0] !== "fix") {
     logger.error(
-      `command ${things[0]} not found, only check, exec, run, upgrade, npm-tag and fix exist`
+      `command ${input[0]} not found, only check, exec, run, upgrade, npm-tag and fix exist`
     );
     throw new ExitError(1);
   }
-  let shouldFix = things[0] === "fix";
+  let shouldFix = input[0] === "fix";
   let { packages, root, tool } = (await getPackages(
     process.cwd()
   )) as PackagesWithConfig;
