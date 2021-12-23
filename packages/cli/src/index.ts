@@ -113,6 +113,23 @@ async function execCmd(args: string[]) {
   throw new ExitError(highestExitCode);
 }
 
+import meow from 'meow';
+const { input, flags } = meow(`
+Usage: manypkg [options] [command]
+
+Options:
+  -h, --help                            display help for command
+
+Commands:
+  exec <cli-command...>                 execute a command for every package in the monorepo
+  fix                                   runs checks and fixes everything it is able to
+  run <pkg-name> <script>               runs a single script in a single package
+  check                                 runs all the checks against your repo
+  upgrade <package-name> <tag-version>  probably upgrades a dependency
+  npm-tag [options] <tag-name>          adds the npm tag to each public package in the repo
+  help [command]                        display help for command
+`);
+
 (async () => {
   let things = process.argv.slice(2);
   if (things[0] === "exec") {
