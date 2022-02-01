@@ -1,4 +1,4 @@
-import internalMismatch from "../EXTERNAL_MISMATCH";
+import externalMismatch from "../EXTERNAL_MISMATCH";
 import { getWS, getFakeWS } from "../../test-helpers";
 
 let rootWorkspace = getFakeWS("root");
@@ -14,10 +14,10 @@ it("should error if the ranges are valid and they are not equal", () => {
   };
   ws.set("pkg-2", pkg2);
 
-  let errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
+  let errors = externalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(0);
 
-  errors = internalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
     Array [
@@ -58,7 +58,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
   };
 
   ws.set("pkg-3", pkg3);
-  let errors = internalMismatch.validate(
+  let errors = externalMismatch.validate(
     ws.get("pkg-1")!,
     ws,
     rootWorkspace,
@@ -66,7 +66,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
   );
   expect(errors.length).toEqual(0);
 
-  errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
     Array [
@@ -107,7 +107,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
   };
 
   ws.set("pkg-3", pkg3);
-  let errors = internalMismatch.validate(
+  let errors = externalMismatch.validate(
     ws.get("pkg-1")!,
     ws,
     rootWorkspace,
@@ -137,7 +137,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
     ]
   `);
 
-  errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(0);
 });
 
@@ -158,7 +158,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
   };
 
   ws.set("pkg-3", pkg3);
-  let errors = internalMismatch.validate(
+  let errors = externalMismatch.validate(
     ws.get("pkg-1")!,
     ws,
     rootWorkspace,
@@ -186,7 +186,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
     ]
   `);
 
-  errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
     Array [
@@ -209,7 +209,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
     ]
   `);
 
-  errors = internalMismatch.validate(pkg3, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(pkg3, ws, rootWorkspace, {});
   expect(errors.length).toEqual(0);
 });
 
@@ -224,9 +224,38 @@ it("should not error if the value is not a valid semver range", () => {
   };
   ws.set("pkg-2", pkg2);
 
-  let errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
+  let errors = externalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(0);
 
-  errors = internalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
+  errors = externalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
+  expect(errors.length).toEqual(0);
+});
+
+it("should not error if the range is included in the allowedDependencyVersions option", () => {
+  let ws = getWS();
+
+  ws.get("pkg-1")!.packageJson.dependencies = { something: "1.0.0" };
+
+  let pkg2 = getFakeWS("pkg-2");
+  pkg2.packageJson.dependencies = {
+    something: "2.0.0"
+  };
+  ws.set("pkg-2", pkg2);
+
+  const options = {
+    allowedDependencyVersions: {
+      something: ["1.0.0", "2.0.0"]
+    }
+  };
+
+  let errors = externalMismatch.validate(pkg2, ws, rootWorkspace, options);
+  expect(errors.length).toEqual(0);
+
+  errors = externalMismatch.validate(
+    ws.get("pkg-1")!,
+    ws,
+    rootWorkspace,
+    options
+  );
   expect(errors.length).toEqual(0);
 });
