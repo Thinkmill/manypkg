@@ -19,6 +19,7 @@ export type Options = {
   defaultBranch?: string;
   ignoredRules?: string[];
   workspaceProtocol?: "allow" | "require";
+  allowedDependencyVersions?: { [dependency: string]: string[] };
 };
 
 type RootCheck<ErrorType> = {
