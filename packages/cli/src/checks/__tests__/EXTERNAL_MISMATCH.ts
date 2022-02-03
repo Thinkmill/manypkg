@@ -230,3 +230,76 @@ it("should not error if the value is not a valid semver range", () => {
   errors = internalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
   expect(errors.length).toEqual(0);
 });
+
+it("should not error if the range is included in the allowedDependencyVersions option", () => {
+  let ws = getWS();
+
+  ws.get("pkg-1")!.packageJson.dependencies = { something: "1.0.0" };
+
+  let pkg2 = getFakeWS("pkg-2");
+  pkg2.packageJson.dependencies = {
+    something: "2.0.0"
+  };
+  ws.set("pkg-2", pkg2);
+
+  const options = {
+    allowedDependencyVersions: {
+      something: ["1.0.0", "2.0.0"]
+    }
+  };
+
+  let errors = internalMismatch.validate(pkg2, ws, rootWorkspace, options);
+  expect(errors.length).toEqual(0);
+
+  errors = internalMismatch.validate(
+    ws.get("pkg-1")!,
+    ws,
+    rootWorkspace,
+    options
+  );
+  expect(errors.length).toEqual(0);
+});
+
+it("should error if the range is outside allowedDependencyVersions and running fix should clamp it to the most commonly used one", () => {
+  let ws = getWS();
+
+  ws.get("pkg-1")!.packageJson.dependencies = { something: "1.0.0" };
+
+  // version 1.0.0 is the most commonly used one
+  let pkg1a = getFakeWS("pkg-1a");
+  pkg1a.packageJson.dependencies = {
+    something: "1.0.0"
+  };
+  ws.set("pkg-1a", pkg1a);
+
+  let pkg2 = getFakeWS("pkg-2");
+  pkg2.packageJson.dependencies = {
+    something: "2.0.0"
+  };
+  ws.set("pkg-2", pkg2);
+
+  // version 3.0.0 is outside allowedDependencyVersions
+  let pkg3 = getFakeWS("pkg-3");
+  pkg3.packageJson.dependencies = {
+    something: "3.0.0"
+  };
+  ws.set("pkg-3", pkg3);
+
+  const options = {
+    allowedDependencyVersions: {
+      something: ["1.0.0", "2.0.0"]
+    }
+  };
+
+  let errors = internalMismatch.validate(pkg3, ws, rootWorkspace, options);
+  expect(errors.length).toEqual(1);
+  expect(errors[0]).toEqual(
+    expect.objectContaining({
+      dependencyName: "something",
+      dependencyRange: "3.0.0"
+    })
+  );
+
+  internalMismatch.fix(errors[0], options);
+  expect(pkg3.packageJson.dependencies.something).toEqual("1.0.0");
+});
