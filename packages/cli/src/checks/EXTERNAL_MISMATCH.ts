@@ -1,7 +1,8 @@
 import {
   makeCheck,
   getMostCommonRangeMap,
-  NORMAL_DEPENDENCY_TYPES,
+  getClosestAllowedRange,
+  NORMAL_DEPENDENCY_TYPES
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
@@ -39,7 +40,9 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyName: depName,
               dependencyRange: range,
-              mostCommonDependencyRange: mostCommonRange,
+              mostCommonDependencyRange: allowedVersions
+              ? getClosestAllowedRange(range, allowedVersions)
+              : mostCommonRange,
             });
           }
         }
