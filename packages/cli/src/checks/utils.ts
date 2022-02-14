@@ -198,13 +198,7 @@ export function getClosestAllowedRange(
     allowedVersionsWithSameMajor.length > 0
       ? allowedVersionsWithSameMajor
       : allowedVersions;
-  let closestRange = possibleRanges[0];
-  for (let i = 1; i < possibleRanges.length; i++) {
-    if (semver.gt(possibleRanges[i], closestRange)) {
-      closestRange = possibleRanges[i];
-    }
-  }
-  return closestRange;
+  return possibleRanges.sort((a, b) => semver.gt(a, b) ? -1 : 1)[0];
 }
 
 function makeCheck<ErrorType>(
