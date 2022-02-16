@@ -1,6 +1,8 @@
 import { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
+import * as logger from "../logger";
+import { ExitError } from "../errors";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -190,15 +192,29 @@ export function getClosestAllowedRange(
   range: string,
   allowedVersions: string[]
 ) {
-  const major = semver.major(range);
+  const major = semver.major(getVersionFromRange(range));
   const allowedVersionsWithSameMajor = allowedVersions.filter(
-    version => semver.major(version) === major
+    version => semver.major(getVersionFromRange(version)) === major
   );
   const possibleRanges =
     allowedVersionsWithSameMajor.length > 0
       ? allowedVersionsWithSameMajor
       : allowedVersions;
-  return possibleRanges.sort((a, b) => semver.gt(a, b) ? -1 : 1)[0];
+  return possibleRanges.sort((a, b) =>
+    semver.gt(getVersionFromRange(a), getVersionFromRange(b)) ? -1 : 1
+  )[0];
+}
+
+function getVersionFromRange(range: string) {
+  if (semver.parse(range)) {
+    return range;
+  }
+  const version = range.substring(1);
+  if (semver.parse(version)) {
+    return version;
+  }
+  logger.error(`Invalid range: ${range}`);
+  throw new ExitError(1);
 }
 
 function makeCheck<ErrorType>(
