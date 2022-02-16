@@ -147,7 +147,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   }
 
   let mostCommonRangeMap = new Map<string, string>();
-  
+
   for (let [depName, specifierMap] of dependencyRangesMapping) {
     const specifierMapEntryArray = Object.entries(specifierMap);
 
@@ -155,12 +155,12 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
     const maxValue = specifierMapEntryArray.reduce((acc, value) => {
       if(acc[1] === value[1]) {
         // If all dependency ranges occurances are equal, pick the highest.
-        // It's impossible to infer intention of the developer 
+        // It's impossible to infer intention of the developer
         // when all ranges occur an equal amount of times
         const highestRange = highest([acc[0], value[0]]);
         return [ highestRange, acc[1] ];
       }
-      
+
       if(acc[1] > value[1]) {
         return acc;
       }
@@ -185,6 +185,21 @@ export function isArrayEqual(arrA: Array<string>, arrB: Array<string>) {
     }
   }
   return true;
+}
+
+export function getClosestAllowedRange(
+  range: string,
+  allowedVersions: string[]
+) {
+  const major = semver.major(range);
+  const allowedVersionsWithSameMajor = allowedVersions.filter(
+    version => semver.major(version) === major
+  );
+  const possibleRanges =
+    allowedVersionsWithSameMajor.length > 0
+      ? allowedVersionsWithSameMajor
+      : allowedVersions;
+  return possibleRanges.sort((a, b) => semver.gt(a, b) ? -1 : 1)[0];
 }
 
 function makeCheck<ErrorType>(
