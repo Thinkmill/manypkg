@@ -267,7 +267,7 @@ it("should not error if the range is included in the allowedDependencyVersions o
 it("should error and fix the version to the closest allowed one when adding an allowed major", () => {
   const options = {
     allowedDependencyVersions: {
-      something: ["^1.0.0", "^2.0.0"]
+      something: ["^1.0.0", "2.0.0"]
     }
   };
 
@@ -285,7 +285,7 @@ it("should error and fix the version to the closest allowed one when adding an a
   // version 2.0.0 is allowed
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "^2.0.0"
+    something: "2.0.0"
   };
   ws.set("pkg-2", pkg2);
 
@@ -302,11 +302,11 @@ it("should error and fix the version to the closest allowed one when adding an a
     expect.objectContaining({
       dependencyName: "something",
       dependencyRange: "^2.1.0",
-      expectedRange: '^2.0.0'
+      expectedRange: '2.0.0'
     })
   );
   internalMismatch.fix(errors[0], options);
-  expect(pkg2a.packageJson.dependencies.something).toEqual("^2.0.0");
+  expect(pkg2a.packageJson.dependencies.something).toEqual("2.0.0");
 
   // try to add version 1.0.1
   let pkg1b = getFakeWS("pkg-1b");
