@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.19.2
+
+### Patch Changes
+
+- [#136](https://github.com/Thinkmill/manypkg/pull/136) [`6063c55`](https://github.com/Thinkmill/manypkg/commit/6063c559907580c15b78160eb529438b18c67017) Thanks [@ChalkPE](https://github.com/ChalkPE)! - Remove unused `get-workspaces` dependency
+
 ## 0.19.1
 
 ### Patch Changes
