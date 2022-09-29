@@ -1,6 +1,7 @@
 import {
   makeCheck,
   getMostCommonRangeMap,
+  getClosestAllowedRange,
   NORMAL_DEPENDENCY_TYPES
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
@@ -11,11 +12,11 @@ type ErrorType = {
   workspace: Package;
   dependencyName: string;
   dependencyRange: string;
-  mostCommonDependencyRange: string;
+  expectedRange: string;
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspace) => {
+  validate: (workspace, allWorkspace, rootWorkspace, options) => {
     let errors: ErrorType[] = [];
     let mostCommonRangeMap = getMostCommonRangeMap(allWorkspace);
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
@@ -25,9 +26,13 @@ export default makeCheck<ErrorType>({
         for (let depName in deps) {
           let range = deps[depName];
           let mostCommonRange = mostCommonRangeMap.get(depName);
+          const allowedVersions =
+            options.allowedDependencyVersions &&
+            options.allowedDependencyVersions[depName];
           if (
             mostCommonRange !== undefined &&
             mostCommonRange !== range &&
+            !(allowedVersions && allowedVersions.includes(range)) &&
             validRange(range)
           ) {
             errors.push({
@@ -35,7 +40,9 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyName: depName,
               dependencyRange: range,
-              mostCommonDependencyRange: mostCommonRange
+              expectedRange: allowedVersions
+                ? getClosestAllowedRange(range, allowedVersions)
+                : mostCommonRange
             });
           }
         }
@@ -47,12 +54,12 @@ export default makeCheck<ErrorType>({
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
       if (deps && deps[error.dependencyName]) {
-        deps[error.dependencyName] = error.mostCommonDependencyRange;
+        deps[error.dependencyName] = error.expectedRange;
       }
     }
     return { requiresInstall: true };
   },
   print: error =>
-    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the most common range in the repo is ${error.mostCommonDependencyRange}, the range should be set to ${error.mostCommonDependencyRange}`,
+    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the range should be set to ${error.expectedRange}`,
   type: "all"
 });

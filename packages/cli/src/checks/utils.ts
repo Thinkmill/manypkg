@@ -1,6 +1,8 @@
 import { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
+import * as logger from "../logger";
+import { ExitError } from "../errors";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -15,7 +17,11 @@ export const DEPENDENCY_TYPES = [
   "peerDependencies"
 ] as const;
 
-export type Options = { defaultBranch?: string; ignoredRules?: string[] };
+export type Options = {
+  defaultBranch?: string;
+  ignoredRules?: string[];
+  allowedDependencyVersions?: { [dependency: string]: string[] };
+};
 
 type RootCheck<ErrorType> = {
   type: "root";
@@ -143,7 +149,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   }
 
   let mostCommonRangeMap = new Map<string, string>();
-  
+
   for (let [depName, specifierMap] of dependencyRangesMapping) {
     const specifierMapEntryArray = Object.entries(specifierMap);
 
@@ -151,12 +157,12 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
     const maxValue = specifierMapEntryArray.reduce((acc, value) => {
       if(acc[1] === value[1]) {
         // If all dependency ranges occurances are equal, pick the highest.
-        // It's impossible to infer intention of the developer 
+        // It's impossible to infer intention of the developer
         // when all ranges occur an equal amount of times
         const highestRange = highest([acc[0], value[0]]);
         return [ highestRange, acc[1] ];
       }
-      
+
       if(acc[1] > value[1]) {
         return acc;
       }
@@ -181,6 +187,35 @@ export function isArrayEqual(arrA: Array<string>, arrB: Array<string>) {
     }
   }
   return true;
+}
+
+export function getClosestAllowedRange(
+  range: string,
+  allowedVersions: string[]
+) {
+  const major = semver.major(getVersionFromRange(range));
+  const allowedVersionsWithSameMajor = allowedVersions.filter(
+    version => semver.major(getVersionFromRange(version)) === major
+  );
+  const possibleRanges =
+    allowedVersionsWithSameMajor.length > 0
+      ? allowedVersionsWithSameMajor
+      : allowedVersions;
+  return possibleRanges.sort((a, b) =>
+    semver.gt(getVersionFromRange(a), getVersionFromRange(b)) ? -1 : 1
+  )[0];
+}
+
+function getVersionFromRange(range: string) {
+  if (semver.parse(range)) {
+    return range;
+  }
+  const version = range.substring(1);
+  if (semver.parse(version)) {
+    return version;
+  }
+  logger.error(`Invalid range: ${range}`);
+  throw new ExitError(1);
 }
 
 function makeCheck<ErrorType>(
