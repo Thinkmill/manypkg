@@ -58,7 +58,7 @@ This gets each public package in the repo, and adds the npm tag specified to the
 
 `manypkg run` executes scripts for packages within a monorepo.
 
-As an example, let's say there are two packages: `@project/package-a` at `packages/pkg-a` and `@project/package-b` at `packages/pkg-a` which both have a `start` script, `manypkg run` can be used like this:
+As an example, let's say there are two packages: `@project/package-a` at `packages/pkg-a` and `@project/package-b` at `packages/pkg-b` which both have a `start` script, `manypkg run` can be used like this:
 
 ```bash
 yarn manypkg run pkg-a start
