@@ -8,7 +8,6 @@ const supportedTools: Record<ToolType, Tool> = {
 };
 
 export * from "./Tool";
-export * from "./expandPackageGlobs";
 export {
     LernaTool,
     RushTool,

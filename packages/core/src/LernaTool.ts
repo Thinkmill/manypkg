@@ -1,32 +1,27 @@
 import path from 'path';
 import fs from 'fs-extra';
 
-import { PackageJSON } from "@changesets/types";
-import { Tool, ToolType, Package, Packages, MonorepoRoot } from './Tool';
+import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
 export const LernaTool: Tool = {
-    type(): ToolType {
-        return 'lerna';
-    },
+    type: 'lerna',
 
-    async isMonorepoRoot(directory: string): Promise<MonorepoRoot | undefined> {
+    async isMonorepoRoot(directory: string): Promise<boolean> {
         try {
             const lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
             if (lernaJson.useWorkspaces !== true) {
-                return {
-                    dir: directory,
-                    tool: LernaTool
-                }
+                return true;
             }
         } catch (err) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
         }
+        return false;
     },
 
-    async getPackages(directory: string): Promise<Packages | undefined> {
+    async getPackages(directory: string): Promise<Packages> {
         try {
             const lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
@@ -44,6 +39,7 @@ export const LernaTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${LernaTool.type} monorepo root`);
         }
     }
 }

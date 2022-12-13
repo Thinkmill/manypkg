@@ -2,8 +2,7 @@ import path from "path";
 import fs from "fs-extra";
 import jju from "jju";
 
-import { PackageJSON } from "@changesets/types";
-import { Tool, ToolType, Package, Packages, MonorepoRoot } from './Tool';
+import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 
 interface RushJson {
     projects: RushProject[];
@@ -15,25 +14,21 @@ interface RushProject {
 }
 
 export const RushTool: Tool = {
-    type(): ToolType {
-        return 'rush';
-    },
+    type: 'rush',
 
-    async isMonorepoRoot(directory: string): Promise<MonorepoRoot | undefined> {
+    async isMonorepoRoot(directory: string): Promise<boolean> {
         try {
             await fs.readFile(path.join(directory, "rush.json"), "utf8");
-            return {
-                dir: directory,
-                tool: RushTool
-            };
+            return true;
         } catch (err) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
         }
+        return false;
     },
 
-    async getPackages(directory: string): Promise<Packages | undefined> {
+    async getPackages(directory: string): Promise<Packages> {
         try {
             const rushText: string = await fs.readFile(path.join(directory, "rush.json"), "utf8");
 
@@ -59,6 +54,7 @@ export const RushTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${RushTool.type} monorepo root`);
         }
     }
 }

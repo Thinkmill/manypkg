@@ -1,13 +1,41 @@
-
-import { PackageJSON } from "@changesets/types";
-
 /**
  * A unique string identifier for each type of supported monorepo tool.
  */
 export type ToolType = "lerna" | "rush";
 
 /**
- * A pre-loaded package json blob, with the diretory it was loaded from.
+ * A package.json access type.
+ */
+export type PackageAccessType = "public" | "restricted";
+
+/**
+ * An in-memory representation of a package.json file.
+ */
+export type PackageJSON = {
+    name: string;
+    version: string;
+    dependencies?: {
+        [key: string]: string;
+    };
+    peerDependencies?: {
+        [key: string]: string;
+    };
+    devDependencies?: {
+        [key: string]: string;
+    };
+    optionalDependencies?: {
+        [key: string]: string;
+    };
+    private?: boolean;
+    publishConfig?: {
+        access?: PackageAccessType;
+        directory?: string;
+        registry?: string;
+    };
+};
+
+/**
+ * A pre-loaded package json structure, with the diretory it was loaded from.
  */
 export type Package = {
     packageJson: PackageJSON;
@@ -27,11 +55,21 @@ export type Packages = {
 /**
  * An object representing the root of a specific monorepo, with the root
  * directory and associated monorepo tool.
+ *
+ * Note that this type is currently not used by Tool definitions directly,
+ * but it is the suggested way to pass around a reference to a monorepo root
+ * directory and associated tool.
  */
 export type MonorepoRoot = {
     dir: string;
     tool: Tool;
 };
+
+/**
+ * Monorepo tools may throw this error if a caller attempts to get the package
+ * collection from a directory that is not a valid monorepo root.
+ */
+export class InvalidMonorepoError extends Error { }
 
 /**
  * A monorepo tool is a specific implementation of monorepos, whether provided built-in
@@ -44,17 +82,16 @@ export interface Tool {
     /**
      * The unique string identifier for this monorepo tool.
      */
-    type(): string;
+    readonly type: string;
 
     /**
      * Determine whether the specified directory is a valid root for this monorepo tool.
-     * Returns a `MonorepoRoot` object if it is valid, or undefined otherwise.
      */
-    isMonorepoRoot(directory: string): Promise<MonorepoRoot | undefined>;
+    isMonorepoRoot(directory: string): Promise<boolean>;
 
     /**
-     * Return the package collection from the specified directory. If the directory is
-     * not a valid monorepo root for this tool, returns undefined instead.
+     * Return the package collection from the specified directory. Will throw an error
+     * if the directory is not a valid monorepo root for this tool.
      */
-    getPackages(directory: string): Promise<Packages | undefined>;
+    getPackages(directory: string): Promise<Packages>;
 }

@@ -1,10 +1,7 @@
+import path from 'path';
+import fs from 'fs-extra';
 
-import fs from "fs-extra";
-import path from "path";
-import globby, { sync as globbySync } from "globby";
-
-import { PackageJSON } from "@changesets/types";
-import { Package} from "./Tool";
+import { Tool, ToolType, Package, PackageJSON, Packages, MonorepoRoot } from './Tool';
 
 export async function expandPackageGlobs(packageGlobs: string[], directory: string): Promise<Package[]> {
   const relativeDirectories: string[] = await globby(packageGlobs, {
