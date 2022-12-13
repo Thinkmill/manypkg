@@ -37,13 +37,14 @@ export const RushTool: Tool = {
             const rushJson: RushJson = jju.parse(rushText);
 
             const directories = rushJson.projects.map(project => path.resolve(directory, project.projectFolder)).sort();
-            const packageJsons = await Promise.all(directories.map(dir => fs.readJson(path.join(dir, "package.json"))));
-            const packages = directories.map((dir, index) => {
-              return {
-                dir,
-                packageJson: packageJsons[index] as PackageJSON
-              };
-            });
+            const packages = await Promise.all(directories.map(async (dir: string) => {
+                return fs.readJson(path.join(dir, "package.json")).then((packageJson: PackageJSON) => {
+                    return {
+                        dir,
+                        packageJson
+                    };
+                });
+            }));
 
             // Rush does not have a root package
             return {
