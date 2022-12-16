@@ -1,22 +1,24 @@
 import path from 'path';
+import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import fs from 'fs-extra';
 
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
-export interface BoltPackageJSON extends PackageJSON {
-    bolt?: {
-        workspaces?: string[]
-    }
+export interface PnpmWorkspaceYaml {
+    packages?: string[]
 }
 
-export const BoltTool: Tool = {
-    type: 'bolt',
+export const PnpmTool: Tool = {
+    type: 'pnpm',
 
     async isMonorepoRoot(directory: string): Promise<boolean> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
-            if (pkgJson.bolt?.workspaces) {
+            const manifest = await readYamlFile<{ packages?: string[] }>(
+                path.join(directory, "pnpm-workspace.yaml")
+            );
+
+            if (manifest.packages) {
                 return true;
             }
         } catch (err) {
@@ -29,11 +31,14 @@ export const BoltTool: Tool = {
 
     async getPackages(directory: string): Promise<Packages> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
-            const packageGlobs: string[] = pkgJson.bolt!.workspaces!;
+            const manifest = await readYamlFile<{ packages?: string[] }>(
+                path.join(directory, "pnpm-workspace.yaml")
+            );
+            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
+            const packageGlobs: string[] = manifest.packages!;
 
             return {
-                tool: BoltTool,
+                tool: PnpmTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
                 root: {
                     dir: directory,
@@ -44,7 +49,7 @@ export const BoltTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${PnpmTool.type} monorepo root`);
         }
     }
 }

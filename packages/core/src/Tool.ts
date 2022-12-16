@@ -1,7 +1,7 @@
 /**
  * A unique string identifier for each type of supported monorepo tool.
  */
-export type ToolType = "lerna" | "rush" | "bolt";
+export type ToolType = "bolt" | "lerna" | "pnpm" | "rush";
 
 /**
  * A package.json access type.
