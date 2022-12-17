@@ -4,20 +4,20 @@ import fs from 'fs-extra';
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
-export interface BoltPackageJSON extends PackageJSON {
-    bolt?: {
-        workspaces?: string[]
-    }
+export interface YarnPackageJSON extends PackageJSON {
+    workspaces?: string[] | { packages: string[] };
 }
 
-export const BoltTool: Tool = {
-    type: 'bolt',
+export const YarnTool : Tool = {
+    type: 'yarn',
 
     async isMonorepoRoot(directory: string): Promise<boolean> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
-            if (pkgJson.bolt && pkgJson.bolt.workspaces) {
-                return true;
+            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as YarnPackageJSON;
+            if (pkgJson.workspaces) {
+                if (Array.isArray(pkgJson.workspaces) || Array.isArray(pkgJson.workspaces.packages)) {
+                    return true;
+                }
             }
         } catch (err) {
             if (err.code !== "ENOENT") {
@@ -29,11 +29,11 @@ export const BoltTool: Tool = {
 
     async getPackages(directory: string): Promise<Packages> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
-            const packageGlobs: string[] = pkgJson.bolt!.workspaces!;
+            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as YarnPackageJSON;
+            const packageGlobs: string[] = Array.isArray(pkgJson.workspaces) ? pkgJson.workspaces : pkgJson.workspaces!.packages;
 
             return {
-                tool: BoltTool,
+                tool: YarnTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
                 root: {
                     dir: directory,
