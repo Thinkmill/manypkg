@@ -90,8 +90,18 @@ export interface Tool {
     isMonorepoRoot(directory: string): Promise<boolean>;
 
     /**
-     * Return the package collection from the specified directory. Will throw an error
+     * A synchronous version of {@link Tool#isMonorepoRoot}.
+     */
+    isMonorepoRootSync(directory: string): boolean;
+
+    /**
+     * Return the package collection from the specified directory. Rejects with an error
      * if the directory is not a valid monorepo root for this tool.
      */
     getPackages(directory: string): Promise<Packages>;
+
+    /**
+     * A synchronous version of {@link Tool#getPackages}.
+     */
+    getPackagesSync(directory: string): Packages;
 }

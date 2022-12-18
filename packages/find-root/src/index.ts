@@ -132,17 +132,36 @@ function hasWorkspacesConfiguredViaPnpmSync(directory: string) {
 }
 
 export function findRootSync(cwd: string) {
+  let monorepoRoot: MonorepoRoot | undefined;
+
+  findUpSync(
+    directory => {
+      const tools = defaultOrder.map(toolType => supportedTools[toolType]);
+
+      for (const tool of tools) {
+        if (tool.isMonorepoRootSync(directory)) {
+          monorepoRoot = {
+            tool: tool,
+            dir: directory
+          };
+          return directory;
+        }
+      }
+    },
+    { cwd, type: "directory" }
+  );
+
+  if (monorepoRoot)
+    return monorepoRoot;
+
+  // Handle the "none" tool (single package case)
+
   let firstPkgJsonDirRef: { current: string | undefined } = {
     current: undefined
   };
-
   let dir = findUpSync(
     directory => {
-      return [
-        hasWorkspacesConfiguredViaLernaSync(directory),
-        hasWorkspacesConfiguredViaPkgJsonSync(directory, firstPkgJsonDirRef),
-        hasWorkspacesConfiguredViaPnpmSync(directory)
-      ].find(dir => dir);
+      return hasWorkspacesConfiguredViaPkgJsonSync(directory, firstPkgJsonDirRef);
     },
     { cwd, type: "directory" }
   );
@@ -150,8 +169,9 @@ export function findRootSync(cwd: string) {
   if (firstPkgJsonDirRef.current === undefined) {
     throw new NoPkgJsonFound(cwd);
   }
-  if (dir === undefined) {
-    return firstPkgJsonDirRef.current;
-  }
-  return dir;
+
+  return {
+    tool: NoneTool,
+    dir: firstPkgJsonDirRef.current
+  };
 }

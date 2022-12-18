@@ -7,6 +7,7 @@
     "@babel/runtime": "^7.5.5",
     "@changesets/types": "^4.0.1",
     "@manypkg/find-root": "^1.1.0",
+    "@manypkg/core": "^1.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "read-yaml-file": "^1.1.0"

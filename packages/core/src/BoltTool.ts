@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
-import { expandPackageGlobs } from "./expandPackageGlobs";
+import { expandPackageGlobs, expandPackageGlobsSync } from "./expandPackageGlobs";
 
 export interface BoltPackageJSON extends PackageJSON {
     bolt?: {
@@ -27,6 +27,20 @@ export const BoltTool: Tool = {
         return false;
     },
 
+    isMonorepoRootSync(directory: string): boolean {
+        try {
+            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as BoltPackageJSON;
+            if (pkgJson.bolt && pkgJson.bolt.workspaces) {
+                return true;
+            }
+        } catch (err) {
+            if (err.code !== "ENOENT") {
+                throw err;
+            }
+        }
+        return false;
+    },
+
     async getPackages(directory: string): Promise<Packages> {
         try {
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
@@ -35,6 +49,27 @@ export const BoltTool: Tool = {
             return {
                 tool: BoltTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
+                root: {
+                    dir: directory,
+                    packageJson: pkgJson
+                }
+            };
+        } catch (err) {
+            if (err.code !== "ENOENT") {
+                throw err;
+            }
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root`);
+        }
+    },
+
+    getPackagesSync(directory: string): Packages {
+        try {
+            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as BoltPackageJSON;
+            const packageGlobs: string[] = pkgJson.bolt!.workspaces!;
+
+            return {
+                tool: BoltTool,
+                packages: expandPackageGlobsSync(packageGlobs, directory),
                 root: {
                     dir: directory,
                     packageJson: pkgJson

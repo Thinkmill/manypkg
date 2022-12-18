@@ -19,9 +19,41 @@ export const NoneTool : Tool = {
         return false;
     },
 
+    isMonorepoRootSync(directory: string): boolean {
+        try {
+            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as packageJson;
+            return true;
+        } catch (err) {
+            if (err.code !== "ENOENT") {
+                throw err;
+            }
+        }
+        return false;
+    },
+
     async getPackages(directory: string): Promise<Packages> {
         try {
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
+
+            return {
+                tool: NoneTool,
+                packages: [],
+                root: {
+                    dir: directory,
+                    packageJson: pkgJson
+                }
+            };
+        } catch (err) {
+            if (err.code !== "ENOENT") {
+                throw err;
+            }
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${NoneTool.type} monorepo root`);
+        }
+    },
+
+    getPackagesSync(directory: string): Packages {
+        try {
+            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as PackageJSON;
 
             return {
                 tool: NoneTool,

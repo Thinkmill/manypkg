@@ -21,3 +21,22 @@ export async function expandPackageGlobs(packageGlobs: string[], directory: stri
     };
   });
 }
+
+export function expandPackageGlobsSync(packageGlobs: string[], directory: string): Package[] {
+  const relativeDirectories: string[] = globbySync(packageGlobs, {
+    cwd: directory,
+    onlyDirectories: true,
+    expandDirectories: false,
+    ignore: ["**/node_modules"]
+  });
+  const directories = relativeDirectories.map(p => path.resolve(directory, p)).sort();
+
+  const packageJsons = directories.map(dir => fs.readJsonSync(path.join(dir, "package.json")));
+
+  return directories.map((dir, index) => {
+    return {
+      dir,
+      packageJson: packageJsons[index] as PackageJSON
+    };
+  });
+}
