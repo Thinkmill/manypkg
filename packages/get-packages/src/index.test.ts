@@ -19,7 +19,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-b"
     );
-    expect(allPackages.tool).toEqual("yarn");
+    expect(allPackages.tool.type).toEqual("yarn");
   });
 
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", async () => {
@@ -34,7 +34,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "yarn-workspace-base-pkg-b"
     );
-    expect(allPackages.tool).toEqual("yarn");
+    expect(allPackages.tool.type).toEqual("yarn");
   });
 
   it("should resolve workspaces for bolt", async () => {
@@ -50,7 +50,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "bolt-workspace-pkg-b"
     );
-    expect(allPackages.tool).toEqual("bolt");
+    expect(allPackages.tool.type).toEqual("bolt");
   });
 
   it("should resolve workspaces for pnpm", async () => {
@@ -66,7 +66,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.packages[1].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-b"
     );
-    expect(allPackages.tool).toEqual("pnpm");
+    expect(allPackages.tool.type).toEqual("pnpm");
   });
 
   it("should resolve workspace for pnpm with exclude rules", async () => {
@@ -79,7 +79,7 @@ let runTests = (getPackages: GetPackages) => {
       "pnpm-exclude-workspace-case-pkg-b"
     );
     expect(allPackages.packages.length).toEqual(2);
-    expect(allPackages.tool).toEqual("pnpm");
+    expect(allPackages.tool.type).toEqual("pnpm");
   })
 
   it("should resolve workspaces for lerna", async () => {
@@ -96,7 +96,7 @@ let runTests = (getPackages: GetPackages) => {
       "lerna-workspace-base-pkg-b"
     );
     expect(allPackages.packages).toHaveLength(2);
-    expect(allPackages.tool).toEqual("lerna");
+    expect(allPackages.tool.type).toEqual("lerna");
   });
 
   it("should resolve workspaces for lerna without explicit packages config", async () => {
@@ -110,10 +110,10 @@ let runTests = (getPackages: GetPackages) => {
       "@manypkg/basic-lerna-fixture-pkg-one"
     );
     expect(allPackages.packages).toHaveLength(1);
-    expect(allPackages.tool).toEqual("lerna");
+    expect(allPackages.tool.type).toEqual("lerna");
   });
 
-  it("should resolve the main package", async () => {
+  it("should resolve the main package if there is no monorepo tool", async () => {
     const path = f.copy("root-only");
     const allPackages = await getPackages(path);
 
@@ -123,7 +123,7 @@ let runTests = (getPackages: GetPackages) => {
 
     expect(allPackages.packages[0].dir).toEqual(path);
     expect(allPackages.packages.length).toEqual(1);
-    expect(allPackages.tool).toEqual("root");
+    expect(allPackages.tool.type).toEqual("none");
   });
 
   it("should throw an error if a package.json is missing the name field", async () => {
@@ -146,7 +146,8 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "@manypkg/cyclic-dep"
     );
-    expect(allPackages.tool).toEqual("yarn");
+    expect(allPackages.tool.type).toEqual("yarn");
+    //1
   });
 };
 

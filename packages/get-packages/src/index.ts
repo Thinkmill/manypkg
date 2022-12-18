@@ -6,20 +6,8 @@ import fs from "fs-extra";
 import path from "path";
 import globby, { sync as globbySync } from "globby";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
-import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
-
-import { supportedTools, defaultOrder } from "@manypkg/core";
-
-export type Tool = "yarn" | "bolt" | "pnpm" | "lerna" | "root";
-
-export type Package = { packageJson: PackageJSON; dir: string };
-
-export type Packages = {
-  tool: Tool;
-  packages: Package[];
-  root: Package;
-};
+import { Tool, ToolType, Package, Packages, MonorepoRoot, NoneTool, PackageJSON, supportedTools, defaultOrder } from "@manypkg/core";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];
@@ -34,70 +22,12 @@ export class PackageJsonMissingNameError extends Error {
 }
 
 export async function getPackages(dir: string): Promise<Packages> {
-  const thing = await findRoot(dir);
-  const cwd = thing.dir;
-  const pkg = await fs.readJson(path.join(cwd, "package.json"));
+  const monorepoRoot: MonorepoRoot = await findRoot(dir);
+  const packages: Packages = await monorepoRoot.tool.getPackages(dir);
+  //const pkg = await fs.readJson(path.join(cwd, "package.json"));
 
-  let tool:
-    | {
-        type: Tool;
-        packageGlobs: string[];
-      }
-    | undefined;
 
-  if (pkg.workspaces) {
-    if (Array.isArray(pkg.workspaces)) {
-      tool = {
-        type: "yarn",
-        packageGlobs: pkg.workspaces
-      };
-    } else if (pkg.workspaces.packages) {
-      tool = {
-        type: "yarn",
-        packageGlobs: pkg.workspaces.packages
-      };
-    }
-  } else if (pkg.bolt && pkg.bolt.workspaces) {
-    tool = {
-      type: "bolt",
-      packageGlobs: pkg.bolt.workspaces
-    };
-  } else {
-    try {
-      const manifest = await readYamlFile<{ packages?: string[] }>(
-        path.join(cwd, "pnpm-workspace.yaml")
-      );
-      if (manifest && manifest.packages) {
-        tool = {
-          type: "pnpm",
-          packageGlobs: manifest.packages
-        };
-      }
-    } catch (err) {
-      if (err.code !== "ENOENT") {
-        throw err;
-      }
-    }
-
-    if (!tool) {
-      try {
-        const lernaJson = await fs.readJson(
-          path.join(cwd, "lerna.json")
-        );
-        if (lernaJson) {
-          tool = {
-            type: "lerna",
-            packageGlobs: lernaJson.packages || ["packages/*"],
-          }
-        }
-      } catch (err) {
-        if (err.code !== "ENOENT") {
-          throw err;
-        }
-      }
-    }
-  }
-
+  /*
   if (!tool) {
     const root = {
       dir: cwd,
@@ -112,14 +42,6 @@ export async function getPackages(dir: string): Promise<Packages> {
       packages: [root]
     };
   }
-
-  const relativeDirectories = await globby(tool.packageGlobs, {
-    cwd,
-    onlyDirectories: true,
-    expandDirectories: false,
-    ignore: ["**/node_modules"]
-  });
-  const directories = relativeDirectories.map(p => path.resolve(cwd, p))
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
@@ -149,21 +71,17 @@ export async function getPackages(dir: string): Promise<Packages> {
     pkgJsonsMissingNameField.sort();
     throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
   }
-  return {
-    tool: tool.type,
-    root: {
-      dir: cwd,
-      packageJson: pkg
-    },
-    packages: results as Package[]
-  };
+  */
+
+  return packages;
 }
 
 export function getPackagesSync(dir: string): Packages {
-  const thing = findRootSync(dir);
-  const cwd = thing.dir;
-  const pkg = fs.readJsonSync(path.join(cwd, "package.json"));
+  const monorepoRoot: MonorepoRoot = findRootSync(dir);
+  const packages: Packages = monorepoRoot.tool.getPackagesSync(dir);
+  //const pkg = await fs.readJson(path.join(cwd, "package.json"));
 
+/*
   let tool:
     | {
         type: Tool;
@@ -223,29 +141,9 @@ export function getPackagesSync(dir: string): Packages {
       }
     }
   }
+  */
 
-  if (!tool) {
-    const root = {
-      dir: cwd,
-      packageJson: pkg
-    };
-    if (!pkg.name) {
-      throw new PackageJsonMissingNameError(["package.json"]);
-    }
-    return {
-      tool: "root",
-      root,
-      packages: [root]
-    };
-  }
-  const relativeDirectories = globbySync(tool.packageGlobs, {
-    cwd,
-    onlyDirectories: true,
-    expandDirectories: false,
-    ignore: ["**/node_modules"]
-  });
-  const directories = relativeDirectories.map(p => path.resolve(cwd, p))
-
+  /*
   let pkgJsonsMissingNameField: Array<string> = [];
 
   const results = directories
@@ -270,13 +168,7 @@ export function getPackagesSync(dir: string): Packages {
     pkgJsonsMissingNameField.sort();
     throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
   }
+*/
 
-  return {
-    tool: tool.type,
-    root: {
-      dir: cwd,
-      packageJson: pkg
-    },
-    packages: results as Package[]
-  };
+  return packages;
 }

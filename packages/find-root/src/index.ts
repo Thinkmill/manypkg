@@ -108,29 +108,6 @@ function hasWorkspacesConfiguredViaPkgJsonSync(
   }
 }
 
-function hasWorkspacesConfiguredViaLernaSync(directory: string) {
-  try {
-    let lernaJson = fs.readJsonSync(path.join(directory, "lerna.json"));
-    if (lernaJson.useWorkspaces !== true) {
-      return directory;
-    }
-  } catch (err) {
-    if (err.code !== "ENOENT") {
-      throw err;
-    }
-  }
-}
-
-function hasWorkspacesConfiguredViaPnpmSync(directory: string) {
-  // @ts-ignore
-  let pnpmWorkspacesFileExists = fs.existsSync(
-    path.join(directory, "pnpm-workspace.yaml")
-  );
-  if (pnpmWorkspacesFileExists) {
-    return directory;
-  }
-}
-
 export function findRootSync(cwd: string) {
   let monorepoRoot: MonorepoRoot | undefined;
 

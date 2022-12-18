@@ -9,7 +9,7 @@ export const NoneTool : Tool = {
 
     async isMonorepoRoot(directory: string): Promise<boolean> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
+            const pkgJson: PackageJSON = (await fs.readJson(path.join(directory, "package.json")));
             return true;
         } catch (err) {
             if (err.code !== "ENOENT") {
@@ -21,7 +21,7 @@ export const NoneTool : Tool = {
 
     isMonorepoRootSync(directory: string): boolean {
         try {
-            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as packageJson;
+            const pkgJson: PackageJSON = fs.readJsonSync(path.join(directory, "package.json"));
             return true;
         } catch (err) {
             if (err.code !== "ENOENT") {
@@ -33,15 +33,16 @@ export const NoneTool : Tool = {
 
     async getPackages(directory: string): Promise<Packages> {
         try {
-            const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
+            const pkgJson: PackageJSON = (await fs.readJson(path.join(directory, "package.json")));
+            const pkg: Package = {
+                dir: directory,
+                packageJson: pkgJson
+            };
 
             return {
                 tool: NoneTool,
-                packages: [],
-                root: {
-                    dir: directory,
-                    packageJson: pkgJson
-                }
+                packages: [pkg],
+                root: pkg
             };
         } catch (err) {
             if (err.code !== "ENOENT") {
@@ -53,15 +54,16 @@ export const NoneTool : Tool = {
 
     getPackagesSync(directory: string): Packages {
         try {
-            const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as PackageJSON;
+            const pkgJson: PackageJSON = fs.readJsonSync(path.join(directory, "package.json"));
+            const pkg: Package = {
+                dir: directory,
+                packageJson: pkgJson
+            };
 
             return {
                 tool: NoneTool,
-                packages: [],
-                root: {
-                    dir: directory,
-                    packageJson: pkgJson
-                }
+                packages: [pkg],
+                root: pkg
             };
         } catch (err) {
             if (err.code !== "ENOENT") {
