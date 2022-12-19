@@ -4,7 +4,7 @@ declare module "fixturez" {
     root?: string;
     cleanup?: boolean;
   };
-  export default function(
+  export default function (
     cwd: string,
     opts?: Opts
   ): {

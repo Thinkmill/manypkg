@@ -10,7 +10,7 @@ it("should error if the ranges are valid and they are not equal", () => {
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
@@ -48,13 +48,13 @@ it("should error and return the correct mostCommonDependencyRange when the range
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -97,13 +97,13 @@ it("should error and return the correct mostCommonDependencyRange when the range
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -148,13 +148,13 @@ it("should error and return the correct mostCommonDependencyRange when the range
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "3.0.0"
+    something: "3.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -220,7 +220,7 @@ it("should not error if the value is not a valid semver range", () => {
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "git:x"
+    something: "git:x",
   };
   ws.set("pkg-2", pkg2);
 

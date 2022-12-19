@@ -51,10 +51,10 @@ exports.sourceNodes = async (
       id: name,
       internal: {
         contentDigest: createContentDigest({
-          name
+          name,
         }),
-        type: "workspaceInfo"
-      }
+        type: "workspaceInfo",
+      },
     };
 
     for (let { name, getFieldInfo } of extraFields) {
@@ -64,7 +64,7 @@ exports.sourceNodes = async (
           ...rest,
           // This pre-empts making this name change in get-workspaces so it doesn't create
           // a breaking change here.
-          packageJSON: config
+          packageJSON: config,
         });
       } else {
         newNode[name] = packageJSON[name];
