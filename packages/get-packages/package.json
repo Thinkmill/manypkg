@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "dist/get-packages.cjs.js",
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
+    "@babel/runtime": "^7.20.6",
     "@changesets/types": "^4.0.1",
     "@manypkg/find-root": "^1.1.0",
     "fs-extra": "^8.1.0",

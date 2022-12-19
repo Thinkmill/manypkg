@@ -1,7 +1,6 @@
 import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
 import fs from "fs-extra";
-
 export class NoPkgJsonFound extends Error {
   directory: string;
   constructor(directory: string) {
