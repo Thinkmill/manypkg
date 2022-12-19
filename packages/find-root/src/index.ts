@@ -1,6 +1,10 @@
 import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
 import fs from "fs-extra";
+
+const isNoEntryError = (err: unknown): boolean =>
+  !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
+
 export class NoPkgJsonFound extends Error {
   directory: string;
   constructor(directory: string) {
@@ -24,7 +28,7 @@ async function hasWorkspacesConfiguredViaPkgJson(
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
@@ -37,15 +41,14 @@ async function hasWorkspacesConfiguredViaLerna(directory: string) {
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
 }
 
-async function hasWorkspacesConfiguredViaPnpm(directory: string) {
-  // @ts-ignore
-  let pnpmWorkspacesFileExists = await fs.exists(
+function hasWorkspacesConfiguredViaPnpm(directory: string) {
+  let pnpmWorkspacesFileExists = fs.existsSync(
     path.join(directory, "pnpm-workspace.yaml")
   );
   if (pnpmWorkspacesFileExists) {
@@ -55,15 +58,15 @@ async function hasWorkspacesConfiguredViaPnpm(directory: string) {
 
 export async function findRoot(cwd: string): Promise<string> {
   let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined
+    current: undefined,
   };
   let dir = await findUp(
-    directory => {
+    (directory) => {
       return Promise.all([
         hasWorkspacesConfiguredViaLerna(directory),
         hasWorkspacesConfiguredViaPkgJson(directory, firstPkgJsonDirRef),
-        hasWorkspacesConfiguredViaPnpm(directory)
-      ]).then(x => x.find(dir => dir));
+        hasWorkspacesConfiguredViaPnpm(directory),
+      ]).then((x) => x.find((dir) => dir));
     },
     { cwd, type: "directory" }
   );
@@ -89,7 +92,7 @@ function hasWorkspacesConfiguredViaPkgJsonSync(
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
@@ -102,7 +105,7 @@ function hasWorkspacesConfiguredViaLernaSync(directory: string) {
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
@@ -120,16 +123,16 @@ function hasWorkspacesConfiguredViaPnpmSync(directory: string) {
 
 export function findRootSync(cwd: string) {
   let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined
+    current: undefined,
   };
 
   let dir = findUpSync(
-    directory => {
+    (directory) => {
       return [
         hasWorkspacesConfiguredViaLernaSync(directory),
         hasWorkspacesConfiguredViaPkgJsonSync(directory, firstPkgJsonDirRef),
-        hasWorkspacesConfiguredViaPnpmSync(directory)
-      ].find(dir => dir);
+        hasWorkspacesConfiguredViaPnpmSync(directory),
+      ].find((dir) => dir);
     },
     { cwd, type: "directory" }
   );

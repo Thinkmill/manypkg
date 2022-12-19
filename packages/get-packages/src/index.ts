@@ -9,6 +9,9 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
+const isNoEntryError = (err: unknown): boolean =>
+  !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
+
 export type Tool = "yarn" | "bolt" | "pnpm" | "lerna" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
@@ -71,7 +74,7 @@ export async function getPackages(dir: string): Promise<Packages> {
         };
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (!isNoEntryError(err)) {
         throw err;
       }
     }
@@ -88,7 +91,7 @@ export async function getPackages(dir: string): Promise<Packages> {
           }
         }
       } catch (err) {
-        if (err.code !== "ENOENT") {
+        if (!isNoEntryError(err)) {
           throw err;
         }
       }
@@ -196,7 +199,7 @@ export function getPackagesSync(dir: string): Packages {
         };
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (!isNoEntryError(err)) {
         throw err;
       }
     }
@@ -213,7 +216,7 @@ export function getPackagesSync(dir: string): Packages {
           }
         }
       } catch (err) {
-        if (err.code !== "ENOENT") {
+        if (!isNoEntryError(err)) {
           throw err;
         }
       }
@@ -256,8 +259,9 @@ export function getPackagesSync(dir: string): Packages {
         }
         return { packageJson, dir };
       } catch (err) {
-        if (err.code === "ENOENT") return null;
-        throw err;
+        if (!isNoEntryError(err)) {
+          throw err;
+        }
       }
     })
     .filter(x => x);
