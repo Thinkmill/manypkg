@@ -10,6 +10,7 @@
     "jju": "^1.4.0"
   },
   "devDependencies": {
+    "@types/jju": "^1.4.2",
     "jest-fixtures": "^0.6.0"
   }
 }

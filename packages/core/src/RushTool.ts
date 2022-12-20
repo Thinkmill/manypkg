@@ -4,6 +4,10 @@ import jju from "jju";
 
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 
+//1 //2
+
+//3
+
 interface RushJson {
     projects: RushProject[];
 }
@@ -67,7 +71,7 @@ export const RushTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${RushTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${RushTool.type} monorepo root: missing rush.json`);
         }
     },
 
@@ -97,7 +101,7 @@ export const RushTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${RushTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${RushTool.type} monorepo root: missing rush.json`);
         }
     }
 }

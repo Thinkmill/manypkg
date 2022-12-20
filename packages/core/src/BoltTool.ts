@@ -44,7 +44,10 @@ export const BoltTool: Tool = {
     async getPackages(directory: string): Promise<Packages> {
         try {
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
-            const packageGlobs: string[] = pkgJson.bolt!.workspaces!;
+            if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
+                throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`);
+            }
+            const packageGlobs: string[] = pkgJson.bolt.workspaces;
 
             return {
                 tool: BoltTool,
@@ -58,14 +61,17 @@ export const BoltTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing package.json`);
         }
     },
 
     getPackagesSync(directory: string): Packages {
         try {
             const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as BoltPackageJSON;
-            const packageGlobs: string[] = pkgJson.bolt!.workspaces!;
+            if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
+                throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`);
+            }
+            const packageGlobs: string[] = pkgJson.bolt.workspaces;
 
             return {
                 tool: BoltTool,
@@ -79,7 +85,7 @@ export const BoltTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing package.json`);
         }
     }
 }

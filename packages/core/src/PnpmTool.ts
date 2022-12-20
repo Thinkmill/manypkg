@@ -66,12 +66,7 @@ export const PnpmTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            console.log(err.stack);
-            console.log(new Error().stack);
-            console.log(3);
-            console.log(4);
-            throw err;
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${PnpmTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`);
         }
     },
 
@@ -95,7 +90,7 @@ export const PnpmTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${PnpmTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`);
         }
     }
 }

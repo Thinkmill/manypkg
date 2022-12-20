@@ -58,7 +58,7 @@ export const LernaTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${LernaTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`);
         }
     },
 
@@ -80,7 +80,7 @@ export const LernaTool: Tool = {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${LernaTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`);
         }
     }
 }
