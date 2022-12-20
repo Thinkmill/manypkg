@@ -21,7 +21,7 @@ type PackagesWithConfig = Packages & {
 };
 
 let defaultOptions = {
-  defaultBranch: "master"
+  defaultBranch: "master",
 };
 
 let runChecks = (
@@ -53,7 +53,7 @@ let runChecks = (
         if (shouldFix && check.fix !== undefined) {
           for (let error of errors) {
             let output = check.fix(error as any, options) || {
-              requiresInstall: false
+              requiresInstall: false,
             };
             if (output.requiresInstall) {
               requiresInstall = true;
@@ -77,7 +77,7 @@ let runChecks = (
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
           let output = check.fix(error as any, options) || {
-            requiresInstall: false
+            requiresInstall: false,
           };
           if (output.requiresInstall) {
             requiresInstall = true;
@@ -100,11 +100,11 @@ async function execCmd(args: string[]) {
   let { packages } = await getPackages(process.cwd());
   let highestExitCode = 0;
   await Promise.all(
-    packages.map(pkg => {
+    packages.map((pkg) => {
       return execLimit(async () => {
         let { code } = await spawn(args[0], args.slice(1), {
           cwd: pkg.dir,
-          stdio: "inherit"
+          stdio: "inherit",
         });
         highestExitCode = Math.max(code, highestExitCode);
       });
@@ -140,11 +140,11 @@ async function execCmd(args: string[]) {
 
   let options: Options = {
     ...defaultOptions,
-    ...root.packageJson.manypkg
+    ...root.packageJson.manypkg,
   };
 
   let packagesByName = new Map<string, Package>(
-    packages.map(x => [x.packageJson.name, x])
+    packages.map((x) => [x.packageJson.name, x])
   );
   packagesByName.set(root.packageJson.name, root);
   let { hasErrored, requiresInstall } = runChecks(
@@ -170,7 +170,7 @@ async function execCmd(args: string[]) {
   } else {
     logger.success(`workspaces valid!`);
   }
-})().catch(err => {
+})().catch((err) => {
   if (err instanceof ExitError) {
     process.exit(err.code);
   } else {

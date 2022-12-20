@@ -15,8 +15,8 @@ export let getFakeWS = (
     dir: `some/fake/dir/${name}`,
     packageJson: {
       name,
-      version
-    }
+      version,
+    },
   };
 };
 

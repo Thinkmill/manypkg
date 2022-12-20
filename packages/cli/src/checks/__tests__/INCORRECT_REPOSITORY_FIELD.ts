@@ -17,7 +17,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(workspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
@@ -50,7 +50,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
@@ -83,7 +83,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
         `Array []`
@@ -109,7 +109,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(workspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
@@ -142,7 +142,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
@@ -175,7 +175,7 @@ describe("incorrect repository field", () => {
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
-        defaultBranch
+        defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
         `Array []`

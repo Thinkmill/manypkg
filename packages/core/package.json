@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "dist/core.cjs.js",
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
+    "@babel/runtime": "^7.20.6",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "jju": "^1.4.0"

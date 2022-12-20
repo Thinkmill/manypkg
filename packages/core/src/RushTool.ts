@@ -48,7 +48,7 @@ export const RushTool: Tool = {
             // so we use a parser that can handle that.
             const rushJson: RushJson = jju.parse(rushText);
 
-            const directories = rushJson.projects.map(project => path.resolve(directory, project.projectFolder)).sort();
+            const directories = rushJson.projects.map(project => path.resolve(directory, project.projectFolder));
             const packages: Package[] = await Promise.all(directories.map(async (dir: string) => {
                 return fs.readJson(path.join(dir, "package.json")).then((packageJson: PackageJSON) => {
                     return {
@@ -79,7 +79,7 @@ export const RushTool: Tool = {
             // so we use a parser that can handle that.
             const rushJson: RushJson = jju.parse(rushText);
 
-            const directories = rushJson.projects.map(project => path.resolve(directory, project.projectFolder)).sort();
+            const directories = rushJson.projects.map(project => path.resolve(directory, project.projectFolder));
             const packages: Package[] = directories.map((dir: string) => {
                 const packageJson: PackageJSON = fs.readJsonSync(path.join(dir, "package.json"));
                 return {

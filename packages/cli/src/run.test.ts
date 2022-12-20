@@ -18,7 +18,7 @@ describe("Run command", () => {
     ["pkg-one", "start", 0],
     ["pkg-two", "start", 1],
     ["@manypkg/basic-fixture-pkg-two", "start", 0],
-    ["pkg-two-one", "start", 0]
+    ["pkg-two-one", "start", 0],
     // @ts-ignore
   ])(
     'should execute "%s %s" and exit with %i',
@@ -28,7 +28,7 @@ describe("Run command", () => {
         // @ts-ignore
         ["run", arg0, arg1],
         {
-          cwd: f.find("basic-with-scripts")
+          cwd: f.find("basic-with-scripts"),
         }
       );
       expect(code).toBe(exitCode);

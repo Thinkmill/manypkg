@@ -70,7 +70,9 @@ let runTests = (getPackages: GetPackages) => {
   });
 
   it("should resolve workspace for pnpm with exclude rules", async () => {
-    const allPackages = await getPackages(f.copy("pnpm-exclude-workspace-case"));
+    const allPackages = await getPackages(
+      f.copy("pnpm-exclude-workspace-case")
+    );
 
     expect(allPackages.packages[0].packageJson.name).toEqual(
       "pnpm-exclude-workspace-case-pkg-a"
@@ -130,7 +132,9 @@ let runTests = (getPackages: GetPackages) => {
     try {
       const allPackages = await getPackagesSync(f.copy("no-name-field"));
     } catch (err) {
-      expect(err.message).toBe(
+      expect(
+        !!err && typeof err === "object" && "message" in err && err.message
+      ).toBe(
         'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
       );
     }

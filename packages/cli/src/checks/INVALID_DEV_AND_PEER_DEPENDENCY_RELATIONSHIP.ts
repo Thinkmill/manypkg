@@ -36,7 +36,7 @@ export default makeCheck<ErrorType>({
             peerVersion: peerDeps[depName],
             dependencyName: depName,
             devVersion: null,
-            idealDevVersion
+            idealDevVersion,
           });
         } else if (
           semver.validRange(devDeps[depName]) &&
@@ -59,14 +59,14 @@ export default makeCheck<ErrorType>({
             dependencyName: depName,
             peerVersion: peerDeps[depName],
             devVersion: devDeps[depName],
-            idealDevVersion
+            idealDevVersion,
           });
         }
       }
     }
     return errors;
   },
-  fix: error => {
+  fix: (error) => {
     if (!error.workspace.packageJson.devDependencies) {
       error.workspace.packageJson.devDependencies = {};
     }
@@ -74,10 +74,10 @@ export default makeCheck<ErrorType>({
       error.idealDevVersion;
     return { requiresInstall: true };
   },
-  print: error => {
+  print: (error) => {
     if (error.devVersion === null) {
       return `${error.workspace.packageJson.name} has a peerDependency on ${error.dependencyName} but it is not also specified in devDependencies, please add it there.`;
     }
     return `${error.workspace.packageJson.name} has a peerDependency on ${error.dependencyName} but the range specified in devDependency is not greater than or equal to the range specified in peerDependencies`;
-  }
+  },
 });

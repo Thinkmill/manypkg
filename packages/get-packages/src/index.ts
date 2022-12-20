@@ -9,6 +9,9 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 import { Tool, ToolType, Package, Packages, MonorepoRoot, NoneTool, PackageJSON, supportedTools, defaultOrder } from "@manypkg/core";
 
+const isNoEntryError = (err: unknown): boolean =>
+  !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
+
 export class PackageJsonMissingNameError extends Error {
   directories: string[];
   constructor(directories: string[]) {
@@ -31,7 +34,7 @@ export async function getPackages(dir: string): Promise<Packages> {
   if (!tool) {
     const root = {
       dir: cwd,
-      packageJson: pkg
+      packageJson: pkg,
     };
     if (!pkg.name) {
       throw new PackageJsonMissingNameError(["package.json"]);
@@ -39,7 +42,7 @@ export async function getPackages(dir: string): Promise<Packages> {
     return {
       tool: "root",
       root,
-      packages: [root]
+      packages: [root],
     };
   }
 
@@ -47,10 +50,10 @@ export async function getPackages(dir: string): Promise<Packages> {
 
   const results = (
     await Promise.all(
-      directories.sort().map(dir =>
+      directories.sort().map((dir) =>
         fs
           .readJson(path.join(dir, "package.json"))
-          .then(packageJson => {
+          .then((packageJson) => {
             if (!packageJson.name) {
               pkgJsonsMissingNameField.push(
                 path.relative(cwd, path.join(dir, "package.json"))
@@ -58,7 +61,7 @@ export async function getPackages(dir: string): Promise<Packages> {
             }
             return { packageJson, dir };
           })
-          .catch(err => {
+          .catch((err) => {
             if (err.code === "ENOENT") {
               return null;
             }
@@ -66,7 +69,7 @@ export async function getPackages(dir: string): Promise<Packages> {
           })
       )
     )
-  ).filter(x => x);
+  ).filter((x) => x);
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort();
     throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
@@ -93,18 +96,18 @@ export function getPackagesSync(dir: string): Packages {
     if (Array.isArray(pkg.workspaces)) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces
+        packageGlobs: pkg.workspaces,
       };
     } else if (pkg.workspaces.packages) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces.packages
+        packageGlobs: pkg.workspaces.packages,
       };
     }
   } else if (pkg.bolt && pkg.bolt.workspaces) {
     tool = {
       type: "bolt",
-      packageGlobs: pkg.bolt.workspaces
+      packageGlobs: pkg.bolt.workspaces,
     };
   } else {
     try {
@@ -114,28 +117,26 @@ export function getPackagesSync(dir: string): Packages {
       if (manifest && manifest.packages) {
         tool = {
           type: "pnpm",
-          packageGlobs: manifest.packages
+          packageGlobs: manifest.packages,
         };
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (!isNoEntryError(err)) {
         throw err;
       }
     }
 
     if (!tool) {
       try {
-        const lernaJson = fs.readJsonSync(
-          path.join(cwd, "lerna.json")
-        );
+        const lernaJson = fs.readJsonSync(path.join(cwd, "lerna.json"));
         if (lernaJson) {
           tool = {
             type: "lerna",
             packageGlobs: lernaJson.packages || ["packages/*"],
-          }
+          };
         }
       } catch (err) {
-        if (err.code !== "ENOENT") {
+        if (!isNoEntryError(err)) {
           throw err;
         }
       }
@@ -148,7 +149,7 @@ export function getPackagesSync(dir: string): Packages {
 
   const results = directories
     .sort()
-    .map(dir => {
+    .map((dir) => {
       try {
         const packageJson = fs.readJsonSync(path.join(dir, "package.json"));
         if (!packageJson.name) {
@@ -158,11 +159,12 @@ export function getPackagesSync(dir: string): Packages {
         }
         return { packageJson, dir };
       } catch (err) {
-        if (err.code === "ENOENT") return null;
-        throw err;
+        if (!isNoEntryError(err)) {
+          throw err;
+        }
       }
     })
-    .filter(x => x);
+    .filter((x) => x);
 
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort();

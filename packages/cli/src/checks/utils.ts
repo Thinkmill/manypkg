@@ -5,14 +5,14 @@ import { highest } from "sembear";
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
   "devDependencies",
-  "optionalDependencies"
+  "optionalDependencies",
 ] as const;
 
 export const DEPENDENCY_TYPES = [
   "dependencies",
   "devDependencies",
   "optionalDependencies",
-  "peerDependencies"
+  "peerDependencies",
 ] as const;
 
 export type Options = { defaultBranch?: string; ignoredRules?: string[] };
@@ -106,7 +106,7 @@ export function sortDeps(pkg: Package) {
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   let cache = new WeakMap<any, any>();
   // @ts-ignore
-  return arg => {
+  return (arg) => {
     if (cache.has(arg)) {
       // $FlowFixMe
       return cache.get(arg);
@@ -120,7 +120,7 @@ function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
 export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   allPackages: Map<string, Package>
 ) {
-  let dependencyRangesMapping = new Map<string, {[key: string]: number}>();
+  let dependencyRangesMapping = new Map<string, { [key: string]: number }>();
 
   for (let [pkgName, pkg] of allPackages) {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
@@ -143,27 +143,27 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   }
 
   let mostCommonRangeMap = new Map<string, string>();
-  
+
   for (let [depName, specifierMap] of dependencyRangesMapping) {
     const specifierMapEntryArray = Object.entries(specifierMap);
 
     const [first] = specifierMapEntryArray;
     const maxValue = specifierMapEntryArray.reduce((acc, value) => {
-      if(acc[1] === value[1]) {
+      if (acc[1] === value[1]) {
         // If all dependency ranges occurances are equal, pick the highest.
-        // It's impossible to infer intention of the developer 
+        // It's impossible to infer intention of the developer
         // when all ranges occur an equal amount of times
         const highestRange = highest([acc[0], value[0]]);
-        return [ highestRange, acc[1] ];
+        return [highestRange, acc[1]];
       }
-      
-      if(acc[1] > value[1]) {
+
+      if (acc[1] > value[1]) {
         return acc;
       }
       return value;
     }, first);
 
-    mostCommonRangeMap.set(depName, maxValue[0])
+    mostCommonRangeMap.set(depName, maxValue[0]);
   }
   return mostCommonRangeMap;
 });

@@ -17,12 +17,12 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   let filteredPackages = packages.filter(({ packageJson }) => {
     let requiresUpdate = false;
 
-    DEPENDENCY_TYPES.forEach(t => {
+    DEPENDENCY_TYPES.forEach((t) => {
       let deps = packageJson[t];
       if (!deps) return;
 
       let packageNames = Object.keys(deps);
-      packageNames.forEach(pkgName => {
+      packageNames.forEach((pkgName) => {
         if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
           requiresUpdate = true;
           packagesToUpdate.add(pkgName);
@@ -34,12 +34,12 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   });
 
   let rootRequiresUpdate = false;
-  DEPENDENCY_TYPES.forEach(t => {
+  DEPENDENCY_TYPES.forEach((t) => {
     let deps = root.packageJson[t];
     if (!deps) return;
 
     let packageNames = Object.keys(deps);
-    packageNames.forEach(pkgName => {
+    packageNames.forEach((pkgName) => {
       if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
         rootRequiresUpdate = true;
         packagesToUpdate.add(pkgName);
@@ -52,7 +52,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   });
 
   let newVersions = await Promise.all(
-    [...packagesToUpdate].map(async pkgName => {
+    [...packagesToUpdate].map(async (pkgName) => {
       if (!newVersion) {
         let info = await getPackageInfo(pkgName);
 
@@ -67,7 +67,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   );
 
   filteredPackages.forEach(({ packageJson }) => {
-    DEPENDENCY_TYPES.forEach(t => {
+    DEPENDENCY_TYPES.forEach((t) => {
       let deps = packageJson[t];
 
       if (deps) {
@@ -96,7 +96,7 @@ const npmRequestLimit = pLimit(40);
 export function getPackageInfo(pkgName: string) {
   return npmRequestLimit(async () => {
     let result = await getPackageJson(pkgName, {
-      allVersions: true
+      allVersions: true,
     });
 
     return result;

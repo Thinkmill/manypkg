@@ -7,7 +7,7 @@ import { ExitError } from "./errors";
 export async function runCmd(args: string[], cwd: string) {
   let { packages, root } = await getPackages(cwd);
 
-  const exactMatchingPackage = packages.find(pkg => {
+  const exactMatchingPackage = packages.find((pkg) => {
     return (
       pkg.packageJson.name === args[0] ||
       path.relative(root.dir, pkg.dir) === args[0]
@@ -17,12 +17,12 @@ export async function runCmd(args: string[], cwd: string) {
   if (exactMatchingPackage) {
     const { code } = await spawn("yarn", args.slice(1), {
       cwd: exactMatchingPackage.dir,
-      stdio: "inherit"
+      stdio: "inherit",
     });
     throw new ExitError(code);
   }
 
-  const matchingPackages = packages.filter(pkg => {
+  const matchingPackages = packages.filter((pkg) => {
     return (
       pkg.packageJson.name.includes(args[0]) ||
       path.relative(root.dir, pkg.dir).includes(args[0])
@@ -34,7 +34,7 @@ export async function runCmd(args: string[], cwd: string) {
       `an identifier must only match a single package but "${
         args[0]
       }" matches the following packages: \n${matchingPackages
-        .map(x => x.packageJson.name)
+        .map((x) => x.packageJson.name)
         .join("\n")}`
     );
     throw new ExitError(1);
@@ -44,7 +44,7 @@ export async function runCmd(args: string[], cwd: string) {
   } else {
     const { code } = await spawn("yarn", args.slice(1), {
       cwd: matchingPackages[0].dir,
-      stdio: "inherit"
+      stdio: "inherit",
     });
     throw new ExitError(code);
   }

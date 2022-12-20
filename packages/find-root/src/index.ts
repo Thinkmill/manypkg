@@ -4,6 +4,9 @@ import fs from "fs-extra";
 
 import { Tool, ToolType, NoneTool, defaultOrder, supportedTools, MonorepoRoot } from "@manypkg/core";
 
+const isNoEntryError = (err: unknown): boolean =>
+  !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
+
 export class NoPkgJsonFound extends Error {
   directory: string;
   constructor(directory: string) {
@@ -27,7 +30,7 @@ async function hasWorkspacesConfiguredViaPkgJson(
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
@@ -68,10 +71,10 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   // that there is no monorepo.
 
   let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined
+    current: undefined,
   };
   let dir = await findUp(
-    directory => {
+    (directory) => {
       return Promise.all([
         hasWorkspacesConfiguredViaPkgJson(directory, firstPkgJsonDirRef)
       ]).then(x => x.find(dir => dir));
@@ -102,7 +105,7 @@ function hasWorkspacesConfiguredViaPkgJsonSync(
       return directory;
     }
   } catch (err) {
-    if (err.code !== "ENOENT") {
+    if (!isNoEntryError(err)) {
       throw err;
     }
   }
@@ -134,7 +137,7 @@ export function findRootSync(cwd: string) {
   // Handle the "none" tool (single package case)
 
   let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined
+    current: undefined,
   };
   let dir = findUpSync(
     directory => {
