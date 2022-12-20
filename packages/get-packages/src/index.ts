@@ -9,6 +9,9 @@ import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { PackageJSON } from "@changesets/types";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 
+const isNoEntryError = (err: unknown): boolean =>
+  !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
+
 export type Tool = "yarn" | "bolt" | "pnpm" | "lerna" | "root";
 
 export type Package = { packageJson: PackageJSON; dir: string };
@@ -46,18 +49,18 @@ export async function getPackages(dir: string): Promise<Packages> {
     if (Array.isArray(pkg.workspaces)) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces
+        packageGlobs: pkg.workspaces,
       };
     } else if (pkg.workspaces.packages) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces.packages
+        packageGlobs: pkg.workspaces.packages,
       };
     }
   } else if (pkg.bolt && pkg.bolt.workspaces) {
     tool = {
       type: "bolt",
-      packageGlobs: pkg.bolt.workspaces
+      packageGlobs: pkg.bolt.workspaces,
     };
   } else {
     try {
@@ -67,28 +70,26 @@ export async function getPackages(dir: string): Promise<Packages> {
       if (manifest && manifest.packages) {
         tool = {
           type: "pnpm",
-          packageGlobs: manifest.packages
+          packageGlobs: manifest.packages,
         };
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (!isNoEntryError(err)) {
         throw err;
       }
     }
 
     if (!tool) {
       try {
-        const lernaJson = await fs.readJson(
-          path.join(cwd, "lerna.json")
-        );
+        const lernaJson = await fs.readJson(path.join(cwd, "lerna.json"));
         if (lernaJson) {
           tool = {
             type: "lerna",
             packageGlobs: lernaJson.packages || ["packages/*"],
-          }
+          };
         }
       } catch (err) {
-        if (err.code !== "ENOENT") {
+        if (!isNoEntryError(err)) {
           throw err;
         }
       }
@@ -98,7 +99,7 @@ export async function getPackages(dir: string): Promise<Packages> {
   if (!tool) {
     const root = {
       dir: cwd,
-      packageJson: pkg
+      packageJson: pkg,
     };
     if (!pkg.name) {
       throw new PackageJsonMissingNameError(["package.json"]);
@@ -106,7 +107,7 @@ export async function getPackages(dir: string): Promise<Packages> {
     return {
       tool: "root",
       root,
-      packages: [root]
+      packages: [root],
     };
   }
 
@@ -114,18 +115,18 @@ export async function getPackages(dir: string): Promise<Packages> {
     cwd,
     onlyDirectories: true,
     expandDirectories: false,
-    ignore: ["**/node_modules"]
+    ignore: ["**/node_modules"],
   });
-  const directories = relativeDirectories.map(p => path.resolve(cwd, p))
+  const directories = relativeDirectories.map((p) => path.resolve(cwd, p));
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
   const results = (
     await Promise.all(
-      directories.sort().map(dir =>
+      directories.sort().map((dir) =>
         fs
           .readJson(path.join(dir, "package.json"))
-          .then(packageJson => {
+          .then((packageJson) => {
             if (!packageJson.name) {
               pkgJsonsMissingNameField.push(
                 path.relative(cwd, path.join(dir, "package.json"))
@@ -133,7 +134,7 @@ export async function getPackages(dir: string): Promise<Packages> {
             }
             return { packageJson, dir };
           })
-          .catch(err => {
+          .catch((err) => {
             if (err.code === "ENOENT") {
               return null;
             }
@@ -141,7 +142,7 @@ export async function getPackages(dir: string): Promise<Packages> {
           })
       )
     )
-  ).filter(x => x);
+  ).filter((x) => x);
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort();
     throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
@@ -150,9 +151,9 @@ export async function getPackages(dir: string): Promise<Packages> {
     tool: tool.type,
     root: {
       dir: cwd,
-      packageJson: pkg
+      packageJson: pkg,
     },
-    packages: results as Package[]
+    packages: results as Package[],
   };
 }
 
@@ -171,18 +172,18 @@ export function getPackagesSync(dir: string): Packages {
     if (Array.isArray(pkg.workspaces)) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces
+        packageGlobs: pkg.workspaces,
       };
     } else if (pkg.workspaces.packages) {
       tool = {
         type: "yarn",
-        packageGlobs: pkg.workspaces.packages
+        packageGlobs: pkg.workspaces.packages,
       };
     }
   } else if (pkg.bolt && pkg.bolt.workspaces) {
     tool = {
       type: "bolt",
-      packageGlobs: pkg.bolt.workspaces
+      packageGlobs: pkg.bolt.workspaces,
     };
   } else {
     try {
@@ -192,28 +193,26 @@ export function getPackagesSync(dir: string): Packages {
       if (manifest && manifest.packages) {
         tool = {
           type: "pnpm",
-          packageGlobs: manifest.packages
+          packageGlobs: manifest.packages,
         };
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (!isNoEntryError(err)) {
         throw err;
       }
     }
 
     if (!tool) {
       try {
-        const lernaJson = fs.readJsonSync(
-          path.join(cwd, "lerna.json")
-        );
+        const lernaJson = fs.readJsonSync(path.join(cwd, "lerna.json"));
         if (lernaJson) {
           tool = {
             type: "lerna",
             packageGlobs: lernaJson.packages || ["packages/*"],
-          }
+          };
         }
       } catch (err) {
-        if (err.code !== "ENOENT") {
+        if (!isNoEntryError(err)) {
           throw err;
         }
       }
@@ -223,7 +222,7 @@ export function getPackagesSync(dir: string): Packages {
   if (!tool) {
     const root = {
       dir: cwd,
-      packageJson: pkg
+      packageJson: pkg,
     };
     if (!pkg.name) {
       throw new PackageJsonMissingNameError(["package.json"]);
@@ -231,22 +230,22 @@ export function getPackagesSync(dir: string): Packages {
     return {
       tool: "root",
       root,
-      packages: [root]
+      packages: [root],
     };
   }
   const relativeDirectories = globbySync(tool.packageGlobs, {
     cwd,
     onlyDirectories: true,
     expandDirectories: false,
-    ignore: ["**/node_modules"]
+    ignore: ["**/node_modules"],
   });
-  const directories = relativeDirectories.map(p => path.resolve(cwd, p))
+  const directories = relativeDirectories.map((p) => path.resolve(cwd, p));
 
   let pkgJsonsMissingNameField: Array<string> = [];
 
   const results = directories
     .sort()
-    .map(dir => {
+    .map((dir) => {
       try {
         const packageJson = fs.readJsonSync(path.join(dir, "package.json"));
         if (!packageJson.name) {
@@ -256,11 +255,12 @@ export function getPackagesSync(dir: string): Packages {
         }
         return { packageJson, dir };
       } catch (err) {
-        if (err.code === "ENOENT") return null;
-        throw err;
+        if (!isNoEntryError(err)) {
+          throw err;
+        }
       }
     })
-    .filter(x => x);
+    .filter((x) => x);
 
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort();
@@ -271,8 +271,8 @@ export function getPackagesSync(dir: string): Packages {
     tool: tool.type,
     root: {
       dir: cwd,
-      packageJson: pkg
+      packageJson: pkg,
     },
-    packages: results as Package[]
+    packages: results as Package[],
   };
 }

@@ -21,7 +21,7 @@ async function tagApackage(
   // Due to a super annoying issue in yarn, we have to manually override this env variable
   // See: https://github.com/yarnpkg/yarn/issues/2935#issuecomment-355292633
   const envOverride = {
-    npm_config_registry: getCorrectRegistry()
+    npm_config_registry: getCorrectRegistry(),
   };
 
   let flags = [];
@@ -37,11 +37,11 @@ async function tagApackage(
       "add",
       `${packageJson.name}@${packageJson.version}`,
       tag,
-      ...flags
+      ...flags,
     ],
     {
       stdio: "inherit",
-      env: Object.assign({}, process.env, envOverride)
+      env: Object.assign({}, process.env, envOverride),
     }
   );
 }

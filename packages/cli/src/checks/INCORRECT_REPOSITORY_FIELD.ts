@@ -38,8 +38,8 @@ export default makeCheck<ErrorType>({
                 type: "INCORRECT_REPOSITORY_FIELD",
                 workspace,
                 currentRepositoryField: rootRepositoryField,
-                correctRepositoryField
-              }
+                correctRepositoryField,
+              },
             ];
           }
         } else {
@@ -65,8 +65,8 @@ export default makeCheck<ErrorType>({
                 type: "INCORRECT_REPOSITORY_FIELD",
                 workspace,
                 currentRepositoryField,
-                correctRepositoryField
-              }
+                correctRepositoryField,
+              },
             ];
           }
         }
@@ -78,7 +78,7 @@ export default makeCheck<ErrorType>({
     (error.workspace.packageJson as any).repository =
       error.correctRepositoryField;
   },
-  print: error => {
+  print: (error) => {
     if (error.currentRepositoryField === undefined) {
       return `${
         error.workspace.packageJson.name
@@ -91,5 +91,5 @@ export default makeCheck<ErrorType>({
     } has a repository field of ${JSON.stringify(
       error.currentRepositoryField
     )} when it should be ${JSON.stringify(error.correctRepositoryField)}`;
-  }
+  },
 });

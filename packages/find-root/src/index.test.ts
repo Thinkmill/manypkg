@@ -29,7 +29,9 @@ const runTests = (findRoot: FindRoot) => {
     // technically legal placement for lerna.json, but broken in practice
     // because it is not a sibling of the root manifest. placed here merely
     // to be encountered "before" the root manifest and its valid workspaces config.
-    await fs.outputJSON(path.join(tmpPath, "packages", "lerna.json"), {useWorkspaces: true})
+    await fs.outputJSON(path.join(tmpPath, "packages", "lerna.json"), {
+      useWorkspaces: true,
+    });
     let packagesRoot = await findRoot(
       path.join(tmpPath, "packages", "package-one", "src")
     );

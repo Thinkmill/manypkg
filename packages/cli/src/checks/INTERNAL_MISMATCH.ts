@@ -1,7 +1,7 @@
 import {
   makeCheck,
   NORMAL_DEPENDENCY_TYPES,
-  versionRangeToRangeType
+  versionRangeToRangeType,
 } from "./utils";
 import semver from "semver";
 import { Package } from "@manypkg/get-packages";
@@ -30,7 +30,7 @@ export default makeCheck<ErrorType>({
               type: "INTERNAL_MISMATCH",
               workspace,
               dependencyWorkspace,
-              dependencyRange: range
+              dependencyRange: range,
             });
           }
         }
@@ -39,7 +39,7 @@ export default makeCheck<ErrorType>({
 
     return errors;
   },
-  fix: error => {
+  fix: (error) => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
       if (deps && deps[error.dependencyWorkspace.packageJson.name]) {
@@ -51,7 +51,7 @@ export default makeCheck<ErrorType>({
     }
     return { requiresInstall: true };
   },
-  print: error =>
+  print: (error) =>
     `${error.workspace.packageJson.name} has a dependency on ${error.dependencyWorkspace.packageJson.name}@${error.dependencyRange} but the version of ${error.dependencyWorkspace.packageJson.name} in the repo is ${error.dependencyWorkspace.packageJson.version} which is not within range of the depended on version, please update the dependency version`,
-  type: "all"
+  type: "all",
 });

@@ -21,7 +21,7 @@ export async function install(tool: Tool, cwd: string) {
       pnpm: "pnpm",
       lerna: "lerna",
       root: "yarn",
-      bolt: "bolt"
+      bolt: "bolt",
     }[tool],
     tool === "pnpm"
       ? ["install"]

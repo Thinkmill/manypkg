@@ -1,7 +1,7 @@
 import {
   makeCheck,
   getMostCommonRangeMap,
-  NORMAL_DEPENDENCY_TYPES
+  NORMAL_DEPENDENCY_TYPES,
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
@@ -35,7 +35,7 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyName: depName,
               dependencyRange: range,
-              mostCommonDependencyRange: mostCommonRange
+              mostCommonDependencyRange: mostCommonRange,
             });
           }
         }
@@ -43,7 +43,7 @@ export default makeCheck<ErrorType>({
     }
     return errors;
   },
-  fix: error => {
+  fix: (error) => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
       if (deps && deps[error.dependencyName]) {
@@ -52,7 +52,7 @@ export default makeCheck<ErrorType>({
     }
     return { requiresInstall: true };
   },
-  print: error =>
+  print: (error) =>
     `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the most common range in the repo is ${error.mostCommonDependencyRange}, the range should be set to ${error.mostCommonDependencyRange}`,
-  type: "all"
+  type: "all",
 });

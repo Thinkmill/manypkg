@@ -26,7 +26,7 @@ export default makeCheck<ErrorType>({
               type: "MULTIPLE_DEPENDENCY_TYPES",
               dependencyType: depType,
               dependencyName: depName,
-              workspace
+              workspace,
             });
           }
         }
@@ -35,7 +35,7 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   type: "all",
-  fix: error => {
+  fix: (error) => {
     let deps = error.workspace.packageJson[error.dependencyType];
     if (deps) {
       delete deps[error.dependencyName];
@@ -45,12 +45,12 @@ export default makeCheck<ErrorType>({
     }
     return { requiresInstall: true };
   },
-  print: error =>
+  print: (error) =>
     `${error.workspace.packageJson.name} has a dependency and a ${
       error.dependencyType === "devDependencies"
         ? "devDependency"
         : "optionalDependency"
     } on ${
       error.dependencyName
-    }, this is unnecessary, it should be removed from ${error.dependencyType}`
+    }, this is unnecessary, it should be removed from ${error.dependencyType}`,
 });
