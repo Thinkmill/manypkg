@@ -151,7 +151,6 @@ let runTests = (getPackages: GetPackages) => {
       "@manypkg/cyclic-dep"
     );
     expect(allPackages.tool.type).toEqual("yarn");
-    //1
   });
 };
 
