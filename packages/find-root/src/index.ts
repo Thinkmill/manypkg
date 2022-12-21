@@ -111,7 +111,7 @@ function hasWorkspacesConfiguredViaPkgJsonSync(
   }
 }
 
-export function findRootSync(cwd: string) {
+export function findRootSync(cwd: string): MonorepoRoot {
   let monorepoRoot: MonorepoRoot | undefined;
 
   findUpSync(

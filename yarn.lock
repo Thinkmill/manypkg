@@ -2805,6 +2805,11 @@
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
 
+"@types/jju@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@types/jju/-/jju-1.4.2.tgz#cb31d10d9e23a1b2786a9842c584b53f6f1b9086"
+  integrity sha512-fbvsM6TrP3QN6791tiF6wAkmlNRwf1VARZ7sXyc5kmbfTDFhECaiS5ZFvpaciud0BoKBBFWA8hE3utOLf5XB1w==
+
 "@types/json-schema@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"

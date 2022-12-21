@@ -51,7 +51,14 @@ exports[`Run command should execute "package-three start" and exit with 1: stder
 "
 `;
 
+exports[`Run command should execute "package-three start" and exit with 1: stderr 2`] = `
+"☔️ error No matching packages found
+"
+`;
+
 exports[`Run command should execute "package-three start" and exit with 1: stdout 1`] = `""`;
+
+exports[`Run command should execute "package-three start" and exit with 1: stdout 2`] = `""`;
 
 exports[`Run command should execute "package-two start" and exit with 1: stderr 1`] = `
 "☔️ error an identifier must only match a single package but \\"package-two\\" matches the following packages: 
@@ -138,7 +145,16 @@ exports[`Run command should execute "pkg-two start" and exit with 1: stderr 1`] 
 "
 `;
 
+exports[`Run command should execute "pkg-two start" and exit with 1: stderr 2`] = `
+"☔️ error an identifier must only match a single package but \\"pkg-two\\" matches the following packages: 
+☔️ error @manypkg/basic-fixture-pkg-two
+☔️ error @manypkg/basic-fixture-pkg-two-one
+"
+`;
+
 exports[`Run command should execute "pkg-two start" and exit with 1: stdout 1`] = `""`;
+
+exports[`Run command should execute "pkg-two start" and exit with 1: stdout 2`] = `""`;
 
 exports[`Run command should execute "pkg-two-one start" and exit with 0: stderr 1`] = `
 "warning package.json: No license field
