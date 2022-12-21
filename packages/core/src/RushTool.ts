@@ -55,12 +55,10 @@ export const RushTool: Tool = {
       const directories = rushJson.projects.map((project) => path.resolve(directory, project.projectFolder));
       const packages: Package[] = await Promise.all(
         directories.map(async (dir: string) => {
-          return fs.readJson(path.join(dir, 'package.json')).then((packageJson: PackageJSON) => {
             return {
-              relativeDir: path.relative(directory, dir),
-              packageJson
+                relativeDir: path.relative(directory, dir),
+                packageJson: await fs.readJson(path.join(dir, 'package.json'))
             };
-          });
         })
       );
 
