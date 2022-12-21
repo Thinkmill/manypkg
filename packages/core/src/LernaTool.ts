@@ -18,7 +18,7 @@ export const LernaTool: Tool = {
             if (lernaJson.useWorkspaces !== true) {
                 return true;
             }
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -32,7 +32,7 @@ export const LernaTool: Tool = {
             if (lernaJson.useWorkspaces !== true) {
                 return true;
             }
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -41,6 +41,8 @@ export const LernaTool: Tool = {
     },
 
     async getPackages(directory: string): Promise<Packages> {
+        const rootDir = path.resolve(directory);
+
         try {
             const lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as PackageJSON;
@@ -49,12 +51,13 @@ export const LernaTool: Tool = {
             return {
                 tool: LernaTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -63,6 +66,8 @@ export const LernaTool: Tool = {
     },
 
     getPackagesSync(directory: string): Packages {
+        const rootDir = path.resolve(directory);
+
         try {
             const lernaJson = fs.readJsonSync(path.join(directory, "lerna.json")) as LernaJson;
             const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as PackageJSON;
@@ -71,12 +76,13 @@ export const LernaTool: Tool = {
             return {
                 tool: LernaTool,
                 packages: expandPackageGlobsSync(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }

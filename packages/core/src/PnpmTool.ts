@@ -47,6 +47,8 @@ export const PnpmTool: Tool = {
     },
 
     async getPackages(directory: string): Promise<Packages> {
+        const rootDir = path.resolve(directory);
+
         try {
             const manifest = await readYamlFile<{ packages?: string[] }>(
                 path.join(directory, "pnpm-workspace.yaml")
@@ -57,12 +59,13 @@ export const PnpmTool: Tool = {
             return {
                 tool: PnpmTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir: rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -71,6 +74,8 @@ export const PnpmTool: Tool = {
     },
 
     getPackagesSync(directory: string): Packages {
+        const rootDir = path.resolve(directory);
+
         try {
             const manifest = readYamlFileSync<{ packages?: string[] }>(
                 path.join(directory, "pnpm-workspace.yaml")
@@ -81,12 +86,13 @@ export const PnpmTool: Tool = {
             return {
                 tool: PnpmTool,
                 packages: expandPackageGlobsSync(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir: rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }

@@ -87,8 +87,8 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   }
 
   return {
-    tool: SinglePackageTool,
-    dir: firstPkgJsonDirRef.current
+    Tool: SinglePackageTool,
+    rootDir: firstPkgJsonDirRef.current
   };
 }
 
@@ -152,6 +152,6 @@ export function findRootSync(cwd: string): MonorepoRoot {
 
   return {
     tool: SinglePackageTool,
-    dir: firstPkgJsonDirRef.current
+    rootDir: firstPkgJsonDirRef.current
   };
 }

@@ -25,7 +25,7 @@ export async function getPackages(dir: string): Promise<Packages> {
   const monorepoRoot: MonorepoRoot = await findRoot(dir);
   const packages: Packages = await monorepoRoot.tool.getPackages(dir);
 
-  validatePackages(packages, monorepoRoot.dir);
+  validatePackages(packages);
 
   return packages;
 }
@@ -34,17 +34,17 @@ export function getPackagesSync(dir: string): Packages {
   const monorepoRoot: MonorepoRoot = findRootSync(dir);
   const packages: Packages = monorepoRoot.tool.getPackagesSync(dir);
 
-  validatePackages(packages, monorepoRoot.dir);
+  validatePackages(packages);
 
   return packages;
 }
 
-function validatePackages(packages: Packages, cwd: string) {
+function validatePackages(packages: Packages) {
   const pkgJsonsMissingNameField: string[] = [];
 
   for (const pkg of packages.packages) {
     if (!pkg.packageJson.name) {
-      pkgJsonsMissingNameField.push(path.relative(cwd, path.join(pkg.dir, "package.json")));
+      pkgJsonsMissingNameField.push(path.relative(packages.rootDir, path.join(pkg.relativeDir, "package.json")));
     }
   }
 

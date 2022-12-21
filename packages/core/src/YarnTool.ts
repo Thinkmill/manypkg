@@ -44,6 +44,8 @@ export const YarnTool : Tool = {
     },
 
     async getPackages(directory: string): Promise<Packages> {
+        const rootDir = path.resolve(directory);
+
         try {
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as YarnPackageJSON;
             const packageGlobs: string[] = Array.isArray(pkgJson.workspaces) ? pkgJson.workspaces : pkgJson.workspaces!.packages;
@@ -51,12 +53,13 @@ export const YarnTool : Tool = {
             return {
                 tool: YarnTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -65,6 +68,8 @@ export const YarnTool : Tool = {
     },
 
     getPackagesSync(directory: string): Packages {
+        const rootDir = path.resolve(directory);
+
         try {
             const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as YarnPackageJSON;
             const packageGlobs: string[] = Array.isArray(pkgJson.workspaces) ? pkgJson.workspaces : pkgJson.workspaces!.packages;
@@ -72,12 +77,13 @@ export const YarnTool : Tool = {
             return {
                 tool: YarnTool,
                 packages: expandPackageGlobsSync(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }

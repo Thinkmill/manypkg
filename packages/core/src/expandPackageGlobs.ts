@@ -20,14 +20,14 @@ export async function expandPackageGlobs(packageGlobs: string[], directory: stri
 
   const discoveredPackages: Array<Package | undefined> = await Promise.all(
     directories.map(dir =>
-      fs.readJson(path.join(dir, "package.json")).catch(err => {
+      fs.readJson(path.join(dir, "package.json")).catch((err: any) => {
         if (err.code !== "ENOENT") {
           throw err;
         }
       }).then(result => {
         if (result) {
           return {
-            dir,
+            relativeDir: path.relative(directory, dir),
             packageJson: result
           }
         }
@@ -54,10 +54,10 @@ export function expandPackageGlobsSync(packageGlobs: string[], directory: string
     try {
       const packageJson: PackageJSON = fs.readJsonSync(path.join(dir, "package.json"));
       return {
-        dir,
+        relativeDir: path.relative(directory, dir),
         packageJson
       }
-    } catch (err) {
+    } catch (err: any) {
       if (err.code != "ENOENT") {
         throw err;
       }

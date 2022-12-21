@@ -4,10 +4,6 @@ import jju from 'jju';
 
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 
-//1 //2
-
-//3
-
 interface RushJson {
   projects: RushProject[];
 }
@@ -24,7 +20,7 @@ export const RushTool: Tool = {
     try {
       await fs.readFile(path.join(directory, 'rush.json'), 'utf8');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
@@ -36,7 +32,7 @@ export const RushTool: Tool = {
     try {
       fs.readFileSync(path.join(directory, 'rush.json'), 'utf8');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
@@ -45,6 +41,8 @@ export const RushTool: Tool = {
   },
 
   async getPackages(directory: string): Promise<Packages> {
+    const rootDir = path.resolve(directory);
+
     try {
       const rushText: string = await fs.readFile(path.join(directory, 'rush.json'), 'utf8');
 
@@ -59,7 +57,7 @@ export const RushTool: Tool = {
         directories.map(async (dir: string) => {
           return fs.readJson(path.join(dir, 'package.json')).then((packageJson: PackageJSON) => {
             return {
-              dir,
+              relativeDir: path.relative(directory, dir),
               packageJson
             };
           });
@@ -69,9 +67,10 @@ export const RushTool: Tool = {
       // Rush does not have a root package
       return {
         tool: RushTool,
-        packages
+        packages,
+        rootDir
       };
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
@@ -82,6 +81,8 @@ export const RushTool: Tool = {
   },
 
   getPackagesSync(directory: string): Packages {
+    const rootDir = path.resolve(directory);
+
     try {
       const rushText: string = fs.readFileSync(path.join(directory, 'rush.json'), 'utf8');
 
@@ -93,7 +94,7 @@ export const RushTool: Tool = {
       const packages: Package[] = directories.map((dir: string) => {
         const packageJson: PackageJSON = fs.readJsonSync(path.join(dir, 'package.json'));
         return {
-          dir,
+          relativeDir: path.relative(directory, dir),
           packageJson
         };
       });
@@ -101,9 +102,10 @@ export const RushTool: Tool = {
       // Rush does not have a root package
       return {
         tool: RushTool,
-        packages
+        packages,
+        rootDir
       };
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         throw err;
       }

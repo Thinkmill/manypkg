@@ -19,7 +19,7 @@ export const BoltTool: Tool = {
             if (pkgJson.bolt && pkgJson.bolt.workspaces) {
                 return true;
             }
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -33,7 +33,7 @@ export const BoltTool: Tool = {
             if (pkgJson.bolt && pkgJson.bolt.workspaces) {
                 return true;
             }
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -42,6 +42,8 @@ export const BoltTool: Tool = {
     },
 
     async getPackages(directory: string): Promise<Packages> {
+        const rootDir = path.resolve(directory);
+
         try {
             const pkgJson = (await fs.readJson(path.join(directory, "package.json"))) as BoltPackageJSON;
             if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
@@ -52,12 +54,13 @@ export const BoltTool: Tool = {
             return {
                 tool: BoltTool,
                 packages: await expandPackageGlobs(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
@@ -66,6 +69,8 @@ export const BoltTool: Tool = {
     },
 
     getPackagesSync(directory: string): Packages {
+        const rootDir = path.resolve(directory);
+
         try {
             const pkgJson = fs.readJsonSync(path.join(directory, "package.json")) as BoltPackageJSON;
             if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
@@ -76,12 +81,13 @@ export const BoltTool: Tool = {
             return {
                 tool: BoltTool,
                 packages: expandPackageGlobsSync(packageGlobs, directory),
-                root: {
-                    dir: directory,
+                rootPackage: {
+                    relativeDir: ".",
                     packageJson: pkgJson
-                }
+                },
+                rootDir
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }

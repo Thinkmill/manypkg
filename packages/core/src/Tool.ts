@@ -35,11 +35,20 @@ export type PackageJSON = {
 };
 
 /**
- * A pre-loaded package json structure, with the diretory it was loaded from.
+ * An individual package json structure, along with the directory it lives in,
+ * relative to the root of the current monorepo.
  */
 export type Package = {
+    /**
+     * The pre-loaded package json structure.
+     */
     packageJson: PackageJSON;
-    dir: string;
+
+    /**
+     * Path to the directory containing this package, relative to the monorepo root (for
+     * a "root package", this is the string ".").
+     */
+    relativeDir: string;
 };
 
 /**
@@ -47,9 +56,25 @@ export type Package = {
  * and (if supported by the tool) the associated "root" package.
  */
 export type Packages = {
+    /**
+     * The underlying tool implementation for this monorepo.
+     */
     tool: Tool;
+
+    /**
+     * A collection of disocvered packages.
+     */
     packages: Package[];
-    root?: Package;
+
+    /**
+     * If supported by the tool, this is the "root package" for the monorepo.
+     */
+    rootPackage?: Package;
+
+    /**
+     * The absolute path of the root directory of this monorepo.
+     */
+    rootDir: string;
 };
 
 /**
@@ -61,7 +86,14 @@ export type Packages = {
  * directory and associated tool.
  */
 export type MonorepoRoot = {
-    dir: string;
+    /**
+     * The absolute path to the root directory of this monorepo.
+     */
+    rootDir: string;
+
+    /**
+     * The underlying tool implementation for this monorepo.
+     */
     tool: Tool;
 };
 

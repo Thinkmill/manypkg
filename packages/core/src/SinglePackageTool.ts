@@ -18,17 +18,20 @@ export const SinglePackageTool: Tool = {
     },
 
     async getPackages(directory: string): Promise<Packages> {
+        const rootDir = path.resolve(directory);
+
         try {
-            const pkgJson: PackageJSON = (await fs.readJson(path.join(directory, "package.json")));
+            const pkgJson: PackageJSON = (await fs.readJson(path.join(rootDir, "package.json")));
             const pkg: Package = {
-                dir: directory,
+                relativeDir: ".",
                 packageJson: pkgJson
             };
 
             return {
                 tool: SinglePackageTool,
                 packages: [pkg],
-                root: pkg
+                rootPackage: pkg,
+                rootDir: rootDir
             };
         } catch (err: any) {
             if (err.code !== "ENOENT") {
@@ -39,17 +42,20 @@ export const SinglePackageTool: Tool = {
     },
 
     getPackagesSync(directory: string): Packages {
+        const rootDir = path.resolve(directory);
+
         try {
-            const pkgJson: PackageJSON = fs.readJsonSync(path.join(directory, "package.json"));
+            const pkgJson: PackageJSON = fs.readJsonSync(path.join(rootDir, "package.json"));
             const pkg: Package = {
-                dir: directory,
+                relativeDir: ".",
                 packageJson: pkgJson
             };
 
             return {
                 tool: SinglePackageTool,
                 packages: [pkg],
-                root: pkg
+                rootPackage: pkg,
+                rootDir: rootDir
             };
         } catch (err: any) {
             if (err.code !== "ENOENT") {
