@@ -7,7 +7,7 @@ import path from "path";
 import globby, { sync as globbySync } from "globby";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { findRoot, findRootSync } from "@manypkg/find-root";
-import { Tool, ToolType, Package, Packages, MonorepoRoot, NoneTool, PackageJSON, supportedTools, defaultOrder } from "@manypkg/core";
+import { Tool, ToolType, Package, Packages, MonorepoRoot, PackageJSON, supportedTools, defaultOrder } from "@manypkg/core";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];

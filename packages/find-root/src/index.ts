@@ -2,7 +2,7 @@ import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
 import fs from "fs-extra";
 
-import { Tool, ToolType, NoneTool, defaultOrder, supportedTools, MonorepoRoot } from "@manypkg/core";
+import { Tool, ToolType, SinglePackageTool, defaultOrder, supportedTools, MonorepoRoot } from "@manypkg/core";
 
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
@@ -87,7 +87,7 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   }
 
   return {
-    tool: NoneTool,
+    tool: SinglePackageTool,
     dir: firstPkgJsonDirRef.current
   };
 }
@@ -151,7 +151,7 @@ export function findRootSync(cwd: string): MonorepoRoot {
   }
 
   return {
-    tool: NoneTool,
+    tool: SinglePackageTool,
     dir: firstPkgJsonDirRef.current
   };
 }

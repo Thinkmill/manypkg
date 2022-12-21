@@ -24,11 +24,8 @@ const supportedTools: Record<ToolType, Tool> = {
  * This ordering is designed to check the most typical package.json-based
  * monorepo implementations first, with tools based on custom file scchemas
  * checked last.
- *
- * The "none" tool (a standard package with no monorepo implementation) is
- * not included in the default sort order.
  */
-const defaultOrder: ToolType[] = ["yarn", "bolt", "pnpm", "lerna", "rush"];
+const defaultOrder: ToolType[] = ["yarn", "bolt", "pnpm", "lerna", "rush", "singlePackage"];
 
 export * from "./Tool";
 export {
