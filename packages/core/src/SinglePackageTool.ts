@@ -4,30 +4,16 @@ import fs from 'fs-extra';
 import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
-export const NoneTool : Tool = {
-    type: 'none',
+export const SinglePackageTool: Tool = {
+    type: 'package',
 
     async isMonorepoRoot(directory: string): Promise<boolean> {
-        try {
-            const pkgJson: PackageJSON = (await fs.readJson(path.join(directory, "package.json")));
-            return true;
-        } catch (err) {
-            if (err.code !== "ENOENT") {
-                throw err;
-            }
-        }
+        // The single package tool is never the root of a monorepo.
         return false;
     },
 
     isMonorepoRootSync(directory: string): boolean {
-        try {
-            const pkgJson: PackageJSON = fs.readJsonSync(path.join(directory, "package.json"));
-            return true;
-        } catch (err) {
-            if (err.code !== "ENOENT") {
-                throw err;
-            }
-        }
+        // The single package tool is never the root of a monorepo.
         return false;
     },
 
@@ -40,15 +26,15 @@ export const NoneTool : Tool = {
             };
 
             return {
-                tool: NoneTool,
+                tool: SinglePackageTool,
                 packages: [pkg],
                 root: pkg
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${NoneTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${SinglePackageTool.type} monorepo root`);
         }
     },
 
@@ -61,15 +47,15 @@ export const NoneTool : Tool = {
             };
 
             return {
-                tool: NoneTool,
+                tool: SinglePackageTool,
                 packages: [pkg],
                 root: pkg
             };
-        } catch (err) {
+        } catch (err: any) {
             if (err.code !== "ENOENT") {
                 throw err;
             }
-            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${NoneTool.type} monorepo root`);
+            throw new InvalidMonorepoError(`Directory ${directory} is not a valid ${SinglePackageTool.type} monorepo root`);
         }
     }
 }
