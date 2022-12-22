@@ -55,12 +55,7 @@ function validatePackages(packages: Packages) {
 
   for (const pkg of packages.packages) {
     if (!pkg.packageJson.name) {
-      pkgJsonsMissingNameField.push(
-        path.relative(
-          packages.rootDir,
-          path.join(pkg.relativeDir, "package.json")
-        )
-      );
+      pkgJsonsMissingNameField.push(path.join(pkg.relativeDir, "package.json"));
     }
   }
 

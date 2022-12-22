@@ -12,7 +12,7 @@ import {
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
 export const SinglePackageTool: Tool = {
-  type: "package",
+  type: "singlePackage",
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     // The single package tool is never the root of a monorepo.

@@ -6,9 +6,9 @@ import fs from "fs-extra";
 import {
   BoltTool,
   LernaTool,
-  NoneTool,
   PnpmTool,
   RushTool,
+  SinglePackageTool,
   YarnTool,
 } from "@manypkg/tools";
 
@@ -24,7 +24,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: YarnTool,
-      dir: tmpPath,
+      rootDir: tmpPath,
     });
   });
 
@@ -35,7 +35,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: LernaTool,
-      dir: tmpPath,
+      rootDir: tmpPath,
     });
   });
 
@@ -49,7 +49,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: YarnTool,
-      dir: tmpPath,
+      rootDir: tmpPath,
     });
   });
 
@@ -60,7 +60,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: PnpmTool,
-      dir: tmpPath,
+      rootDir: tmpPath,
     });
   });
 
@@ -68,8 +68,8 @@ const runTests = (findRoot: FindRoot) => {
     let tmpPath = f.copy("single-pkg");
     let monorepoRoot = await findRoot(path.join(tmpPath, "src"));
     expect(monorepoRoot).toEqual({
-      tool: NoneTool,
-      dir: tmpPath,
+      tool: SinglePackageTool,
+      rootDir: tmpPath,
     });
   });
 };

@@ -34,6 +34,7 @@ describe("Run command", () => {
       expect(code).toBe(exitCode);
       expect(stripAnsi(stdout.toString())).toMatchSnapshot("stdout");
       expect(stripAnsi(stderr.toString())).toMatchSnapshot("stderr");
-    }
+    },
+    10 /* seconds */
   );
 });

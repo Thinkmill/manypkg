@@ -115,7 +115,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.tool.type).toEqual("lerna");
   });
 
-  it("should resolve the main package if there is no monorepo tool", async () => {
+  it("should resolve the main package if there is only a single package", async () => {
     const path = f.copy("root-only");
     const allPackages = await getPackages(path);
 
@@ -123,9 +123,10 @@ let runTests = (getPackages: GetPackages) => {
       return expect(allPackages.packages).not.toBeNull();
     }
 
-    expect(allPackages.packages[0].dir).toEqual(path);
+    expect(allPackages.rootDir).toEqual(path);
+    expect(allPackages.packages[0].relativeDir).toEqual(".");
     expect(allPackages.packages.length).toEqual(1);
-    expect(allPackages.tool.type).toEqual("none");
+    expect(allPackages.tool.type).toEqual("singlePackage");
   });
 
   it("should throw an error if a package.json is missing the name field", async () => {
