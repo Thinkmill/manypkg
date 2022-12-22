@@ -62,12 +62,10 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
       )
         .then((x) => x.find((value) => value))
         .then((result) => {
-          if (result && !monorepoRoot) {
+          if (result) {
             monorepoRoot = result;
+            return dir;
           }
-
-          // the findUp tool expects us to return the current directory or undefined
-          return result ? result.dir : undefined;
         });
     },
     { cwd, type: "directory" }
