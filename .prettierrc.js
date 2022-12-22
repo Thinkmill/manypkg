@@ -8,8 +8,7 @@ module.exports = {
   // Avoid line breaks in markdown
   proseWrap: "never",
 
-  // Disabling search dirs and pointing directly at plugins
-  // makes it easier for VSCode and WebStorm to find them.
+  // Disabling search dirs and pointing directly at plugins to keep configuration explicit
   pluginSearchDirs: false,
   plugins: [require("prettier-plugin-packagejson")],
 };
