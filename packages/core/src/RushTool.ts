@@ -1,8 +1,15 @@
-import path from 'path';
-import fs from 'fs-extra';
-import jju from 'jju';
+import path from "path";
+import fs from "fs-extra";
+import jju from "jju";
 
-import { Tool, ToolType, Package, PackageJSON, Packages, InvalidMonorepoError } from './Tool';
+import {
+  Tool,
+  ToolType,
+  Package,
+  PackageJSON,
+  Packages,
+  InvalidMonorepoError,
+} from "./Tool";
 
 interface RushJson {
   projects: RushProject[];
@@ -14,14 +21,14 @@ interface RushProject {
 }
 
 export const RushTool: Tool = {
-  type: 'rush',
+  type: "rush",
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      await fs.readFile(path.join(directory, 'rush.json'), 'utf8');
+      await fs.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err: any) {
-      if (err.code !== 'ENOENT') {
+      if (err.code !== "ENOENT") {
         throw err;
       }
     }
@@ -30,10 +37,10 @@ export const RushTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      fs.readFileSync(path.join(directory, 'rush.json'), 'utf8');
+      fs.readFileSync(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err: any) {
-      if (err.code !== 'ENOENT') {
+      if (err.code !== "ENOENT") {
         throw err;
       }
     }
@@ -44,21 +51,26 @@ export const RushTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const rushText: string = await fs.readFile(path.join(directory, 'rush.json'), 'utf8');
+      const rushText: string = await fs.readFile(
+        path.join(directory, "rush.json"),
+        "utf8"
+      );
 
       // Rush configuration files are full of inline and block-scope comment blocks (JSONC),
       // so we use a parser that can handle that.
       const rushJson: RushJson = jju.parse(rushText);
 
-      console.log(rushJson, 'rush.json');
+      console.log(rushJson, "rush.json");
 
-      const directories = rushJson.projects.map((project) => path.resolve(directory, project.projectFolder));
+      const directories = rushJson.projects.map((project) =>
+        path.resolve(directory, project.projectFolder)
+      );
       const packages: Package[] = await Promise.all(
         directories.map(async (dir: string) => {
-            return {
-                relativeDir: path.relative(directory, dir),
-                packageJson: await fs.readJson(path.join(dir, 'package.json'))
-            };
+          return {
+            relativeDir: path.relative(directory, dir),
+            packageJson: await fs.readJson(path.join(dir, "package.json")),
+          };
         })
       );
 
@@ -66,10 +78,10 @@ export const RushTool: Tool = {
       return {
         tool: RushTool,
         packages,
-        rootDir
+        rootDir,
       };
     } catch (err: any) {
-      if (err.code !== 'ENOENT') {
+      if (err.code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -82,18 +94,25 @@ export const RushTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const rushText: string = fs.readFileSync(path.join(directory, 'rush.json'), 'utf8');
+      const rushText: string = fs.readFileSync(
+        path.join(directory, "rush.json"),
+        "utf8"
+      );
 
       // Rush configuration files are full of inline and block-scope comment blocks (JSONC),
       // so we use a parser that can handle that.
       const rushJson: RushJson = jju.parse(rushText);
 
-      const directories = rushJson.projects.map((project) => path.resolve(directory, project.projectFolder));
+      const directories = rushJson.projects.map((project) =>
+        path.resolve(directory, project.projectFolder)
+      );
       const packages: Package[] = directories.map((dir: string) => {
-        const packageJson: PackageJSON = fs.readJsonSync(path.join(dir, 'package.json'));
+        const packageJson: PackageJSON = fs.readJsonSync(
+          path.join(dir, "package.json")
+        );
         return {
           relativeDir: path.relative(directory, dir),
-          packageJson
+          packageJson,
         };
       });
 
@@ -101,15 +120,15 @@ export const RushTool: Tool = {
       return {
         tool: RushTool,
         packages,
-        rootDir
+        rootDir,
       };
     } catch (err: any) {
-      if (err.code !== 'ENOENT') {
+      if (err.code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
         `Directory ${directory} is not a valid ${RushTool.type} monorepo root: missing rush.json`
       );
     }
-  }
+  },
 };

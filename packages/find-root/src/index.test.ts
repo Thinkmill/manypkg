@@ -3,7 +3,14 @@ import fixturez from "fixturez";
 import path from "path";
 import fs from "fs-extra";
 
-import { BoltTool, LernaTool, NoneTool, PnpmTool, RushTool, YarnTool } from "@manypkg/core";
+import {
+  BoltTool,
+  LernaTool,
+  NoneTool,
+  PnpmTool,
+  RushTool,
+  YarnTool,
+} from "@manypkg/core";
 
 let f = fixturez(__dirname);
 
@@ -17,7 +24,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: YarnTool,
-      dir: tmpPath
+      dir: tmpPath,
     });
   });
 
@@ -28,7 +35,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: LernaTool,
-      dir: tmpPath
+      dir: tmpPath,
     });
   });
 
@@ -42,7 +49,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: YarnTool,
-      dir: tmpPath
+      dir: tmpPath,
     });
   });
 
@@ -53,7 +60,7 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: PnpmTool,
-      dir: tmpPath
+      dir: tmpPath,
     });
   });
 
@@ -62,7 +69,7 @@ const runTests = (findRoot: FindRoot) => {
     let monorepoRoot = await findRoot(path.join(tmpPath, "src"));
     expect(monorepoRoot).toEqual({
       tool: NoneTool,
-      dir: tmpPath
+      dir: tmpPath,
     });
   });
 };

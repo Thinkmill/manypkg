@@ -1,7 +1,13 @@
 /**
  * A unique string identifier for each type of supported monorepo tool.
  */
-export type ToolType = "bolt" | "lerna" | "pnpm" | "rush" | "singlePackage" | "yarn";
+export type ToolType =
+  | "bolt"
+  | "lerna"
+  | "pnpm"
+  | "rush"
+  | "singlePackage"
+  | "yarn";
 
 /**
  * A package.json access type.
@@ -12,26 +18,26 @@ export type PackageAccessType = "public" | "restricted";
  * An in-memory representation of a package.json file.
  */
 export type PackageJSON = {
-    name: string;
-    version: string;
-    dependencies?: {
-        [key: string]: string;
-    };
-    peerDependencies?: {
-        [key: string]: string;
-    };
-    devDependencies?: {
-        [key: string]: string;
-    };
-    optionalDependencies?: {
-        [key: string]: string;
-    };
-    private?: boolean;
-    publishConfig?: {
-        access?: PackageAccessType;
-        directory?: string;
-        registry?: string;
-    };
+  name: string;
+  version: string;
+  dependencies?: {
+    [key: string]: string;
+  };
+  peerDependencies?: {
+    [key: string]: string;
+  };
+  devDependencies?: {
+    [key: string]: string;
+  };
+  optionalDependencies?: {
+    [key: string]: string;
+  };
+  private?: boolean;
+  publishConfig?: {
+    access?: PackageAccessType;
+    directory?: string;
+    registry?: string;
+  };
 };
 
 /**
@@ -39,16 +45,16 @@ export type PackageJSON = {
  * relative to the root of the current monorepo.
  */
 export type Package = {
-    /**
-     * The pre-loaded package json structure.
-     */
-    packageJson: PackageJSON;
+  /**
+   * The pre-loaded package json structure.
+   */
+  packageJson: PackageJSON;
 
-    /**
-     * Path to the directory containing this package, relative to the monorepo root (for
-     * a "root package", this is the string ".").
-     */
-    relativeDir: string;
+  /**
+   * Path to the directory containing this package, relative to the monorepo root (for
+   * a "root package", this is the string ".").
+   */
+  relativeDir: string;
 };
 
 /**
@@ -56,25 +62,25 @@ export type Package = {
  * and (if supported by the tool) the associated "root" package.
  */
 export type Packages = {
-    /**
-     * The underlying tool implementation for this monorepo.
-     */
-    tool: Tool;
+  /**
+   * The underlying tool implementation for this monorepo.
+   */
+  tool: Tool;
 
-    /**
-     * A collection of disocvered packages.
-     */
-    packages: Package[];
+  /**
+   * A collection of disocvered packages.
+   */
+  packages: Package[];
 
-    /**
-     * If supported by the tool, this is the "root package" for the monorepo.
-     */
-    rootPackage?: Package;
+  /**
+   * If supported by the tool, this is the "root package" for the monorepo.
+   */
+  rootPackage?: Package;
 
-    /**
-     * The absolute path of the root directory of this monorepo.
-     */
-    rootDir: string;
+  /**
+   * The absolute path of the root directory of this monorepo.
+   */
+  rootDir: string;
 };
 
 /**
@@ -86,22 +92,22 @@ export type Packages = {
  * directory and associated tool.
  */
 export type MonorepoRoot = {
-    /**
-     * The absolute path to the root directory of this monorepo.
-     */
-    rootDir: string;
+  /**
+   * The absolute path to the root directory of this monorepo.
+   */
+  rootDir: string;
 
-    /**
-     * The underlying tool implementation for this monorepo.
-     */
-    tool: Tool;
+  /**
+   * The underlying tool implementation for this monorepo.
+   */
+  tool: Tool;
 };
 
 /**
  * Monorepo tools may throw this error if a caller attempts to get the package
  * collection from a directory that is not a valid monorepo root.
  */
-export class InvalidMonorepoError extends Error { }
+export class InvalidMonorepoError extends Error {}
 
 /**
  * A monorepo tool is a specific implementation of monorepos, whether provided built-in
@@ -111,29 +117,29 @@ export class InvalidMonorepoError extends Error { }
  * a valid instance of this type of monorepo, how to retrieve the packages, etc.
  */
 export interface Tool {
-    /**
-     * The unique string identifier for this monorepo tool.
-     */
-    readonly type: string;
+  /**
+   * The unique string identifier for this monorepo tool.
+   */
+  readonly type: string;
 
-    /**
-     * Determine whether the specified directory is a valid root for this monorepo tool.
-     */
-    isMonorepoRoot(directory: string): Promise<boolean>;
+  /**
+   * Determine whether the specified directory is a valid root for this monorepo tool.
+   */
+  isMonorepoRoot(directory: string): Promise<boolean>;
 
-    /**
-     * A synchronous version of {@link Tool#isMonorepoRoot}.
-     */
-    isMonorepoRootSync(directory: string): boolean;
+  /**
+   * A synchronous version of {@link Tool#isMonorepoRoot}.
+   */
+  isMonorepoRootSync(directory: string): boolean;
 
-    /**
-     * Return the package collection from the specified directory. Rejects with an error
-     * if the directory is not a valid monorepo root for this tool.
-     */
-    getPackages(directory: string): Promise<Packages>;
+  /**
+   * Return the package collection from the specified directory. Rejects with an error
+   * if the directory is not a valid monorepo root for this tool.
+   */
+  getPackages(directory: string): Promise<Packages>;
 
-    /**
-     * A synchronous version of {@link Tool#getPackages}.
-     */
-    getPackagesSync(directory: string): Packages;
+  /**
+   * A synchronous version of {@link Tool#getPackages}.
+   */
+  getPackagesSync(directory: string): Packages;
 }

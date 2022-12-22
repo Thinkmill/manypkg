@@ -82,7 +82,7 @@ let runTests = (getPackages: GetPackages) => {
     );
     expect(allPackages.packages.length).toEqual(2);
     expect(allPackages.tool.type).toEqual("pnpm");
-  })
+  });
 
   it("should resolve workspaces for lerna", async () => {
     const allPackages = await getPackages(f.copy("lerna-workspace-base"));
