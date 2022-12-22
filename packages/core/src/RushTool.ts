@@ -60,8 +60,6 @@ export const RushTool: Tool = {
       // so we use a parser that can handle that.
       const rushJson: RushJson = jju.parse(rushText);
 
-      console.log(rushJson, "rush.json");
-
       const directories = rushJson.projects.map((project) =>
         path.resolve(directory, project.projectFolder)
       );
