@@ -1,14 +1,14 @@
 {
   "name": "@manypkg/cli",
+  "version": "0.19.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thinkmill/manypkg.git",
     "directory": "packages/cli"
   },
-  "version": "0.19.2",
+  "license": "MIT",
   "main": "dist/cli.cjs.js",
   "module": "dist/cli.esm.js",
-  "license": "MIT",
   "bin": {
     "manypkg": "./bin.js"
   },
