@@ -32,7 +32,7 @@ export const PnpmTool: Tool = {
         return true;
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -49,7 +49,7 @@ export const PnpmTool: Tool = {
         return true;
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -77,8 +77,8 @@ export const PnpmTool: Tool = {
         },
         rootDir: rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -108,8 +108,8 @@ export const PnpmTool: Tool = {
         },
         rootDir: rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(

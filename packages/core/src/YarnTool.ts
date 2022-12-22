@@ -35,7 +35,7 @@ export const YarnTool: Tool = {
         }
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -56,7 +56,7 @@ export const YarnTool: Tool = {
         }
       }
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -83,12 +83,12 @@ export const YarnTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${BoltTool.type} monorepo root`
+        `Directory ${directory} is not a valid ${YarnTool.type} monorepo root`
       );
     }
   },
@@ -113,12 +113,12 @@ export const YarnTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${BoltTool.type} monorepo root`
+        `Directory ${directory} is not a valid ${YarnTool.type} monorepo root`
       );
     }
   },

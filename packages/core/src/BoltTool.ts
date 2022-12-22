@@ -31,8 +31,8 @@ export const BoltTool: Tool = {
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if ((err as { code: string }).code !== "ENOENT") {
         throw err;
       }
     }
@@ -47,8 +47,8 @@ export const BoltTool: Tool = {
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if ((err as { code: string }).code !== "ENOENT") {
         throw err;
       }
     }
@@ -78,8 +78,8 @@ export const BoltTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if ((err as { code: string }).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -111,8 +111,8 @@ export const BoltTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if ((err as { code: string }).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(

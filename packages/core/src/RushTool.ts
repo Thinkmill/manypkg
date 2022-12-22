@@ -27,8 +27,8 @@ export const RushTool: Tool = {
     try {
       await fs.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -39,8 +39,8 @@ export const RushTool: Tool = {
     try {
       fs.readFileSync(path.join(directory, "rush.json"), "utf8");
       return true;
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -78,8 +78,8 @@ export const RushTool: Tool = {
         packages,
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -120,8 +120,8 @@ export const RushTool: Tool = {
         packages,
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(

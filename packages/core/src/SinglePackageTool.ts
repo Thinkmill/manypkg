@@ -42,8 +42,8 @@ export const SinglePackageTool: Tool = {
         rootPackage: pkg,
         rootDir: rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -70,8 +70,8 @@ export const SinglePackageTool: Tool = {
         rootPackage: pkg,
         rootDir: rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(

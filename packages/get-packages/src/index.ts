@@ -18,6 +18,8 @@ import {
   defaultOrder,
 } from "@manypkg/core";
 
+export type { Package, Packages } from "@manypkg/core";
+
 export class PackageJsonMissingNameError extends Error {
   directories: string[];
   constructor(directories: string[]) {

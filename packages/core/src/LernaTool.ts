@@ -30,8 +30,8 @@ export const LernaTool: Tool = {
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -46,8 +46,8 @@ export const LernaTool: Tool = {
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
     }
@@ -73,8 +73,8 @@ export const LernaTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
@@ -104,8 +104,8 @@ export const LernaTool: Tool = {
         },
         rootDir,
       };
-    } catch (err: any) {
-      if (err.code !== "ENOENT") {
+    } catch (err) {
+      if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(

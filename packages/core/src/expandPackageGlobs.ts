@@ -34,8 +34,8 @@ export async function expandPackageGlobs(
     directories.map((dir) =>
       fs
         .readJson(path.join(dir, "package.json"))
-        .catch((err: any) => {
-          if (err.code !== "ENOENT") {
+        .catch((err) => {
+          if (err && (err as any).code !== "ENOENT") {
             throw err;
           }
         })
@@ -80,7 +80,7 @@ export function expandPackageGlobsSync(
           relativeDir: path.relative(directory, dir),
           packageJson,
         };
-      } catch (err: any) {
+      } catch (err) {
         if (err.code != "ENOENT") {
           throw err;
         }
