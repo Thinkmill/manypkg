@@ -10,7 +10,7 @@ import {
   PnpmTool,
   RushTool,
   YarnTool,
-} from "@manypkg/core";
+} from "@manypkg/tools";
 
 let f = fixturez(__dirname);
 

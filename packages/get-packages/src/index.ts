@@ -16,9 +16,9 @@ import {
   PackageJSON,
   supportedTools,
   defaultOrder,
-} from "@manypkg/core";
+} from "@manypkg/tools";
 
-export type { Package, Packages } from "@manypkg/core";
+export { Package, Packages } from "@manypkg/tools";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];

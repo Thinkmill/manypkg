@@ -9,7 +9,7 @@ import {
   defaultOrder,
   supportedTools,
   MonorepoRoot,
-} from "@manypkg/core";
+} from "@manypkg/tools";
 
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
@@ -55,7 +55,7 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
             if (await tool.isMonorepoRoot(directory)) {
               return {
                 tool: tool,
-                dir: directory,
+                rootDir: directory,
               };
             }
           })
@@ -95,7 +95,7 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   }
 
   return {
-    Tool: SinglePackageTool,
+    tool: SinglePackageTool,
     rootDir: firstPkgJsonDirRef.current,
   };
 }
@@ -130,7 +130,7 @@ export function findRootSync(cwd: string): MonorepoRoot {
         if (tool.isMonorepoRootSync(directory)) {
           monorepoRoot = {
             tool: tool,
-            dir: directory,
+            rootDir: directory,
           };
           return directory;
         }

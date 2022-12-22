@@ -134,22 +134,24 @@ async function execCmd(args: string[]) {
     throw new ExitError(1);
   }
   let shouldFix = things[0] === "fix";
-  let { packages, root, tool } = (await getPackages(
+  let { tool, packages, rootPackage, rootDir } = (await getPackages(
     process.cwd()
   )) as PackagesWithConfig;
 
   let options: Options = {
     ...defaultOptions,
-    ...root.packageJson.manypkg,
+    ...(rootPackage ? rootPackage.packageJson.manypkg : {}),
   };
 
   let packagesByName = new Map<string, Package>(
     packages.map((x) => [x.packageJson.name, x])
   );
-  packagesByName.set(root.packageJson.name, root);
+  if (rootPackage) {
+    packagesByName.set(rootPackage.packageJson.name, rootPackage);
+  }
   let { hasErrored, requiresInstall } = runChecks(
     packagesByName,
-    root,
+    rootPackage!,
     shouldFix,
     options
   );
@@ -160,7 +162,7 @@ async function execCmd(args: string[]) {
       })
     );
     if (requiresInstall) {
-      await install(tool, root.dir);
+      await install(tool, rootDir);
     }
 
     logger.success(`fixed workspaces!`);
