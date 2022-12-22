@@ -7,6 +7,18 @@
     "packages/*",
     "test-gatsby"
   ],
+  "scripts": {
+    "postinstall": "preconstruct dev && manypkg check",
+    "release": "yarn preconstruct build && yarn changeset publish",
+    "test": "jest",
+    "test-gatsby": "cd test-gatsby && gatsby develop"
+  },
+  "jest": {
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
+  },
   "dependencies": {
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.20.2",
@@ -22,26 +34,12 @@
     "jest-watch-typeahead": "^0.6.0",
     "preconstruct": "^0.0.89",
     "prettier": "^2.8.1",
+    "prettier-plugin-packagejson": "^2.3.0",
     "typescript": "^4.9.4"
-  },
-  "jest": {
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
   },
   "preconstruct": {
     "packages": [
       "packages/!(gatsby)*"
     ]
-  },
-  "prettier": {
-    "proseWrap": "never"
-  },
-  "scripts": {
-    "postinstall": "preconstruct dev && manypkg check",
-    "release": "yarn preconstruct build && yarn changeset publish",
-    "test-gatsby": "cd test-gatsby && gatsby develop",
-    "test": "jest"
   }
 }
