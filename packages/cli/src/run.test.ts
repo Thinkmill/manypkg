@@ -35,6 +35,6 @@ describe("Run command", () => {
       expect(stripAnsi(stdout.toString())).toMatchSnapshot("stdout");
       expect(stripAnsi(stderr.toString())).toMatchSnapshot("stderr");
     },
-    10 /* seconds */
+    10_000 /* 10 seconds */
   );
 });
