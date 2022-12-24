@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   release:
@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js 10.x
-        uses: actions/setup-node@master
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v3
         with:
-          node-version: 10.x
+          node-version: 16.x
 
       - name: Install Yarn
         run: npm install --global yarn
@@ -28,7 +28,7 @@ jobs:
       - run: git branch -a
 
       - name: "Create Pull Request or Publish to npm"
-        uses: changesets/action@master
+        uses: changesets/action@v3
         with:
           publish: yarn release --otp=1
         env:
