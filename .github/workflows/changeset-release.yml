@@ -28,7 +28,7 @@ jobs:
       - run: git branch -a
 
       - name: "Create Pull Request or Publish to npm"
-        uses: changesets/action@v3
+        uses: changesets/action@v1
         with:
           publish: yarn release --otp=1
         env:
