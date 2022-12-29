@@ -1,4 +1,3 @@
-// @flow
 import * as logger from "./logger";
 import { getPackages, Packages, Package } from "@manypkg/get-packages";
 import { Options } from "./checks/utils";
