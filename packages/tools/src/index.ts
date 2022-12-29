@@ -1,8 +1,8 @@
 import { Tool, ToolType } from "./Tool";
 import { BoltTool } from "./BoltTool";
 import { LernaTool } from "./LernaTool";
-import { SinglePackageTool } from "./SinglePackageTool";
 import { PnpmTool } from "./PnpmTool";
+import { RootTool } from "./RootTool";
 import { RushTool } from "./RushTool";
 import { YarnTool } from "./YarnTool";
 
@@ -13,8 +13,8 @@ const supportedTools: Record<ToolType, Tool> = {
   bolt: BoltTool,
   lerna: LernaTool,
   pnpm: PnpmTool,
+  root: RootTool,
   rush: RushTool,
-  singlePackage: SinglePackageTool,
   yarn: YarnTool,
 };
 
@@ -30,8 +30,8 @@ const defaultOrder: ToolType[] = [
   "bolt",
   "pnpm",
   "lerna",
+  "root",
   "rush",
-  "singlePackage",
 ];
 
 export * from "./Tool";
@@ -39,8 +39,8 @@ export {
   BoltTool,
   LernaTool,
   PnpmTool,
+  RootTool,
   RushTool,
-  SinglePackageTool,
   YarnTool,
   supportedTools,
   defaultOrder,

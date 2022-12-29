@@ -8,7 +8,9 @@ import { writePackage, install } from "./utils";
 
 export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing
-  let { packages, tool, root } = await getPackages(process.cwd());
+  let { packages, tool, rootPackage, rootDir } = await getPackages(
+    process.cwd()
+  );
   let isScope = name.startsWith("@") && !name.includes("/");
   let newVersion = semver.validRange(tag) ? tag : null;
 
@@ -33,23 +35,25 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
     return requiresUpdate;
   });
 
-  let rootRequiresUpdate = false;
-  DEPENDENCY_TYPES.forEach((t) => {
-    let deps = root.packageJson[t];
-    if (!deps) return;
+  if (rootPackage) {
+    let rootRequiresUpdate = false;
+    DEPENDENCY_TYPES.forEach((t) => {
+      let deps = rootPackage!.packageJson[t];
+      if (!deps) return;
 
-    let packageNames = Object.keys(deps);
-    packageNames.forEach((pkgName) => {
-      if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
-        rootRequiresUpdate = true;
-        packagesToUpdate.add(pkgName);
+      let packageNames = Object.keys(deps);
+      packageNames.forEach((pkgName) => {
+        if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
+          rootRequiresUpdate = true;
+          packagesToUpdate.add(pkgName);
+        }
+      });
+
+      if (rootRequiresUpdate) {
+        filteredPackages.push(rootPackage!);
       }
     });
-
-    if (rootRequiresUpdate) {
-      filteredPackages.push(root);
-    }
-  });
+  }
 
   let newVersions = await Promise.all(
     [...packagesToUpdate].map(async (pkgName) => {
@@ -88,7 +92,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
   await Promise.all([...filteredPackages].map(writePackage));
 
-  await install(tool, root.dir);
+  await install(tool.type, rootDir);
 }
 
 const npmRequestLimit = pLimit(40);

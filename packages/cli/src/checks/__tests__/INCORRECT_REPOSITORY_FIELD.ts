@@ -169,9 +169,9 @@ describe("incorrect repository field", () => {
       (rootWorkspace.packageJson as any).repository =
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg";
 
-      rootWorkspace.dir = __dirname;
+      rootWorkspace.relativeDir = ".";
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
+      workspace.relativeDir = "packages/no-repository-field";
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {

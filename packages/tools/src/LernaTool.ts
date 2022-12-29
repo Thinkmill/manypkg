@@ -58,16 +58,17 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
+      const lernaJson = await fs.readJson(path.join(rootDir, "lerna.json"));
       const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       )) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
         tool: LernaTool,
-        packages: await expandPackageGlobs(packageGlobs, directory),
+        packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -78,7 +79,7 @@ export const LernaTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`
+        `Directory ${rootDir} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`
       );
     }
   },
@@ -88,17 +89,18 @@ export const LernaTool: Tool = {
 
     try {
       const lernaJson = fs.readJsonSync(
-        path.join(directory, "lerna.json")
+        path.join(rootDir, "lerna.json")
       ) as LernaJson;
       const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       ) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
         tool: LernaTool,
-        packages: expandPackageGlobsSync(packageGlobs, directory),
+        packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -109,7 +111,7 @@ export const LernaTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`
+        `Directory ${rootDir} is not a valid ${LernaTool.type} monorepo root: missing lerna.json and/or package.json`
       );
     }
   },

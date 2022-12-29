@@ -7,8 +7,8 @@ import {
   BoltTool,
   LernaTool,
   PnpmTool,
+  RootTool,
   RushTool,
-  SinglePackageTool,
   YarnTool,
 } from "@manypkg/tools";
 
@@ -68,7 +68,7 @@ const runTests = (findRoot: FindRoot) => {
     let tmpPath = f.copy("single-pkg");
     let monorepoRoot = await findRoot(path.join(tmpPath, "src"));
     expect(monorepoRoot).toEqual({
-      tool: SinglePackageTool,
+      tool: RootTool,
       rootDir: tmpPath,
     });
   });

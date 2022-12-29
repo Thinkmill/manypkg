@@ -5,7 +5,7 @@ import fs from "fs-extra";
 import {
   Tool,
   ToolType,
-  SinglePackageTool,
+  RootTool,
   defaultOrder,
   supportedTools,
   MonorepoRoot,
@@ -73,10 +73,9 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
 
   if (monorepoRoot) return monorepoRoot;
 
-  // No monorepo root was found for any supported tool, so instead we return... something??
-  // I'm not sure what the case for this "default to current root pkg if no monorepo found"
-  // behavior is, it feels like we should return undefined and the calling tool should know
-  // that there is no monorepo.
+  // If there is no monorepo root, but we can find a single package json file, we will
+  // return a "RootTool" repo, which is the special case where we just have a root package
+  // with no monorepo implementation (i.e.: a normal package folder).
 
   let firstPkgJsonDirRef: { current: string | undefined } = {
     current: undefined,
@@ -95,7 +94,7 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   }
 
   return {
-    tool: SinglePackageTool,
+    tool: RootTool,
     rootDir: firstPkgJsonDirRef.current,
   };
 }
@@ -141,7 +140,9 @@ export function findRootSync(cwd: string): MonorepoRoot {
 
   if (monorepoRoot) return monorepoRoot;
 
-  // Handle the "none" tool (single package case)
+  // If there is no monorepo root, but we can find a single package json file, we will
+  // return a "RootTool" repo, which is the special case where we just have a root package
+  // with no monorepo implementation (i.e.: a normal package folder).
 
   let firstPkgJsonDirRef: { current: string | undefined } = {
     current: undefined,
@@ -161,7 +162,7 @@ export function findRootSync(cwd: string): MonorepoRoot {
   }
 
   return {
-    tool: SinglePackageTool,
+    tool: RootTool,
     rootDir: firstPkgJsonDirRef.current,
   };
 }

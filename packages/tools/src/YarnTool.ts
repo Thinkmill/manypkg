@@ -68,7 +68,7 @@ export const YarnTool: Tool = {
 
     try {
       const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       )) as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
@@ -76,8 +76,9 @@ export const YarnTool: Tool = {
 
       return {
         tool: YarnTool,
-        packages: await expandPackageGlobs(packageGlobs, directory),
+        packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -88,7 +89,7 @@ export const YarnTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${YarnTool.type} monorepo root`
+        `Directory ${rootDir} is not a valid ${YarnTool.type} monorepo root`
       );
     }
   },
@@ -98,7 +99,7 @@ export const YarnTool: Tool = {
 
     try {
       const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       ) as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
@@ -106,8 +107,9 @@ export const YarnTool: Tool = {
 
       return {
         tool: YarnTool,
-        packages: expandPackageGlobsSync(packageGlobs, directory),
+        packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -118,7 +120,7 @@ export const YarnTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${YarnTool.type} monorepo root`
+        `Directory ${rootDir} is not a valid ${YarnTool.type} monorepo root`
       );
     }
   },

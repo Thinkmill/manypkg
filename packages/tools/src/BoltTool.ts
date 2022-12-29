@@ -60,19 +60,20 @@ export const BoltTool: Tool = {
 
     try {
       const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       )) as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
-          `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
+          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
         );
       }
       const packageGlobs: string[] = pkgJson.bolt.workspaces;
 
       return {
         tool: BoltTool,
-        packages: await expandPackageGlobs(packageGlobs, directory),
+        packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -83,7 +84,7 @@ export const BoltTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing package.json`
+        `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
       );
     }
   },
@@ -93,7 +94,7 @@ export const BoltTool: Tool = {
 
     try {
       const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       ) as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
@@ -104,8 +105,9 @@ export const BoltTool: Tool = {
 
       return {
         tool: BoltTool,
-        packages: expandPackageGlobsSync(packageGlobs, directory),
+        packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },

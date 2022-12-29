@@ -1,4 +1,5 @@
 // @flow
+import path from "path";
 import * as logger from "./logger";
 import { getPackages, Packages, Package } from "@manypkg/get-packages";
 import { Options } from "./checks/utils";
@@ -97,13 +98,13 @@ let runChecks = (
 let execLimit = pLimit(4);
 
 async function execCmd(args: string[]) {
-  let { packages } = await getPackages(process.cwd());
+  let { packages, rootDir } = await getPackages(process.cwd());
   let highestExitCode = 0;
   await Promise.all(
     packages.map((pkg) => {
       return execLimit(async () => {
         let { code } = await spawn(args[0], args.slice(1), {
-          cwd: pkg.dir,
+          cwd: path.join(rootDir, pkg.relativeDir),
           stdio: "inherit",
         });
         highestExitCode = Math.max(code, highestExitCode);
@@ -162,7 +163,7 @@ async function execCmd(args: string[]) {
       })
     );
     if (requiresInstall) {
-      await install(tool, rootDir);
+      await install(tool.type, rootDir);
     }
 
     logger.success(`fixed workspaces!`);

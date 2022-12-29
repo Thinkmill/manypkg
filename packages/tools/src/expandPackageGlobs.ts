@@ -12,9 +12,9 @@ import {
 } from "./Tool";
 
 /**
- * This internal method takes a list of one or more directory globs and a root directory,
- * and returns a list of all matching relative directories that contain a `package.json`
- * file.
+ * This internal method takes a list of one or more directory globs and the absolute path
+ * to the root directory, and returns a list of all matching relative directories that
+ * contain a `package.json` file.
  */
 export async function expandPackageGlobs(
   packageGlobs: string[],
@@ -42,6 +42,7 @@ export async function expandPackageGlobs(
         .then((result) => {
           if (result) {
             return {
+              dir: path.resolve(dir),
               relativeDir: path.relative(directory, dir),
               packageJson: result,
             };
@@ -77,11 +78,12 @@ export function expandPackageGlobsSync(
           path.join(dir, "package.json")
         );
         return {
+          dir: path.resolve(dir),
           relativeDir: path.relative(directory, dir),
           packageJson,
         };
       } catch (err) {
-        if (err.code != "ENOENT") {
+        if (err && (err as any).code !== "ENOENT") {
           throw err;
         }
       }

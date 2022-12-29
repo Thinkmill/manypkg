@@ -12,7 +12,8 @@ export let getFakeWS = (
   version: string = "1.0.0"
 ): Package => {
   return {
-    dir: `some/fake/dir/${name}`,
+    dir: `fake/monorepo/packages/${name}`,
+    relativeDir: `packages/${name}`,
     packageJson: {
       name,
       version,

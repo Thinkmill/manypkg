@@ -48,12 +48,10 @@ export default makeCheck<ErrorType>({
           if (result.host === "github.com") {
             correctRepositoryField = `${baseRepositoryUrl}/tree/${
               options.defaultBranch
-            }/${normalizePath(
-              path.relative(rootWorkspace.dir, workspace.dir)
-            )}`;
+            }/${normalizePath(workspace.relativeDir)}`;
           } else if (result.host === "dev.azure.com") {
             correctRepositoryField = `${baseRepositoryUrl}?path=${normalizePath(
-              path.relative(rootWorkspace.dir, workspace.dir)
+              workspace.relativeDir
             )}&version=GB${options.defaultBranch}&_a=contents`;
           }
 

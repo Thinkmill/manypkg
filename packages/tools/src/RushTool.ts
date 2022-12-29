@@ -52,7 +52,7 @@ export const RushTool: Tool = {
 
     try {
       const rushText: string = await fs.readFile(
-        path.join(directory, "rush.json"),
+        path.join(rootDir, "rush.json"),
         "utf8"
       );
 
@@ -61,11 +61,12 @@ export const RushTool: Tool = {
       const rushJson: RushJson = jju.parse(rushText);
 
       const directories = rushJson.projects.map((project) =>
-        path.resolve(directory, project.projectFolder)
+        path.resolve(rootDir, project.projectFolder)
       );
       const packages: Package[] = await Promise.all(
         directories.map(async (dir: string) => {
           return {
+            dir,
             relativeDir: path.relative(directory, dir),
             packageJson: await fs.readJson(path.join(dir, "package.json")),
           };
@@ -83,7 +84,7 @@ export const RushTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${RushTool.type} monorepo root: missing rush.json`
+        `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
       );
     }
   },
@@ -93,7 +94,7 @@ export const RushTool: Tool = {
 
     try {
       const rushText: string = fs.readFileSync(
-        path.join(directory, "rush.json"),
+        path.join(rootDir, "rush.json"),
         "utf8"
       );
 
@@ -102,13 +103,14 @@ export const RushTool: Tool = {
       const rushJson: RushJson = jju.parse(rushText);
 
       const directories = rushJson.projects.map((project) =>
-        path.resolve(directory, project.projectFolder)
+        path.resolve(rootDir, project.projectFolder)
       );
       const packages: Package[] = directories.map((dir: string) => {
         const packageJson: PackageJSON = fs.readJsonSync(
           path.join(dir, "package.json")
         );
         return {
+          dir,
           relativeDir: path.relative(directory, dir),
           packageJson,
         };
@@ -125,7 +127,7 @@ export const RushTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${RushTool.type} monorepo root: missing rush.json`
+        `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
       );
     }
   },

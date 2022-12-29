@@ -61,28 +61,29 @@ export const PnpmTool: Tool = {
 
     try {
       const manifest = await readYamlFile<{ packages?: string[] }>(
-        path.join(directory, "pnpm-workspace.yaml")
+        path.join(rootDir, "pnpm-workspace.yaml")
       );
       const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       )) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
         tool: PnpmTool,
-        packages: await expandPackageGlobs(packageGlobs, directory),
+        packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
-        rootDir: rootDir,
+        rootDir,
       };
     } catch (err) {
       if (err && (err as any).code !== "ENOENT") {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`
+        `Directory ${rootDir} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`
       );
     }
   },
@@ -92,17 +93,18 @@ export const PnpmTool: Tool = {
 
     try {
       const manifest = readYamlFileSync<{ packages?: string[] }>(
-        path.join(directory, "pnpm-workspace.yaml")
+        path.join(rootDir, "pnpm-workspace.yaml")
       );
       const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
+        path.join(rootDir, "package.json")
       ) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
         tool: PnpmTool,
-        packages: expandPackageGlobsSync(packageGlobs, directory),
+        packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
+          dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
         },
@@ -113,7 +115,7 @@ export const PnpmTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`
+        `Directory ${rootDir} is not a valid ${PnpmTool.type} monorepo root: missing pnpm-workspace.yaml and/or package.json`
       );
     }
   },

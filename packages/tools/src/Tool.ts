@@ -1,13 +1,7 @@
 /**
  * A unique string identifier for each type of supported monorepo tool.
  */
-export type ToolType =
-  | "bolt"
-  | "lerna"
-  | "pnpm"
-  | "rush"
-  | "singlePackage"
-  | "yarn";
+export type ToolType = "bolt" | "lerna" | "pnpm" | "root" | "rush" | "yarn";
 
 /**
  * A package.json access type.
@@ -38,6 +32,9 @@ export type PackageJSON = {
     directory?: string;
     registry?: string;
   };
+  manypkg?: {
+    [key: string]: string;
+  };
 };
 
 /**
@@ -51,8 +48,13 @@ export type Package = {
   packageJson: PackageJSON;
 
   /**
-   * Path to the directory containing this package, relative to the monorepo root (for
-   * a "root package", this is the string ".").
+   * Absolute path to the directory containing this package.
+   */
+  dir: string;
+
+  /**
+   * Relative path to the directory containing this package, relative to the monorepo
+   * root (for a "root package", this is the string ".").
    */
   relativeDir: string;
 };
@@ -120,7 +122,7 @@ export interface Tool {
   /**
    * The unique string identifier for this monorepo tool.
    */
-  readonly type: string;
+  readonly type: ToolType;
 
   /**
    * Determine whether the specified directory is a valid root for this monorepo tool.

@@ -11,8 +11,8 @@ import {
 } from "./Tool";
 import { expandPackageGlobs } from "./expandPackageGlobs";
 
-export const SinglePackageTool: Tool = {
-  type: "singlePackage",
+export const RootTool: Tool = {
+  type: "root",
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     // The single package tool is never the root of a monorepo.
@@ -32,12 +32,13 @@ export const SinglePackageTool: Tool = {
         path.join(rootDir, "package.json")
       );
       const pkg: Package = {
+        dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
       };
 
       return {
-        tool: SinglePackageTool,
+        tool: RootTool,
         packages: [pkg],
         rootPackage: pkg,
         rootDir: rootDir,
@@ -47,7 +48,7 @@ export const SinglePackageTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${SinglePackageTool.type} monorepo root`
+        `Directory ${rootDir} is not a valid ${RootTool.type} monorepo root`
       );
     }
   },
@@ -60,12 +61,13 @@ export const SinglePackageTool: Tool = {
         path.join(rootDir, "package.json")
       );
       const pkg: Package = {
+        dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
       };
 
       return {
-        tool: SinglePackageTool,
+        tool: RootTool,
         packages: [pkg],
         rootPackage: pkg,
         rootDir: rootDir,
@@ -75,7 +77,7 @@ export const SinglePackageTool: Tool = {
         throw err;
       }
       throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${SinglePackageTool.type} monorepo root`
+        `Directory ${rootDir} is not a valid ${RootTool.type} monorepo root`
       );
     }
   },
