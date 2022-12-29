@@ -21,14 +21,14 @@ describe("incorrect repository field", () => {
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
-                      Array [
-                        Object {
-                          "correctRepositoryField": "https://github.com/Thinkmill/manypkg/tree/${defaultBranch}/packages/no-repository-field",
-                          "currentRepositoryField": undefined,
-                          "type": "INCORRECT_REPOSITORY_FIELD",
-                        },
-                      ]
-                `);
+        [
+          {
+            "correctRepositoryField": "https://github.com/Thinkmill/manypkg/tree/${defaultBranch}/packages/no-repository-field",
+            "currentRepositoryField": undefined,
+            "type": "INCORRECT_REPOSITORY_FIELD",
+          },
+        ]
+      `);
 
       check.fix(errors[0], {});
 
@@ -54,14 +54,14 @@ describe("incorrect repository field", () => {
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
-                      Array [
-                        Object {
-                          "correctRepositoryField": "https://github.com/Thinkmill/manypkg",
-                          "currentRepositoryField": "https://github.com/Thinkmill/manypkg.git",
-                          "type": "INCORRECT_REPOSITORY_FIELD",
-                        },
-                      ]
-                `);
+        [
+          {
+            "correctRepositoryField": "https://github.com/Thinkmill/manypkg",
+            "currentRepositoryField": "https://github.com/Thinkmill/manypkg.git",
+            "type": "INCORRECT_REPOSITORY_FIELD",
+          },
+        ]
+      `);
 
       check.fix(errors[0], {});
 
@@ -86,7 +86,7 @@ describe("incorrect repository field", () => {
         defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
-        `Array []`
+        `[]`
       );
 
       expect((rootWorkspace.packageJson as any).repository).toBe(
@@ -113,14 +113,14 @@ describe("incorrect repository field", () => {
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
-                      Array [
-                        Object {
-                          "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GB${defaultBranch}&_a=contents",
-                          "currentRepositoryField": undefined,
-                          "type": "INCORRECT_REPOSITORY_FIELD",
-                        },
-                      ]
-                `);
+        [
+          {
+            "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg?path=packages/no-repository-field&version=GB${defaultBranch}&_a=contents",
+            "currentRepositoryField": undefined,
+            "type": "INCORRECT_REPOSITORY_FIELD",
+          },
+        ]
+      `);
 
       check.fix(errors[0], {});
 
@@ -146,14 +146,14 @@ describe("incorrect repository field", () => {
       });
       expect(errors.map(({ workspace, ...x }: any) => x))
         .toMatchInlineSnapshot(`
-                      Array [
-                        Object {
-                          "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg",
-                          "currentRepositoryField": "https://Thinkmill@dev.azure.com/Thinkmill/monorepos/_git/manypkg",
-                          "type": "INCORRECT_REPOSITORY_FIELD",
-                        },
-                      ]
-                `);
+        [
+          {
+            "correctRepositoryField": "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg",
+            "currentRepositoryField": "https://Thinkmill@dev.azure.com/Thinkmill/monorepos/_git/manypkg",
+            "type": "INCORRECT_REPOSITORY_FIELD",
+          },
+        ]
+      `);
 
       check.fix(errors[0], {});
 
@@ -178,7 +178,7 @@ describe("incorrect repository field", () => {
         defaultBranch,
       });
       expect(errors.map(({ workspace, ...x }: any) => x)).toMatchInlineSnapshot(
-        `Array []`
+        `[]`
       );
 
       expect((rootWorkspace.packageJson as any).repository).toBe(

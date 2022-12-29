@@ -58,21 +58,21 @@ describe("internal mismatch", () => {
     ws.set("depends-on-one", dependsOnOne);
     let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
     expect(errors).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "dependencyRange": "^0.1.0",
-          "dependencyWorkspace": Object {
+          "dependencyWorkspace": {
             "dir": "some/fake/dir/pkg-1",
-            "packageJson": Object {
+            "packageJson": {
               "name": "pkg-1",
               "version": "1.0.0",
             },
           },
           "type": "INTERNAL_MISMATCH",
-          "workspace": Object {
+          "workspace": {
             "dir": "some/fake/dir/depends-on-one",
-            "packageJson": Object {
-              "devDependencies": Object {
+            "packageJson": {
+              "devDependencies": {
                 "pkg-1": "^0.1.0",
               },
               "name": "depends-on-one",

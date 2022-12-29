@@ -20,16 +20,16 @@ it("should error if the ranges are valid and they are not equal", () => {
   errors = internalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "1.0.0",
         "mostCommonDependencyRange": "2.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
+        "workspace": {
           "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+          "packageJson": {
+            "dependencies": {
               "something": "1.0.0",
             },
             "name": "pkg-1",
@@ -69,16 +69,16 @@ it("should error and return the correct mostCommonDependencyRange when the range
   errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
         "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
+        "workspace": {
           "dir": "some/fake/dir/pkg-2",
-          "packageJson": Object {
-            "dependencies": Object {
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-2",
@@ -113,20 +113,19 @@ it("should error and return the correct mostCommonDependencyRange when the range
     rootWorkspace,
     {}
   );
-  console.log(errors);
 
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
         "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
+        "workspace": {
           "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-1",
@@ -166,16 +165,16 @@ it("should error and return the correct mostCommonDependencyRange when the range
   );
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "1.0.0",
         "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
+        "workspace": {
           "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+          "packageJson": {
+            "dependencies": {
               "something": "1.0.0",
             },
             "name": "pkg-1",
@@ -189,16 +188,16 @@ it("should error and return the correct mostCommonDependencyRange when the range
   errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
         "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
+        "workspace": {
           "dir": "some/fake/dir/pkg-2",
-          "packageJson": Object {
-            "dependencies": Object {
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-2",
