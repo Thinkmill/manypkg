@@ -1,14 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 
-import {
-  Tool,
-  ToolType,
-  Package,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -20,8 +13,8 @@ export interface BoltPackageJSON extends PackageJSON {
   };
 }
 
-export const BoltTool: Tool = {
-  type: "bolt",
+export const BoltTool = {
+  type: "bolt" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
@@ -120,4 +113,4 @@ export const BoltTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;

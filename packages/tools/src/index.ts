@@ -1,4 +1,4 @@
-import { Tool, ToolType } from "./Tool";
+import { Tool } from "./Tool";
 import { BoltTool } from "./BoltTool";
 import { LernaTool } from "./LernaTool";
 import { SinglePackageTool } from "./SinglePackageTool";
@@ -7,16 +7,27 @@ import { RushTool } from "./RushTool";
 import { YarnTool } from "./YarnTool";
 
 /**
+ * A unique string identifier for each type of supported monorepo tool.
+ */
+export type ToolType =
+  | typeof BoltTool["type"]
+  | typeof LernaTool["type"]
+  | typeof PnpmTool["type"]
+  | typeof RushTool["type"]
+  | typeof SinglePackageTool["type"]
+  | typeof YarnTool["type"];
+
+/**
  * A convenient mapping of tool type names to tool implementations.
  */
-const supportedTools: Record<ToolType, Tool> = {
+const supportedTools = {
   bolt: BoltTool,
   lerna: LernaTool,
   pnpm: PnpmTool,
   rush: RushTool,
   singlePackage: SinglePackageTool,
   yarn: YarnTool,
-};
+} satisfies Record<ToolType, Tool>;
 
 /**
  * A default ordering for monorepo tool checks.
@@ -25,14 +36,14 @@ const supportedTools: Record<ToolType, Tool> = {
  * monorepo implementations first, with tools based on custom file scchemas
  * checked last.
  */
-const defaultOrder: ToolType[] = [
+const defaultOrder = [
   "yarn",
   "bolt",
   "pnpm",
   "lerna",
   "rush",
   "singlePackage",
-];
+] as const satisfies readonly [...ToolType[]];
 
 export * from "./Tool";
 export {

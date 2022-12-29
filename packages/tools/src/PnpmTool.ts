@@ -2,14 +2,7 @@ import path from "path";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import fs from "fs-extra";
 
-import {
-  Tool,
-  ToolType,
-  Package,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -19,8 +12,8 @@ export interface PnpmWorkspaceYaml {
   packages?: string[];
 }
 
-export const PnpmTool: Tool = {
-  type: "pnpm",
+export const PnpmTool = {
+  type: "pnpm" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
@@ -117,4 +110,4 @@ export const PnpmTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;

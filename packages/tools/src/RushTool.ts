@@ -4,7 +4,6 @@ import jju from "jju";
 
 import {
   Tool,
-  ToolType,
   Package,
   PackageJSON,
   Packages,
@@ -20,8 +19,8 @@ interface RushProject {
   projectFolder: string;
 }
 
-export const RushTool: Tool = {
-  type: "rush",
+export const RushTool = {
+  type: "rush" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
@@ -129,4 +128,4 @@ export const RushTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;

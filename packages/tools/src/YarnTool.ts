@@ -1,14 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 
-import {
-  Tool,
-  ToolType,
-  Package,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -18,8 +11,8 @@ export interface YarnPackageJSON extends PackageJSON {
   workspaces?: string[] | { packages: string[] };
 }
 
-export const YarnTool: Tool = {
-  type: "yarn",
+export const YarnTool = {
+  type: "yarn" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
@@ -122,4 +115,4 @@ export const YarnTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;

@@ -1,14 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 
-import {
-  Tool,
-  ToolType,
-  Package,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -19,8 +12,8 @@ export interface LernaJson {
   packages?: string[];
 }
 
-export const LernaTool: Tool = {
-  type: "lerna",
+export const LernaTool = {
+  type: "lerna" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
@@ -113,4 +106,4 @@ export const LernaTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;

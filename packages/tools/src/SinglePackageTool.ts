@@ -3,16 +3,14 @@ import fs from "fs-extra";
 
 import {
   Tool,
-  ToolType,
   Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
 } from "./Tool";
-import { expandPackageGlobs } from "./expandPackageGlobs";
 
-export const SinglePackageTool: Tool = {
-  type: "singlePackage",
+export const SinglePackageTool = {
+  type: "singlePackage" as const,
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     // The single package tool is never the root of a monorepo.
@@ -79,4 +77,4 @@ export const SinglePackageTool: Tool = {
       );
     }
   },
-};
+} satisfies Tool;
