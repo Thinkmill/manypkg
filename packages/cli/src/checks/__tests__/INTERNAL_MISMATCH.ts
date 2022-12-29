@@ -62,15 +62,16 @@ describe("internal mismatch", () => {
         Object {
           "dependencyRange": "^0.1.0",
           "dependencyWorkspace": Object {
-            "dir": "some/fake/dir/pkg-1",
+            "dir": "fake/monorepo/packages/pkg-1",
             "packageJson": Object {
               "name": "pkg-1",
               "version": "1.0.0",
             },
+            "relativeDir": "packages/pkg-1",
           },
           "type": "INTERNAL_MISMATCH",
           "workspace": Object {
-            "dir": "some/fake/dir/depends-on-one",
+            "dir": "fake/monorepo/packages/depends-on-one",
             "packageJson": Object {
               "devDependencies": Object {
                 "pkg-1": "^0.1.0",
@@ -78,6 +79,7 @@ describe("internal mismatch", () => {
               "name": "depends-on-one",
               "version": "1.0.0",
             },
+            "relativeDir": "packages/depends-on-one",
           },
         },
       ]

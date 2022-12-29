@@ -27,7 +27,7 @@ it("should error if the ranges are valid and they are not equal", () => {
         "mostCommonDependencyRange": "2.0.0",
         "type": "EXTERNAL_MISMATCH",
         "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
+          "dir": "fake/monorepo/packages/pkg-1",
           "packageJson": Object {
             "dependencies": Object {
               "something": "1.0.0",
@@ -35,6 +35,7 @@ it("should error if the ranges are valid and they are not equal", () => {
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -76,7 +77,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
         "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
         "workspace": Object {
-          "dir": "some/fake/dir/pkg-2",
+          "dir": "fake/monorepo/packages/pkg-2",
           "packageJson": Object {
             "dependencies": Object {
               "something": "2.0.0",
@@ -84,6 +85,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "name": "pkg-2",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-2",
         },
       },
     ]
@@ -124,7 +126,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
         "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
         "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
+          "dir": "fake/monorepo/packages/pkg-1",
           "packageJson": Object {
             "dependencies": Object {
               "something": "2.0.0",
@@ -132,6 +134,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -173,7 +176,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
         "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
         "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
+          "dir": "fake/monorepo/packages/pkg-1",
           "packageJson": Object {
             "dependencies": Object {
               "something": "1.0.0",
@@ -181,6 +184,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -196,7 +200,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
         "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
         "workspace": Object {
-          "dir": "some/fake/dir/pkg-2",
+          "dir": "fake/monorepo/packages/pkg-2",
           "packageJson": Object {
             "dependencies": Object {
               "something": "2.0.0",
@@ -204,6 +208,7 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "name": "pkg-2",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-2",
         },
       },
     ]
