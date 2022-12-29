@@ -13,7 +13,7 @@ hello start
 `;
 
 exports[`Run command should execute "package start" and exit with 1: stderr 1`] = `
-"☔️ error an identifier must only match a single package but \\"package\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "package" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-one
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
@@ -54,7 +54,7 @@ exports[`Run command should execute "package-three start" and exit with 1: stder
 exports[`Run command should execute "package-three start" and exit with 1: stdout 1`] = `""`;
 
 exports[`Run command should execute "package-two start" and exit with 1: stderr 1`] = `
-"☔️ error an identifier must only match a single package but \\"package-two\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "package-two" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
 "
@@ -65,7 +65,7 @@ exports[`Run command should execute "package-two start" and exit with 1: stdout 
 exports[`Run command should execute "package-two-one something" and exit with 1: stderr 1`] = `
 "warning package.json: No license field
 warning ../../package.json: No license field
-error Command \\"something\\" not found.
+error Command "something" not found.
 "
 `;
 
@@ -111,7 +111,7 @@ hello start
 `;
 
 exports[`Run command should execute "pkg-two start" and exit with 1: stderr 1`] = `
-"☔️ error an identifier must only match a single package but \\"pkg-two\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "pkg-two" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
 "
