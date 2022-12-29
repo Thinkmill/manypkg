@@ -26,17 +26,13 @@ let defaultOptions = {
 
 let runChecks = (
   allWorkspaces: Map<string, Package>,
-  rootWorkspace: RootPackage,
+  rootWorkspace: RootPackage | undefined,
   shouldFix: boolean,
   options: Options
 ) => {
   let hasErrored = false;
   let requiresInstall = false;
-  let ignoredRules = new Set(
-    (rootWorkspace.packageJson.manypkg &&
-      rootWorkspace.packageJson.manypkg.ignoredRules) ||
-      []
-  );
+  let ignoredRules = new Set(options.ignoredRules || []);
   for (let [ruleName, check] of Object.entries(checks)) {
     if (ignoredRules.has(ruleName)) {
       continue;
@@ -67,13 +63,8 @@ let runChecks = (
         }
       }
     }
-    if (check.type === "root") {
-      let errors = check.validate(
-        rootWorkspace,
-        allWorkspaces,
-        rootWorkspace,
-        options
-      );
+    if (check.type === "root" && rootWorkspace) {
+      let errors = check.validate(rootWorkspace, allWorkspaces, options);
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
           let output = check.fix(error as any, options) || {
@@ -151,7 +142,7 @@ async function execCmd(args: string[]) {
   }
   let { hasErrored, requiresInstall } = runChecks(
     packagesByName,
-    rootPackage!,
+    rootPackage,
     shouldFix,
     options
   );
