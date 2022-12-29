@@ -126,7 +126,7 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.rootDir).toEqual(path);
     expect(allPackages.packages[0].relativeDir).toEqual(".");
     expect(allPackages.packages.length).toEqual(1);
-    expect(allPackages.tool.type).toEqual("singlePackage");
+    expect(allPackages.tool.type).toEqual("root");
   });
 
   it("should throw an error if a package.json is missing the name field", async () => {
