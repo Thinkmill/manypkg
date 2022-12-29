@@ -1,5 +1,4 @@
 import parseGithubUrl from "parse-github-url";
-import path from "path";
 import normalizePath from "normalize-path";
 import { Package } from "@manypkg/get-packages";
 
@@ -15,7 +14,8 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace, allWorkspaces, rootWorkspace, options) => {
-    let rootRepositoryField = (rootWorkspace.packageJson as any).repository;
+    let rootRepositoryField: unknown = (rootWorkspace?.packageJson as any)
+      ?.repository;
 
     if (typeof rootRepositoryField === "string") {
       let result = parseGithubUrl(rootRepositoryField);

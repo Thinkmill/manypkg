@@ -22,7 +22,6 @@ type RootCheck<ErrorType> = {
   validate: (
     rootPackage: Package,
     allPackages: Map<string, Package>,
-    rootWorkspace: Package,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -37,7 +36,6 @@ type RootCheckWithFix<ErrorType> = {
   validate: (
     rootPackage: Package,
     allPackages: Map<string, Package>,
-    rootWorkspace: Package,
     options: Options
   ) => ErrorType[];
   fix: (
@@ -52,7 +50,7 @@ type AllCheck<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package,
+    rootWorkspace: Package | undefined,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -67,7 +65,7 @@ type AllCheckWithFix<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package,
+    rootWorkspace: Package | undefined,
     options: Options
   ) => ErrorType[];
   fix: (
