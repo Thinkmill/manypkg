@@ -7,8 +7,8 @@
     "directory": "packages/cli"
   },
   "license": "MIT",
-  "main": "dist/cli.cjs.js",
-  "module": "dist/cli.esm.js",
+  "main": "dist/manypkg-cli.cjs.js",
+  "module": "dist/manypkg-cli.esm.js",
   "bin": {
     "manypkg": "./bin.js"
   },

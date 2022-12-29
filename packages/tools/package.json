@@ -2,7 +2,7 @@
   "name": "@manypkg/tools",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/tools.cjs.js",
+  "main": "dist/manypkg-tools.cjs.js",
   "dependencies": {
     "@babel/runtime": "^7.20.6",
     "fs-extra": "^8.1.0",
