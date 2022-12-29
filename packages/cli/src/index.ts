@@ -17,7 +17,7 @@ type RootPackage = Package & {
   };
 };
 type PackagesWithConfig = Packages & {
-  root: RootPackage;
+  rootPackage?: RootPackage;
 };
 
 let defaultOptions = {
@@ -140,7 +140,7 @@ async function execCmd(args: string[]) {
 
   let options: Options = {
     ...defaultOptions,
-    ...(rootPackage ? rootPackage.packageJson.manypkg : {}),
+    ...rootPackage?.packageJson.manypkg,
   };
 
   let packagesByName = new Map<string, Package>(
