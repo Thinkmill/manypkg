@@ -2,21 +2,9 @@
 // It supports yarn workspaces as well, and can fall back through
 // several options
 
-import fs from "fs-extra";
 import path from "path";
-import globby, { sync as globbySync } from "globby";
-import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
 import { findRoot, findRootSync } from "@manypkg/find-root";
-import {
-  Tool,
-  ToolType,
-  Package,
-  Packages,
-  MonorepoRoot,
-  PackageJSON,
-  supportedTools,
-  defaultOrder,
-} from "@manypkg/tools";
+import { Packages, MonorepoRoot } from "@manypkg/tools";
 
 export type { Tool, ToolType, Package, Packages } from "@manypkg/tools";
 
