@@ -1,19 +1,17 @@
 import path from "path";
 import check from "../INCORRECT_REPOSITORY_FIELD";
-import { getWS, getFakeWS, getFakeString } from "../../test-helpers";
+import { getWS, getFakeWS, getFakeString, getRootWS } from "../../test-helpers";
 
 describe("incorrect repository field", () => {
   describe("github", () => {
     it("should work", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg";
-      rootWorkspace.dir = __dirname;
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(workspace, ws, rootWorkspace, {
@@ -38,15 +36,13 @@ describe("incorrect repository field", () => {
     });
     it("should fix root in a different format", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg.git";
 
-      rootWorkspace.dir = __dirname;
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
@@ -71,15 +67,13 @@ describe("incorrect repository field", () => {
     });
     it("should do nothing if already in good format", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://github.com/Thinkmill/manypkg";
 
-      rootWorkspace.dir = __dirname;
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
@@ -98,14 +92,12 @@ describe("incorrect repository field", () => {
   describe("azure devops", () => {
     it("should work", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg";
-      rootWorkspace.dir = __dirname;
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(workspace, ws, rootWorkspace, {
@@ -130,15 +122,13 @@ describe("incorrect repository field", () => {
     });
     it("should fix root in a different format", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://Thinkmill@dev.azure.com/Thinkmill/monorepos/_git/manypkg";
 
-      rootWorkspace.dir = __dirname;
       let workspace = getFakeWS("no-repository-field");
-      workspace.dir = path.join(__dirname, "packages/no-repository-field");
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {
@@ -163,15 +153,13 @@ describe("incorrect repository field", () => {
     });
     it("should do nothing if already in good format", () => {
       let ws = getWS();
-      let rootWorkspace = getFakeWS("root");
+      let rootWorkspace = getRootWS();
       let defaultBranch = `b${getFakeString(5)}`;
 
       (rootWorkspace.packageJson as any).repository =
         "https://dev.azure.com/Thinkmill/monorepos/_git/manypkg";
 
-      rootWorkspace.relativeDir = ".";
       let workspace = getFakeWS("no-repository-field");
-      workspace.relativeDir = "packages/no-repository-field";
       ws.set("depends-on-one", workspace);
       ws.set("root", rootWorkspace);
       let errors = check.validate(rootWorkspace, ws, rootWorkspace, {

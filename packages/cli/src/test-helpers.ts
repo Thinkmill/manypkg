@@ -7,6 +7,17 @@
 import { Package } from "@manypkg/get-packages";
 import crypto from "crypto";
 
+export let getRootWS = (): Package => {
+  return {
+    dir: `fake/monorepo`,
+    relativeDir: ".",
+    packageJson: {
+      name: "root",
+      private: true,
+    },
+  };
+};
+
 export let getFakeWS = (
   name: string = "pkg-1",
   version: string = "1.0.0"
