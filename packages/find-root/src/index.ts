@@ -4,12 +4,30 @@ import fs from "fs-extra";
 
 import {
   Tool,
-  ToolType,
   RootTool,
-  defaultOrder,
-  supportedTools,
   MonorepoRoot,
+  BoltTool,
+  LernaTool,
+  PnpmTool,
+  RushTool,
+  YarnTool,
 } from "@manypkg/tools";
+
+/**
+ * A default ordering for monorepo tool checks.
+ *
+ * This ordering is designed to check the most typical package.json-based
+ * monorepo implementations first, with tools based on custom file schemas
+ * checked last.
+ */
+const defaultOrder: Tool[] = [
+  YarnTool,
+  BoltTool,
+  PnpmTool,
+  LernaTool,
+  RootTool,
+  RushTool,
+];
 
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
@@ -49,16 +67,14 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   await findUp(
     async (directory) => {
       return Promise.all(
-        defaultOrder
-          .map((toolType) => supportedTools[toolType])
-          .map(async (tool: Tool): Promise<MonorepoRoot | undefined> => {
-            if (await tool.isMonorepoRoot(directory)) {
-              return {
-                tool: tool,
-                rootDir: directory,
-              };
-            }
-          })
+        defaultOrder.map(async (tool): Promise<MonorepoRoot | undefined> => {
+          if (await tool.isMonorepoRoot(directory)) {
+            return {
+              tool: tool,
+              rootDir: directory,
+            };
+          }
+        })
       )
         .then((x) => x.find((value) => value))
         .then((result) => {
@@ -123,9 +139,7 @@ export function findRootSync(cwd: string): MonorepoRoot {
 
   findUpSync(
     (directory) => {
-      const tools = defaultOrder.map((toolType) => supportedTools[toolType]);
-
-      for (const tool of tools) {
+      for (const tool of defaultOrder) {
         if (tool.isMonorepoRootSync(directory)) {
           monorepoRoot = {
             tool: tool,
