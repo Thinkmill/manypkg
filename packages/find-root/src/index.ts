@@ -25,8 +25,8 @@ const defaultOrder: Tool[] = [
   BoltTool,
   PnpmTool,
   LernaTool,
-  RootTool,
   RushTool,
+  RootTool,
 ];
 
 const isNoEntryError = (err: unknown): boolean =>
