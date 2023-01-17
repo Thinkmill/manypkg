@@ -47,9 +47,10 @@ export const LernaTool: Tool = {
         return true;
       }
     } catch (err) {
-      if (err && (err as any).code !== "ENOENT") {
-        throw err;
+      if (err && (err as any).code === "ENOENT") {
+        return false;
       }
+      throw err;
     }
     return false;
   },

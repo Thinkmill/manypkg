@@ -13,7 +13,7 @@ export async function runCmd(args: string[], cwd: string) {
 
   if (exactMatchingPackage) {
     const { code } = await spawn("yarn", args.slice(1), {
-      cwd: path.join(rootDir, exactMatchingPackage.relativeDir),
+      cwd: exactMatchingPackage.dir,
       stdio: "inherit",
     });
     throw new ExitError(code);
@@ -40,7 +40,7 @@ export async function runCmd(args: string[], cwd: string) {
     throw new ExitError(1);
   } else {
     const { code } = await spawn("yarn", args.slice(1), {
-      cwd: path.join(rootDir, matchingPackages[0].relativeDir),
+      cwd: matchingPackages[0].dir,
       stdio: "inherit",
     });
     throw new ExitError(code);
