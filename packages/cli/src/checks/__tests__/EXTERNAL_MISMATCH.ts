@@ -1,7 +1,7 @@
 import internalMismatch from "../EXTERNAL_MISMATCH";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
 
-let rootWorkspace = getFakeWS("root");
+let rootWorkspace = getRootWS();
 
 it("should error if the ranges are valid and they are not equal", () => {
   let ws = getWS();

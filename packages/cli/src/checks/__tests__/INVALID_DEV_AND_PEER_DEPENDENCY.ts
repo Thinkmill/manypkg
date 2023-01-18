@@ -1,7 +1,7 @@
 import makeCheck from "../INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
 
-let rootWorkspace = getFakeWS("root");
+let rootWorkspace = getRootWS();
 
 describe("invalid dev and peer dependency", () => {
   describe("internal dependencies", () => {

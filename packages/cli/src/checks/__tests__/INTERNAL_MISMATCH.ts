@@ -1,7 +1,7 @@
 import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
 
-let rootWorkspace = getFakeWS("root");
+let rootWorkspace = getRootWS();
 
 describe("internal mismatch", () => {
   it("should not error if internal version is compatible", () => {
