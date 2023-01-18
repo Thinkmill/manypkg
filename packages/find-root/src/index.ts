@@ -26,7 +26,6 @@ const defaultOrder: Tool[] = [
   PnpmTool,
   LernaTool,
   RushTool,
-  RootTool,
 ];
 
 const isNoEntryError = (err: unknown): boolean =>
@@ -39,25 +38,6 @@ export class NoPkgJsonFound extends Error {
       `No package.json could be found upwards from the directory ${directory}`
     );
     this.directory = directory;
-  }
-}
-
-async function hasWorkspacesConfiguredViaPkgJson(
-  directory: string,
-  firstPkgJsonDirRef: { current: string | undefined }
-) {
-  try {
-    let pkgJson = await fs.readJson(path.join(directory, "package.json"));
-    if (firstPkgJsonDirRef.current === undefined) {
-      firstPkgJsonDirRef.current = directory;
-    }
-    if (pkgJson.workspaces || pkgJson.bolt) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
   }
 }
 
@@ -80,58 +60,42 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
         .then((result) => {
           if (result) {
             monorepoRoot = result;
-            return dir;
+            return directory;
           }
         });
     },
     { cwd, type: "directory" }
   );
 
-  if (monorepoRoot) return monorepoRoot;
+  if (monorepoRoot) {
+    return monorepoRoot;
+  }
 
   // If there is no monorepo root, but we can find a single package json file, we will
   // return a "RootTool" repo, which is the special case where we just have a root package
   // with no monorepo implementation (i.e.: a normal package folder).
-
-  let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined,
-  };
-  let dir = await findUp(
-    (directory) => {
-      return Promise.all([
-        hasWorkspacesConfiguredViaPkgJson(directory, firstPkgJsonDirRef),
-      ]).then((x) => x.find((dir) => dir));
+  let rootDir = await findUp(
+    async (directory) => {
+      try {
+        await fs.access(path.join(directory, "package.json"));
+        return directory;
+      } catch (err) {
+        if (!isNoEntryError(err)) {
+          throw err;
+        }
+      }
     },
     { cwd, type: "directory" }
   );
 
-  if (firstPkgJsonDirRef.current === undefined) {
+  if (!rootDir) {
     throw new NoPkgJsonFound(cwd);
   }
 
   return {
     tool: RootTool,
-    rootDir: firstPkgJsonDirRef.current,
+    rootDir,
   };
-}
-
-function hasWorkspacesConfiguredViaPkgJsonSync(
-  directory: string,
-  firstPkgJsonDirRef: { current: string | undefined }
-) {
-  try {
-    const pkgJson = fs.readJsonSync(path.join(directory, "package.json"));
-    if (firstPkgJsonDirRef.current === undefined) {
-      firstPkgJsonDirRef.current = directory;
-    }
-    if (pkgJson.workspaces || pkgJson.bolt) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
-  }
 }
 
 export function findRootSync(cwd: string): MonorepoRoot {
@@ -152,31 +116,27 @@ export function findRootSync(cwd: string): MonorepoRoot {
     { cwd, type: "directory" }
   );
 
-  if (monorepoRoot) return monorepoRoot;
+  if (monorepoRoot) {
+    return monorepoRoot;
+  }
 
   // If there is no monorepo root, but we can find a single package json file, we will
   // return a "RootTool" repo, which is the special case where we just have a root package
   // with no monorepo implementation (i.e.: a normal package folder).
-
-  let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined,
-  };
-  let dir = findUpSync(
+  const rootDir = findUpSync(
     (directory) => {
-      return hasWorkspacesConfiguredViaPkgJsonSync(
-        directory,
-        firstPkgJsonDirRef
-      );
+      const exists = fs.existsSync(path.join(directory, "package.json"));
+      return exists ? directory : undefined;
     },
     { cwd, type: "directory" }
   );
 
-  if (firstPkgJsonDirRef.current === undefined) {
+  if (!rootDir) {
     throw new NoPkgJsonFound(cwd);
   }
 
   return {
     tool: RootTool,
-    rootDir: firstPkgJsonDirRef.current,
+    rootDir,
   };
 }
