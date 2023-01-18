@@ -1,16 +1,8 @@
 import { findRoot, findRootSync } from ".";
 import fixturez from "fixturez";
 import path from "path";
-import fs from "fs-extra";
 
-import {
-  BoltTool,
-  LernaTool,
-  PnpmTool,
-  RootTool,
-  RushTool,
-  YarnTool,
-} from "@manypkg/tools";
+import { LernaTool, PnpmTool, RootTool, YarnTool } from "@manypkg/tools";
 
 let f = fixturez(__dirname);
 
