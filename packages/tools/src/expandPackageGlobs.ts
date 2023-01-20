@@ -2,14 +2,7 @@ import path from "path";
 import fs from "fs-extra";
 import globby from "globby";
 
-import {
-  Tool,
-  ToolType,
-  Package,
-  PackageJSON,
-  Packages,
-  MonorepoRoot,
-} from "./Tool";
+import { Tool, Package, PackageJSON, Packages, MonorepoRoot } from "./Tool";
 
 /**
  * This internal method takes a list of one or more directory globs and the absolute path

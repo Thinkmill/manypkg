@@ -13,6 +13,7 @@ export let getRootWS = (): Package => {
     relativeDir: ".",
     packageJson: {
       name: "root",
+      version: "0.0.1",
       private: true,
     },
   };

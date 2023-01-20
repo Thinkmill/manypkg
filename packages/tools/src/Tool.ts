@@ -1,9 +1,4 @@
 /**
- * A unique string identifier for each type of supported monorepo tool.
- */
-export type ToolType = "bolt" | "lerna" | "pnpm" | "root" | "rush" | "yarn";
-
-/**
  * A package.json access type.
  */
 export type PackageAccessType = "public" | "restricted";
@@ -11,7 +6,7 @@ export type PackageAccessType = "public" | "restricted";
 /**
  * An in-memory representation of a package.json file.
  */
-export type PackageJSON = {
+export interface PackageJSON {
   name: string;
   version: string;
   dependencies?: {
@@ -35,13 +30,13 @@ export type PackageJSON = {
   manypkg?: {
     [key: string]: string;
   };
-};
+}
 
 /**
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
-export type Package = {
+export interface Package {
   /**
    * The pre-loaded package json structure.
    */
@@ -57,13 +52,13 @@ export type Package = {
    * root (for a "root package", this is the string ".").
    */
   relativeDir: string;
-};
+}
 
 /**
  * A collection of packages, along with the monorepo tool used to load them,
  * and (if supported by the tool) the associated "root" package.
  */
-export type Packages = {
+export interface Packages {
   /**
    * The underlying tool implementation for this monorepo.
    */
@@ -83,7 +78,7 @@ export type Packages = {
    * The absolute path of the root directory of this monorepo.
    */
   rootDir: string;
-};
+}
 
 /**
  * An object representing the root of a specific monorepo, with the root
@@ -93,7 +88,7 @@ export type Packages = {
  * but it is the suggested way to pass around a reference to a monorepo root
  * directory and associated tool.
  */
-export type MonorepoRoot = {
+export interface MonorepoRoot {
   /**
    * The absolute path to the root directory of this monorepo.
    */
@@ -103,7 +98,7 @@ export type MonorepoRoot = {
    * The underlying tool implementation for this monorepo.
    */
   tool: Tool;
-};
+}
 
 /**
  * Monorepo tools may throw this error if a caller attempts to get the package
@@ -120,9 +115,10 @@ export class InvalidMonorepoError extends Error {}
  */
 export interface Tool {
   /**
-   * The unique string identifier for this monorepo tool.
+   * A string identifier for this monorepo tool. Should be unique among monorepo tools
+   * exported by manypkg.
    */
-  readonly type: ToolType;
+  readonly type: string;
 
   /**
    * Determine whether the specified directory is a valid root for this monorepo tool.

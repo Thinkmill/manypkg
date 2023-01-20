@@ -4,7 +4,6 @@ import fs from "fs-extra";
 
 import {
   Tool,
-  ToolType,
   Package,
   PackageJSON,
   Packages,

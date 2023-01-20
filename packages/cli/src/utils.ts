@@ -1,5 +1,5 @@
 import * as fs from "fs-extra";
-import { Package, Tool, ToolType } from "@manypkg/get-packages";
+import { Package, Tool } from "@manypkg/get-packages";
 import path from "path";
 import spawn from "spawndamnit";
 import detectIndent from "detect-indent";
@@ -14,8 +14,8 @@ export async function writePackage(pkg: Package) {
   );
 }
 
-export async function install(toolType: ToolType, cwd: string) {
-  const cliRunners: Record<ToolType, string> = {
+export async function install(toolType: string, cwd: string) {
+  const cliRunners: Record<string, string> = {
     bolt: "bolt",
     lerna: "lerna",
     pnpm: "pnpm",

@@ -6,7 +6,7 @@ import path from "path";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 import { Packages, MonorepoRoot } from "@manypkg/tools";
 
-export type { Tool, ToolType, Package, Packages } from "@manypkg/tools";
+export type { Tool, Package, Packages } from "@manypkg/tools";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];

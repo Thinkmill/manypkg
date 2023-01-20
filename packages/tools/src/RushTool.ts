@@ -4,7 +4,6 @@ import jju from "jju";
 
 import {
   Tool,
-  ToolType,
   Package,
   PackageJSON,
   Packages,
