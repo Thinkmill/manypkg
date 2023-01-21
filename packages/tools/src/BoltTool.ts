@@ -31,9 +31,10 @@ export const BoltTool: Tool = {
         return true;
       }
     } catch (err) {
-      if ((err as { code: string }).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        return false;
       }
+      throw err;
     }
     return false;
   },
@@ -47,9 +48,10 @@ export const BoltTool: Tool = {
         return true;
       }
     } catch (err) {
-      if ((err as { code: string }).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        return false;
       }
+      throw err;
     }
     return false;
   },
@@ -79,12 +81,12 @@ export const BoltTool: Tool = {
         rootDir,
       };
     } catch (err) {
-      if ((err as { code: string }).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        throw new InvalidMonorepoError(
+          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
+        );
       }
-      throw new InvalidMonorepoError(
-        `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
-      );
+      throw err;
     }
   },
 
@@ -113,12 +115,12 @@ export const BoltTool: Tool = {
         rootDir,
       };
     } catch (err) {
-      if ((err as { code: string }).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        throw new InvalidMonorepoError(
+          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
+        );
       }
-      throw new InvalidMonorepoError(
-        `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing package.json`
-      );
+      throw err;
     }
   },
 };

@@ -28,11 +28,12 @@ export async function expandPackageGlobs(
       fs
         .readJson(path.join(dir, "package.json"))
         .catch((err) => {
-          if (err && (err as any).code !== "ENOENT") {
-            throw err;
+          if (err && (err as { code: string }).code === "ENOENT") {
+            return undefined;
           }
+          throw err;
         })
-        .then((result) => {
+        .then((result: PackageJSON | undefined) => {
           if (result) {
             return {
               dir: path.resolve(dir),
@@ -76,9 +77,10 @@ export function expandPackageGlobsSync(
           packageJson,
         };
       } catch (err) {
-        if (err && (err as any).code !== "ENOENT") {
-          throw err;
+        if (err && (err as { code: string }).code === "ENOENT") {
+          return undefined;
         }
+        throw err;
       }
     }
   );

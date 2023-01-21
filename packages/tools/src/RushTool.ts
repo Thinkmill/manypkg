@@ -27,9 +27,10 @@ export const RushTool: Tool = {
       await fs.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err) {
-      if (err && (err as any).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        return false;
       }
+      throw err;
     }
     return false;
   },
@@ -39,9 +40,10 @@ export const RushTool: Tool = {
       fs.readFileSync(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err) {
-      if (err && (err as any).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        return false;
       }
+      throw err;
     }
     return false;
   },
@@ -79,12 +81,12 @@ export const RushTool: Tool = {
         rootDir,
       };
     } catch (err) {
-      if (err && (err as any).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        throw new InvalidMonorepoError(
+          `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
+        );
       }
-      throw new InvalidMonorepoError(
-        `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
-      );
+      throw err;
     }
   },
 
@@ -122,12 +124,12 @@ export const RushTool: Tool = {
         rootDir,
       };
     } catch (err) {
-      if (err && (err as any).code !== "ENOENT") {
-        throw err;
+      if (err && (err as { code: string }).code === "ENOENT") {
+        throw new InvalidMonorepoError(
+          `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
+        );
       }
-      throw new InvalidMonorepoError(
-        `Directory ${rootDir} is not a valid ${RushTool.type} monorepo root: missing rush.json`
-      );
+      throw err;
     }
   },
 };
