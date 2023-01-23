@@ -1,6 +1,6 @@
 # @manypkg/find-root
 
-> Find the root of a monorepo with Yarn workspaces, Bolt or pnpm
+> Find the root of a monorepo with Yarn workspaces, Lerna, pnpm or Rush
 
 ## Install
 
