@@ -15,6 +15,7 @@ type Package = { packageJson: PackageJSON; dir: string };
 type Packages = {
   tool: Tool;
   packages: Package[];
-  root: Package;
+  rootPackage?: Package;
+  rootDir: string;
 };
 ```
