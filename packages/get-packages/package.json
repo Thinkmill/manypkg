@@ -5,12 +5,8 @@
   "main": "dist/manypkg-get-packages.cjs.js",
   "dependencies": {
     "@babel/runtime": "^7.20.6",
-    "@changesets/types": "^4.0.1",
     "@manypkg/find-root": "^1.1.0",
-    "@manypkg/tools": "^1.0.0",
-    "fs-extra": "^8.1.0",
-    "globby": "^11.0.0",
-    "read-yaml-file": "^1.1.0"
+    "@manypkg/tools": "^1.0.0"
   },
   "devDependencies": {
     "jest-fixtures": "^0.6.0"
