@@ -18,5 +18,8 @@
   },
   "peerDependencies": {
     "gatsby": "^2.15.28"
+  },
+  "engines": {
+    "node": ">=14.18.0"
   }
 }
