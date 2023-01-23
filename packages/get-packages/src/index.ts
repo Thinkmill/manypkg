@@ -1,7 +1,3 @@
-// This is a modified version of the package-getting in bolt
-// It supports yarn workspaces as well, and can fall back through
-// several options
-
 import path from "path";
 import { findRoot, findRootSync } from "@manypkg/find-root";
 import { Packages, MonorepoRoot } from "@manypkg/tools";

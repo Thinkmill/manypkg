@@ -6,7 +6,6 @@ import {
   Tool,
   RootTool,
   MonorepoRoot,
-  BoltTool,
   LernaTool,
   PnpmTool,
   RushTool,
@@ -20,13 +19,7 @@ import {
  * monorepo implementations first, with tools based on custom file schemas
  * checked last.
  */
-const defaultOrder: Tool[] = [
-  YarnTool,
-  BoltTool,
-  PnpmTool,
-  LernaTool,
-  RushTool,
-];
+const defaultOrder: Tool[] = [YarnTool, PnpmTool, LernaTool, RushTool];
 
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
