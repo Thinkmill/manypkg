@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/gatsby-source-workspace",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "license": "MIT",
   "files": [
     "gatsby-node.js",
