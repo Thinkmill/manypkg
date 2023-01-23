@@ -4,7 +4,7 @@
 
 import path from "path";
 import { findRoot, findRootSync } from "@manypkg/find-root";
-import { Packages, MonorepoRoot } from "@manypkg/tools";
+import { Packages, MonorepoRoot, Tool } from "@manypkg/tools";
 
 export type { Tool, Package, Packages } from "@manypkg/tools";
 
@@ -20,8 +20,20 @@ export class PackageJsonMissingNameError extends Error {
   }
 }
 
-export async function getPackages(dir: string): Promise<Packages> {
-  const monorepoRoot: MonorepoRoot = await findRoot(dir);
+/**
+ * Given a starting folder, search that folder and its parents until a supported monorepo
+ * is found, and return the collection of packages and a corresponding monorepo `Tool`
+ * object.
+ *
+ * By default, all predefined `Tool` implementations are included in the search -- the
+ * caller can provide a list of desired tools to restrict the types of monorepos discovered,
+ * or to provide a custom tool implementation.
+ */
+export async function getPackages(
+  dir: string,
+  tools?: Tool[]
+): Promise<Packages> {
+  const monorepoRoot: MonorepoRoot = await findRoot(dir, tools);
   const packages: Packages = await monorepoRoot.tool.getPackages(dir);
 
   validatePackages(packages);
@@ -29,8 +41,11 @@ export async function getPackages(dir: string): Promise<Packages> {
   return packages;
 }
 
-export function getPackagesSync(dir: string): Packages {
-  const monorepoRoot: MonorepoRoot = findRootSync(dir);
+/**
+ * A synchronous version of {@link getPackages}.
+ */
+export function getPackagesSync(dir: string, tools?: Tool[]): Packages {
+  const monorepoRoot: MonorepoRoot = findRootSync(dir, tools);
   const packages: Packages = monorepoRoot.tool.getPackagesSync(dir);
 
   validatePackages(packages);
