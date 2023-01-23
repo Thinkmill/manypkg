@@ -2,6 +2,32 @@ import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
 import fs from "fs-extra";
 
+import {
+  Tool,
+  RootTool,
+  MonorepoRoot,
+  BoltTool,
+  LernaTool,
+  PnpmTool,
+  RushTool,
+  YarnTool,
+} from "@manypkg/tools";
+
+/**
+ * A default ordering for monorepo tool checks.
+ *
+ * This ordering is designed to check the most typical package.json-based
+ * monorepo implementations first, with tools based on custom file schemas
+ * checked last.
+ */
+const defaultOrder: Tool[] = [
+  YarnTool,
+  BoltTool,
+  PnpmTool,
+  LernaTool,
+  RushTool,
+];
+
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
 
@@ -15,133 +41,102 @@ export class NoPkgJsonFound extends Error {
   }
 }
 
-async function hasWorkspacesConfiguredViaPkgJson(
-  directory: string,
-  firstPkgJsonDirRef: { current: string | undefined }
-) {
-  try {
-    let pkgJson = await fs.readJson(path.join(directory, "package.json"));
-    if (firstPkgJsonDirRef.current === undefined) {
-      firstPkgJsonDirRef.current = directory;
-    }
-    if (pkgJson.workspaces || pkgJson.bolt) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
-  }
-}
+export async function findRoot(cwd: string): Promise<MonorepoRoot> {
+  let monorepoRoot: MonorepoRoot | undefined;
 
-async function hasWorkspacesConfiguredViaLerna(directory: string) {
-  try {
-    let lernaJson = await fs.readJson(path.join(directory, "lerna.json"));
-    if (lernaJson.useWorkspaces !== true) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
-  }
-}
-
-function hasWorkspacesConfiguredViaPnpm(directory: string) {
-  let pnpmWorkspacesFileExists = fs.existsSync(
-    path.join(directory, "pnpm-workspace.yaml")
-  );
-  if (pnpmWorkspacesFileExists) {
-    return directory;
-  }
-}
-
-export async function findRoot(cwd: string): Promise<string> {
-  let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined,
-  };
-  let dir = await findUp(
-    (directory) => {
-      return Promise.all([
-        hasWorkspacesConfiguredViaLerna(directory),
-        hasWorkspacesConfiguredViaPkgJson(directory, firstPkgJsonDirRef),
-        hasWorkspacesConfiguredViaPnpm(directory),
-      ]).then((x) => x.find((dir) => dir));
-    },
-    { cwd, type: "directory" }
-  );
-  if (firstPkgJsonDirRef.current === undefined) {
-    throw new NoPkgJsonFound(cwd);
-  }
-  if (dir === undefined) {
-    return firstPkgJsonDirRef.current;
-  }
-  return dir;
-}
-
-function hasWorkspacesConfiguredViaPkgJsonSync(
-  directory: string,
-  firstPkgJsonDirRef: { current: string | undefined }
-) {
-  try {
-    const pkgJson = fs.readJsonSync(path.join(directory, "package.json"));
-    if (firstPkgJsonDirRef.current === undefined) {
-      firstPkgJsonDirRef.current = directory;
-    }
-    if (pkgJson.workspaces || pkgJson.bolt) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
-  }
-}
-
-function hasWorkspacesConfiguredViaLernaSync(directory: string) {
-  try {
-    let lernaJson = fs.readJsonSync(path.join(directory, "lerna.json"));
-    if (lernaJson.useWorkspaces !== true) {
-      return directory;
-    }
-  } catch (err) {
-    if (!isNoEntryError(err)) {
-      throw err;
-    }
-  }
-}
-
-function hasWorkspacesConfiguredViaPnpmSync(directory: string) {
-  // @ts-ignore
-  let pnpmWorkspacesFileExists = fs.existsSync(
-    path.join(directory, "pnpm-workspace.yaml")
-  );
-  if (pnpmWorkspacesFileExists) {
-    return directory;
-  }
-}
-
-export function findRootSync(cwd: string) {
-  let firstPkgJsonDirRef: { current: string | undefined } = {
-    current: undefined,
-  };
-
-  let dir = findUpSync(
-    (directory) => {
-      return [
-        hasWorkspacesConfiguredViaLernaSync(directory),
-        hasWorkspacesConfiguredViaPkgJsonSync(directory, firstPkgJsonDirRef),
-        hasWorkspacesConfiguredViaPnpmSync(directory),
-      ].find((dir) => dir);
+  await findUp(
+    async (directory) => {
+      return Promise.all(
+        defaultOrder.map(async (tool): Promise<MonorepoRoot | undefined> => {
+          if (await tool.isMonorepoRoot(directory)) {
+            return {
+              tool: tool,
+              rootDir: directory,
+            };
+          }
+        })
+      )
+        .then((x) => x.find((value) => value))
+        .then((result) => {
+          if (result) {
+            monorepoRoot = result;
+            return directory;
+          }
+        });
     },
     { cwd, type: "directory" }
   );
 
-  if (firstPkgJsonDirRef.current === undefined) {
+  if (monorepoRoot) {
+    return monorepoRoot;
+  }
+
+  // If there is no monorepo root, but we can find a single package json file, we will
+  // return a "RootTool" repo, which is the special case where we just have a root package
+  // with no monorepo implementation (i.e.: a normal package folder).
+  let rootDir = await findUp(
+    async (directory) => {
+      try {
+        await fs.access(path.join(directory, "package.json"));
+        return directory;
+      } catch (err) {
+        if (!isNoEntryError(err)) {
+          throw err;
+        }
+      }
+    },
+    { cwd, type: "directory" }
+  );
+
+  if (!rootDir) {
     throw new NoPkgJsonFound(cwd);
   }
-  if (dir === undefined) {
-    return firstPkgJsonDirRef.current;
+
+  return {
+    tool: RootTool,
+    rootDir,
+  };
+}
+
+export function findRootSync(cwd: string): MonorepoRoot {
+  let monorepoRoot: MonorepoRoot | undefined;
+
+  findUpSync(
+    (directory) => {
+      for (const tool of defaultOrder) {
+        if (tool.isMonorepoRootSync(directory)) {
+          monorepoRoot = {
+            tool: tool,
+            rootDir: directory,
+          };
+          return directory;
+        }
+      }
+    },
+    { cwd, type: "directory" }
+  );
+
+  if (monorepoRoot) {
+    return monorepoRoot;
   }
-  return dir;
+
+  // If there is no monorepo root, but we can find a single package json file, we will
+  // return a "RootTool" repo, which is the special case where we just have a root package
+  // with no monorepo implementation (i.e.: a normal package folder).
+  const rootDir = findUpSync(
+    (directory) => {
+      const exists = fs.existsSync(path.join(directory, "package.json"));
+      return exists ? directory : undefined;
+    },
+    { cwd, type: "directory" }
+  );
+
+  if (!rootDir) {
+    throw new NoPkgJsonFound(cwd);
+  }
+
+  return {
+    tool: RootTool,
+    rootDir,
+  };
 }

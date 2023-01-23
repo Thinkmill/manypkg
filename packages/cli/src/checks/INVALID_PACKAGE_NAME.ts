@@ -40,7 +40,7 @@ export default makeCheck<ErrorType>({
   print: (error) => {
     if (!error.workspace.packageJson.name) {
       return `The package at ${JSON.stringify(
-        error.workspace.dir
+        error.workspace.relativeDir
       )} does not have a name`;
     }
     return `${

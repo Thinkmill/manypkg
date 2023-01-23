@@ -1,5 +1,4 @@
 import parseGithubUrl from "parse-github-url";
-import path from "path";
 import normalizePath from "normalize-path";
 import { Package } from "@manypkg/get-packages";
 
@@ -15,7 +14,8 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace, allWorkspaces, rootWorkspace, options) => {
-    let rootRepositoryField = (rootWorkspace.packageJson as any).repository;
+    let rootRepositoryField: unknown = (rootWorkspace?.packageJson as any)
+      ?.repository;
 
     if (typeof rootRepositoryField === "string") {
       let result = parseGithubUrl(rootRepositoryField);
@@ -48,12 +48,10 @@ export default makeCheck<ErrorType>({
           if (result.host === "github.com") {
             correctRepositoryField = `${baseRepositoryUrl}/tree/${
               options.defaultBranch
-            }/${normalizePath(
-              path.relative(rootWorkspace.dir, workspace.dir)
-            )}`;
+            }/${normalizePath(workspace.relativeDir)}`;
           } else if (result.host === "dev.azure.com") {
             correctRepositoryField = `${baseRepositoryUrl}?path=${normalizePath(
-              path.relative(rootWorkspace.dir, workspace.dir)
+              workspace.relativeDir
             )}&version=GB${options.defaultBranch}&_a=contents`;
           }
 

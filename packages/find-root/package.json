@@ -6,6 +6,7 @@
   "module": "dist/manypkg-find-root.esm.js",
   "dependencies": {
     "@babel/runtime": "^7.20.6",
+    "@manypkg/tools": "^1.0.0",
     "@types/node": "^12.7.1",
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0"

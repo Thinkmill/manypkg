@@ -5,13 +5,10 @@ import * as logger from "./logger";
 import { ExitError } from "./errors";
 
 export async function runCmd(args: string[], cwd: string) {
-  let { packages, root } = await getPackages(cwd);
+  let { packages, rootDir } = await getPackages(cwd);
 
   const exactMatchingPackage = packages.find((pkg) => {
-    return (
-      pkg.packageJson.name === args[0] ||
-      path.relative(root.dir, pkg.dir) === args[0]
-    );
+    return pkg.packageJson.name === args[0] || pkg.relativeDir === args[0];
   });
 
   if (exactMatchingPackage) {
@@ -25,7 +22,7 @@ export async function runCmd(args: string[], cwd: string) {
   const matchingPackages = packages.filter((pkg) => {
     return (
       pkg.packageJson.name.includes(args[0]) ||
-      path.relative(root.dir, pkg.dir).includes(args[0])
+      pkg.relativeDir.includes(args[0])
     );
   });
 

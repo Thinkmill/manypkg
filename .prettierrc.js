@@ -9,6 +9,6 @@ module.exports = {
   proseWrap: "never",
 
   // Disabling search dirs and pointing directly at plugins to keep configuration explicit
-  pluginSearchDirs: false,
+  pluginSearchDirs: [],
   plugins: [require("prettier-plugin-packagejson")],
 };

@@ -1,7 +1,7 @@
 import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
 
-let rootWorkspace = getFakeWS("root");
+let rootWorkspace = getRootWS();
 
 describe("internal mismatch", () => {
   it("should not error if internal version is compatible", () => {
@@ -62,15 +62,16 @@ describe("internal mismatch", () => {
         {
           "dependencyRange": "^0.1.0",
           "dependencyWorkspace": {
-            "dir": "some/fake/dir/pkg-1",
+            "dir": "fake/monorepo/packages/pkg-1",
             "packageJson": {
               "name": "pkg-1",
               "version": "1.0.0",
             },
+            "relativeDir": "packages/pkg-1",
           },
           "type": "INTERNAL_MISMATCH",
           "workspace": {
-            "dir": "some/fake/dir/depends-on-one",
+            "dir": "fake/monorepo/packages/depends-on-one",
             "packageJson": {
               "devDependencies": {
                 "pkg-1": "^0.1.0",
@@ -78,6 +79,7 @@ describe("internal mismatch", () => {
               "name": "depends-on-one",
               "version": "1.0.0",
             },
+            "relativeDir": "packages/depends-on-one",
           },
         },
       ]
