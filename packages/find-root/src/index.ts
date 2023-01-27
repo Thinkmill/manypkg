@@ -20,7 +20,7 @@ import {
  * monorepo implementations first, with tools based on custom file schemas
  * checked last.
  */
-export const DEFAULT_TOOLS = [
+const DEFAULT_TOOLS: Tool[] = [
   YarnTool,
   BoltTool,
   PnpmTool,
@@ -61,15 +61,14 @@ export class NoMatchingMonorepoFound extends Error {
  */
 export async function findRoot(
   cwd: string,
-  tools?: Tool[]
+  tools: Tool[] = DEFAULT_TOOLS
 ): Promise<MonorepoRoot> {
   let monorepoRoot: MonorepoRoot | undefined;
-  const toolsToInclude: Tool[] = tools || DEFAULT_TOOLS;
 
   await findUp(
     async (directory) => {
       return Promise.all(
-        toolsToInclude.map(async (tool): Promise<MonorepoRoot | undefined> => {
+        tools.map(async (tool): Promise<MonorepoRoot | undefined> => {
           if (await tool.isMonorepoRoot(directory)) {
             return {
               tool: tool,
@@ -93,7 +92,7 @@ export async function findRoot(
     return monorepoRoot;
   }
 
-  if (!toolsToInclude.includes(RootTool)) {
+  if (!tools.includes(RootTool)) {
     throw new NoMatchingMonorepoFound(cwd);
   }
 
@@ -127,13 +126,15 @@ export async function findRoot(
 /**
  * A synchronous version of {@link findRoot}.
  */
-export function findRootSync(cwd: string, tools?: Tool[]): MonorepoRoot {
+export function findRootSync(
+  cwd: string,
+  tools: Tool[] = DEFAULT_TOOLS
+): MonorepoRoot {
   let monorepoRoot: MonorepoRoot | undefined;
-  const toolsToInclude: Tool[] = tools || DEFAULT_TOOLS;
 
   findUpSync(
     (directory) => {
-      for (const tool of toolsToInclude) {
+      for (const tool of tools) {
         if (tool.isMonorepoRootSync(directory)) {
           monorepoRoot = {
             tool: tool,
@@ -150,7 +151,7 @@ export function findRootSync(cwd: string, tools?: Tool[]): MonorepoRoot {
     return monorepoRoot;
   }
 
-  if (!toolsToInclude.includes(RootTool)) {
+  if (!tools.includes(RootTool)) {
     throw new NoMatchingMonorepoFound(cwd);
   }
 
