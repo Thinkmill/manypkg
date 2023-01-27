@@ -1,5 +1,11 @@
 # @manypkg/gatsby-source-workspace
 
+## 0.5.0
+
+### Minor Changes
+
+- [#162](https://github.com/Thinkmill/manypkg/pull/162) [`f046017`](https://github.com/Thinkmill/manypkg/commit/f046017af2349f0c1bbc5b25224da0ede8ddc2d6) Thanks [@Andarist](https://github.com/Andarist)! - Increased the transpilation target of the source files to `node@14.x`. At the same time added this as `package.json#engines` to explicitly declare the minimum node version supported by this package.
+
 ## 0.4.1
 
 ### Patch Changes

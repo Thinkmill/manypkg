@@ -1,5 +1,18 @@
 # @manypkg/cli
 
+## 0.20.0
+
+### Minor Changes
+
+- [#165](https://github.com/Thinkmill/manypkg/pull/165) [`7b9c4f6`](https://github.com/Thinkmill/manypkg/commit/7b9c4f6d9a73de8b3cc45af5abc8af47f6b9206c) Thanks [@Andarist](https://github.com/Andarist)! - Removed support for Bolt monorepos.
+
+* [#162](https://github.com/Thinkmill/manypkg/pull/162) [`f046017`](https://github.com/Thinkmill/manypkg/commit/f046017af2349f0c1bbc5b25224da0ede8ddc2d6) Thanks [@Andarist](https://github.com/Andarist)! - Increased the transpilation target of the source files to `node@14.x`. At the same time added this as `package.json#engines` to explicitly declare the minimum node version supported by this package.
+
+### Patch Changes
+
+- Updated dependencies [[`7b9c4f6`](https://github.com/Thinkmill/manypkg/commit/7b9c4f6d9a73de8b3cc45af5abc8af47f6b9206c), [`f046017`](https://github.com/Thinkmill/manypkg/commit/f046017af2349f0c1bbc5b25224da0ede8ddc2d6), [`a01efc9`](https://github.com/Thinkmill/manypkg/commit/a01efc9c25900b7d21b6d517a2021b021f8b3922)]:
+  - @manypkg/get-packages@2.0.0
+
 ## 0.19.2
 
 ### Patch Changes

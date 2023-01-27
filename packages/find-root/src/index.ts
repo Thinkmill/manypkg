@@ -6,7 +6,6 @@ import {
   Tool,
   RootTool,
   MonorepoRoot,
-  BoltTool,
   LernaTool,
   PnpmTool,
   RushTool,
@@ -22,7 +21,6 @@ import {
  */
 const DEFAULT_TOOLS: Tool[] = [
   YarnTool,
-  BoltTool,
   PnpmTool,
   LernaTool,
   RushTool,

@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
-    "release": "yarn preconstruct build && yarn changeset publish",
+    "release": "preconstruct build && changeset publish",
     "test": "jest",
     "test-gatsby": "cd test-gatsby && gatsby develop"
   },
@@ -24,8 +24,8 @@
     "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.18.6",
-    "@changesets/changelog-github": "^0.4.1",
-    "@changesets/cli": "^2.5.0",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.0",
     "@preconstruct/cli": "^2.2.2",
     "@types/fs-extra": "^8.0.1",
     "@types/jest": "^29.2.4",
@@ -37,6 +37,9 @@
     "prettier": "^2.8.1",
     "prettier-plugin-packagejson": "^2.3.0",
     "typescript": "^4.9.4"
+  },
+  "engines": {
+    "node": ">=14.18.0"
   },
   "preconstruct": {
     "packages": [
