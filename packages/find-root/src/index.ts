@@ -49,6 +49,16 @@ export class NoMatchingMonorepoFound extends Error {
 }
 
 /**
+ * Configuration options for `findRoot` and `findRootSync` functions.
+ */
+export interface FindRootOptions {
+  /**
+   * Override the list of monorepo tool implementations that are used during the search.
+   */
+  tools?: Tool[];
+}
+
+/**
  * Given a starting folder, search that folder and its parents until a supported monorepo
  * is found, and return a `MonorepoRoot` object with the discovered directory and a
  * corresponding monorepo `Tool` object.
@@ -59,9 +69,10 @@ export class NoMatchingMonorepoFound extends Error {
  */
 export async function findRoot(
   cwd: string,
-  tools: Tool[] = DEFAULT_TOOLS
+  options: FindRootOptions = {}
 ): Promise<MonorepoRoot> {
   let monorepoRoot: MonorepoRoot | undefined;
+  const tools = options.tools || DEFAULT_TOOLS;
 
   await findUp(
     async (directory) => {
@@ -126,9 +137,10 @@ export async function findRoot(
  */
 export function findRootSync(
   cwd: string,
-  tools: Tool[] = DEFAULT_TOOLS
+  options: FindRootOptions = {}
 ): MonorepoRoot {
   let monorepoRoot: MonorepoRoot | undefined;
+  const tools = options.tools || DEFAULT_TOOLS;
 
   findUpSync(
     (directory) => {

@@ -68,7 +68,9 @@ const runTests = (findRoot: FindRoot) => {
   test("it will not find a lerna monorepo if only PnpmTool is allowed", async () => {
     let tmpPath = f.copy("basic-lerna");
     await expect(async () =>
-      findRoot(path.join(tmpPath, "packages", "package-one", "src"), [PnpmTool])
+      findRoot(path.join(tmpPath, "packages", "package-one", "src"), {
+        tools: [PnpmTool],
+      })
     ).rejects.toThrowError(
       /No monorepo matching the list of supported monorepos could be found upwards from directory /
     );
