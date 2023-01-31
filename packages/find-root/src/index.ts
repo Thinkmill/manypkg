@@ -19,7 +19,13 @@ import {
  * monorepo implementations first, with tools based on custom file schemas
  * checked last.
  */
-const defaultOrder: Tool[] = [YarnTool, PnpmTool, LernaTool, RushTool];
+const DEFAULT_TOOLS: Tool[] = [
+  YarnTool,
+  PnpmTool,
+  LernaTool,
+  RushTool,
+  RootTool,
+];
 
 const isNoEntryError = (err: unknown): boolean =>
   !!err && typeof err === "object" && "code" in err && err.code === "ENOENT";
@@ -27,20 +33,51 @@ const isNoEntryError = (err: unknown): boolean =>
 export class NoPkgJsonFound extends Error {
   directory: string;
   constructor(directory: string) {
+    super(`No package.json could be found upwards from directory ${directory}`);
+    this.directory = directory;
+  }
+}
+
+export class NoMatchingMonorepoFound extends Error {
+  directory: string;
+  constructor(directory: string) {
     super(
-      `No package.json could be found upwards from the directory ${directory}`
+      `No monorepo matching the list of supported monorepos could be found upwards from directory ${directory}`
     );
     this.directory = directory;
   }
 }
 
-export async function findRoot(cwd: string): Promise<MonorepoRoot> {
+/**
+ * Configuration options for `findRoot` and `findRootSync` functions.
+ */
+export interface FindRootOptions {
+  /**
+   * Override the list of monorepo tool implementations that are used during the search.
+   */
+  tools?: Tool[];
+}
+
+/**
+ * Given a starting folder, search that folder and its parents until a supported monorepo
+ * is found, and return a `MonorepoRoot` object with the discovered directory and a
+ * corresponding monorepo `Tool` object.
+ *
+ * By default, all predefined `Tool` implementations are included in the search -- the
+ * caller can provide a list of desired tools to restrict the types of monorepos discovered,
+ * or to provide a custom tool implementation.
+ */
+export async function findRoot(
+  cwd: string,
+  options: FindRootOptions = {}
+): Promise<MonorepoRoot> {
   let monorepoRoot: MonorepoRoot | undefined;
+  const tools = options.tools || DEFAULT_TOOLS;
 
   await findUp(
     async (directory) => {
       return Promise.all(
-        defaultOrder.map(async (tool): Promise<MonorepoRoot | undefined> => {
+        tools.map(async (tool): Promise<MonorepoRoot | undefined> => {
           if (await tool.isMonorepoRoot(directory)) {
             return {
               tool: tool,
@@ -62,6 +99,10 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
 
   if (monorepoRoot) {
     return monorepoRoot;
+  }
+
+  if (!tools.includes(RootTool)) {
+    throw new NoMatchingMonorepoFound(cwd);
   }
 
   // If there is no monorepo root, but we can find a single package json file, we will
@@ -91,12 +132,19 @@ export async function findRoot(cwd: string): Promise<MonorepoRoot> {
   };
 }
 
-export function findRootSync(cwd: string): MonorepoRoot {
+/**
+ * A synchronous version of {@link findRoot}.
+ */
+export function findRootSync(
+  cwd: string,
+  options: FindRootOptions = {}
+): MonorepoRoot {
   let monorepoRoot: MonorepoRoot | undefined;
+  const tools = options.tools || DEFAULT_TOOLS;
 
   findUpSync(
     (directory) => {
-      for (const tool of defaultOrder) {
+      for (const tool of tools) {
         if (tool.isMonorepoRootSync(directory)) {
           monorepoRoot = {
             tool: tool,
@@ -111,6 +159,10 @@ export function findRootSync(cwd: string): MonorepoRoot {
 
   if (monorepoRoot) {
     return monorepoRoot;
+  }
+
+  if (!tools.includes(RootTool)) {
+    throw new NoMatchingMonorepoFound(cwd);
   }
 
   // If there is no monorepo root, but we can find a single package json file, we will
