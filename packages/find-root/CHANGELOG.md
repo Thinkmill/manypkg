@@ -1,5 +1,11 @@
 # @manypkg/find-root
 
+## 2.1.0
+
+### Minor Changes
+
+- [#167](https://github.com/Thinkmill/manypkg/pull/167) [`bf586f5`](https://github.com/Thinkmill/manypkg/commit/bf586f56f14f213ac7d3e4c1ee85ef8456872c3c) Thanks [@elliot-nelson](https://github.com/elliot-nelson)! - The `findRoot` and `findRootSync` methods now take an optional list of `Tool` implementations, allowing the caller to restrict the desired types of monorepo discovered, or provide a custom monorepo tool implementation.
+
 ## 2.0.0
 
 ### Major Changes
