@@ -32,7 +32,7 @@ export interface GetPackagesOptions extends FindRootOptions {}
  */
 export async function getPackages(
   dir: string,
-  options: GetPackagesOptions = {}
+  options?: GetPackagesOptions
 ): Promise<Packages> {
   const monorepoRoot: MonorepoRoot = await findRoot(dir, options);
   const packages: Packages = await monorepoRoot.tool.getPackages(dir);
@@ -47,7 +47,7 @@ export async function getPackages(
  */
 export function getPackagesSync(
   dir: string,
-  options: GetPackagesOptions = {}
+  options?: GetPackagesOptions
 ): Packages {
   const monorepoRoot: MonorepoRoot = findRootSync(dir, options);
   const packages: Packages = monorepoRoot.tool.getPackagesSync(dir);
