@@ -264,3 +264,7 @@ Having a `repository` field is helpful so there is a link to the source of a pac
 #### How it's fixed
 
 This is fixed by setting the correct URL.
+
+## License
+
+Copyright (c) 2023 Thinkmill Labs Pty Ltd. Licensed under the MIT License.
