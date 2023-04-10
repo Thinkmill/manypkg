@@ -16,6 +16,7 @@ export async function writePackage(pkg: Package) {
 
 export async function install(toolType: string, cwd: string) {
   const cliRunners: Record<string, string> = {
+    bolt: "bolt",
     lerna: "lerna",
     pnpm: "pnpm",
     root: "yarn",

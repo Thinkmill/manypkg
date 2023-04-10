@@ -1,3 +1,7 @@
+// This is a modified version of the package-getting in bolt
+// It supports yarn workspaces as well, and can fall back through
+// several options
+
 import path from "path";
 import { findRoot, findRootSync, FindRootOptions } from "@manypkg/find-root";
 import { Packages, MonorepoRoot, Tool } from "@manypkg/tools";
@@ -6,6 +10,7 @@ export type { Tool, Package, Packages } from "@manypkg/tools";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];
+
   constructor(directories: string[]) {
     super(
       `The following package.jsons are missing the "name" field:\n${directories.join(
