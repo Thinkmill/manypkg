@@ -11,7 +11,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   let { packages, tool, rootPackage, rootDir } = await getPackages(
     process.cwd()
   );
-  let isScope = name.startsWith("@") && !name.includes("/");
+  let isScope = name.startsWith("@") && (!name.includes("/") || name.endsWith("/"));
   let newVersion = semver.validRange(tag) ? tag : null;
 
   let packagesToUpdate = new Set<string>();
