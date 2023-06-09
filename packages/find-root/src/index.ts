@@ -6,6 +6,7 @@ import {
   Tool,
   RootTool,
   MonorepoRoot,
+  BoltTool,
   LernaTool,
   PnpmTool,
   RushTool,
@@ -24,6 +25,7 @@ const DEFAULT_TOOLS: Tool[] = [
   PnpmTool,
   LernaTool,
   RushTool,
+  BoltTool,
   RootTool,
 ];
 
@@ -32,6 +34,7 @@ const isNoEntryError = (err: unknown): boolean =>
 
 export class NoPkgJsonFound extends Error {
   directory: string;
+
   constructor(directory: string) {
     super(`No package.json could be found upwards from directory ${directory}`);
     this.directory = directory;
@@ -40,6 +43,7 @@ export class NoPkgJsonFound extends Error {
 
 export class NoMatchingMonorepoFound extends Error {
   directory: string;
+
   constructor(directory: string) {
     super(
       `No monorepo matching the list of supported monorepos could be found upwards from directory ${directory}`
