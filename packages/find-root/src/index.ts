@@ -22,10 +22,10 @@ import {
  */
 const DEFAULT_TOOLS: Tool[] = [
   YarnTool,
-  BoltTool,
   PnpmTool,
   LernaTool,
   RushTool,
+  BoltTool,
   RootTool,
 ];
 
