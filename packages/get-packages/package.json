@@ -1,11 +1,11 @@
 {
   "name": "@manypkg/get-packages",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "MIT",
   "main": "dist/manypkg-get-packages.cjs.js",
   "dependencies": {
-    "@manypkg/find-root": "^2.1.0",
-    "@manypkg/tools": "^1.0.0"
+    "@manypkg/find-root": "^2.2.0",
+    "@manypkg/tools": "^1.1.0"
   },
   "devDependencies": {
     "jest-fixtures": "^0.6.0"
