@@ -1,5 +1,16 @@
 # @manypkg/cli
 
+## 0.21.0
+
+### Minor Changes
+
+- [#174](https://github.com/Thinkmill/manypkg/pull/174) [`de0fff3`](https://github.com/Thinkmill/manypkg/commit/de0fff37af9e6dc21b75b7115381483c1e85b8a7) Thanks [@steve-taylor](https://github.com/steve-taylor)! - Restored support for Bolt monorepos.
+
+### Patch Changes
+
+- Updated dependencies [[`de0fff3`](https://github.com/Thinkmill/manypkg/commit/de0fff37af9e6dc21b75b7115381483c1e85b8a7)]:
+  - @manypkg/get-packages@2.2.0
+
 ## 0.20.0
 
 ### Minor Changes

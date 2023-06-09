@@ -1,11 +1,11 @@
 {
   "name": "@manypkg/find-root",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "MIT",
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",
   "dependencies": {
-    "@manypkg/tools": "^1.0.0",
+    "@manypkg/tools": "^1.1.0",
     "@types/node": "^12.7.1",
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0"
