@@ -1,7 +1,6 @@
-import { getPackages, Packages } from "@manypkg/get-packages";
+import { getPackages } from "@manypkg/get-packages";
 import semver from "semver";
 import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils";
-import getPackageJson from "package-json";
 import pLimit from "p-limit";
 
 import { writePackage, install } from "./utils";
@@ -99,7 +98,7 @@ const npmRequestLimit = pLimit(40);
 
 export function getPackageInfo(pkgName: string) {
   return npmRequestLimit(async () => {
-    let result = await getPackageJson(pkgName, {
+    let result = await import("package-json")(pkgName, {
       allVersions: true,
     });
 
