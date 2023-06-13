@@ -125,7 +125,7 @@ function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
 export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   allPackages: Map<string, Package>
 ) {
-  let dependencyRangesMapping = new Map<string, {[key: string]: number}>();
+  let dependencyRangesMapping = new Map<string, { [key: string]: number }>();
 
   for (let [pkgName, pkg] of allPackages) {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
@@ -154,21 +154,21 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
 
     const [first] = specifierMapEntryArray;
     const maxValue = specifierMapEntryArray.reduce((acc, value) => {
-      if(acc[1] === value[1]) {
+      if (acc[1] === value[1]) {
         // If all dependency ranges occurances are equal, pick the highest.
         // It's impossible to infer intention of the developer
         // when all ranges occur an equal amount of times
         const highestRange = highest([acc[0], value[0]]);
-        return [ highestRange, acc[1] ];
+        return [highestRange, acc[1]];
       }
 
-      if(acc[1] > value[1]) {
+      if (acc[1] > value[1]) {
         return acc;
       }
       return value;
     }, first);
 
-    mostCommonRangeMap.set(depName, maxValue[0])
+    mostCommonRangeMap.set(depName, maxValue[0]);
   }
   return mostCommonRangeMap;
 });
@@ -206,12 +206,9 @@ export function getClosestAllowedRange(
 }
 
 function getVersionFromRange(range: string) {
-  if (semver.parse(range)) {
-    return range;
-  }
-  const version = range.substring(1);
-  if (semver.parse(version)) {
-    return version;
+  const minVersion = semver.minVersion(range);
+  if (minVersion) {
+    return minVersion;
   }
   logger.error(`Invalid range: ${range}`);
   throw new ExitError(1);
