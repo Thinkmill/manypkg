@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/find-root",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "license": "MIT",
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",

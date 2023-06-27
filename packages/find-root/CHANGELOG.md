@@ -1,5 +1,11 @@
 # @manypkg/find-root
 
+## 2.2.1
+
+### Patch Changes
+
+- [#183](https://github.com/Thinkmill/manypkg/pull/183) [`e03c0a3`](https://github.com/Thinkmill/manypkg/commit/e03c0a3bca83d6104ca4671703986996be2b829f) Thanks [@askoufis](https://github.com/askoufis)! - Moved `@types/node` out of `dependencies` to `devDependencies`
+
 ## 2.2.0
 
 ### Minor Changes
