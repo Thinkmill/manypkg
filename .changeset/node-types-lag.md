@@ -2,4 +2,4 @@
 "@manypkg/find-root": patch
 ---
 
-Remove `@types/node` dependency
+Moved `@types/node` out of `dependencies` to `devDependencies`
