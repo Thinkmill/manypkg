@@ -85,4 +85,86 @@ describe("internal mismatch", () => {
       ]
     `);
   });
+  it("should remove workspace: protocol", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("uses-workspace-protocol");
+    pkg2.packageJson.devDependencies = {
+      "pkg-1": "workspace:*",
+    };
+    ws.set("uses-workspace-protocol", pkg2);
+    let errors = makeCheck.validate(pkg2, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should convert workspace:~ into *", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("uses-only-tilde");
+    pkg2.packageJson.devDependencies = {
+      "pkg-1": "workspace:~",
+    };
+    ws.set("uses-only-tilde", pkg2);
+    let errors = makeCheck.validate(pkg2, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should convert workspace:^ into *", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("uses-only-caret");
+    pkg2.packageJson.devDependencies = {
+      "pkg-1": "workspace:^",
+    };
+    ws.set("uses-only-caret", pkg2);
+    let errors = makeCheck.validate(pkg2, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should allow prereleases in workspace: protocol", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("is-pre-release", "1.0.0-1");
+    ws.set("is-pre-release", pkg2);
+    let pkg3 = getFakeWS("uses-pre-release");
+    pkg3.packageJson.devDependencies = {
+      "is-pre-release": "workspace:^1.0.0-0",
+    };
+    ws.set("uses-pre-release", pkg3);
+    let errors = makeCheck.validate(pkg3, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should allow prereleases for workspace:*", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("is-pre-release", "1.0.0-1");
+    ws.set("is-pre-release", pkg2);
+    let pkg3 = getFakeWS("uses-pre-release");
+    pkg3.packageJson.devDependencies = {
+      "is-pre-release": "workspace:*",
+    };
+    ws.set("uses-pre-release", pkg3);
+    let errors = makeCheck.validate(pkg3, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should not error if internal workspace: protocol version is compatible", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("uses-caret-version");
+    pkg2.packageJson.devDependencies = {
+      "pkg-1": "workspace:^1.0.0",
+    };
+    ws.set("uses-caret-version", pkg2);
+    let errors = makeCheck.validate(pkg2, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
+  it("should error but not fix workspace: protocol versions", () => {
+    let ws = getWS();
+    let pkg2 = getFakeWS("uses-tilde-version");
+    pkg2.packageJson.devDependencies = {
+      "pkg-1": "workspace:~0.1.0",
+    };
+    ws.set("uses-tilde-version", pkg2);
+    let errors = makeCheck.validate(pkg2, ws, rootWorkspace, {});
+    expect(errors[0]).toMatchObject({
+      type: "INTERNAL_MISMATCH",
+      dependencyWorkspace: ws.get("pkg-1"),
+      workspace: pkg2,
+      dependencyRange: "workspace:~0.1.0",
+    });
+    expect(errors.length).toEqual(1);
+    let fixed = makeCheck.fix!(errors[0], {});
+    expect(fixed).toBeUndefined;
+  });
 });

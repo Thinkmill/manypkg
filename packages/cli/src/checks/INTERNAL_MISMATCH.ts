@@ -20,17 +20,26 @@ export default makeCheck<ErrorType>({
       let deps = workspace.packageJson[depType];
       if (deps) {
         for (let depName in deps) {
-          let range = deps[depName];
+          const dependencyRange = deps[depName];
+          let range = dependencyRange;
+          let includePrerelease = true;
+          if (range.startsWith("workspace:")) {
+            range = range.slice(10);
+            if (range === "~" || range === "^") range = "*";
+            if (range === "*") includePrerelease = true;
+          }
           let dependencyWorkspace = allWorkspaces.get(depName);
           if (
             dependencyWorkspace !== undefined &&
-            !semver.satisfies(dependencyWorkspace.packageJson.version, range)
+            !semver.satisfies(dependencyWorkspace.packageJson.version, range, {
+              includePrerelease,
+            })
           ) {
             errors.push({
               type: "INTERNAL_MISMATCH",
               workspace,
               dependencyWorkspace,
-              dependencyRange: range,
+              dependencyRange,
             });
           }
         }
@@ -42,7 +51,11 @@ export default makeCheck<ErrorType>({
   fix: (error) => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
-      if (deps && deps[error.dependencyWorkspace.packageJson.name]) {
+      if (
+        deps &&
+        deps[error.dependencyWorkspace.packageJson.name] &&
+        !error.dependencyRange.startsWith("workspace:")
+      ) {
         deps[error.dependencyWorkspace.packageJson.name] =
           versionRangeToRangeType(
             deps[error.dependencyWorkspace.packageJson.name]
