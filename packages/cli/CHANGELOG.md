@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.21.1
+
+### Patch Changes
+
+- [#181](https://github.com/Thinkmill/manypkg/pull/181) [`1e31ced`](https://github.com/Thinkmill/manypkg/commit/1e31cedbbe09c15cbf38c43c8c286f6af62ef18c) Thanks [@fbartho](https://github.com/fbartho)! - Updated `package-json` dependency.
+
 ## 0.21.0
 
 ### Minor Changes
