@@ -98,10 +98,10 @@ const npmRequestLimit = pLimit(40);
 
 export function getPackageInfo(pkgName: string) {
   return npmRequestLimit(async () => {
-    let result = await import("package-json")(pkgName, {
+    const getPackageJson = await (await import("package-json")).default;
+    
+    return getPackageJson(pkgName, {
       allVersions: true,
     });
-
-    return result;
   });
 }
