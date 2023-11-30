@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "license": "MIT",
   "main": "dist/manypkg-tools.cjs.js",
+  "types": "dist/manypkg-tools.cjs.d.ts",
   "dependencies": {
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",

@@ -3,6 +3,7 @@
   "version": "2.2.0",
   "license": "MIT",
   "main": "dist/manypkg-get-packages.cjs.js",
+  "types": "dist/manypkg-get-packages.cjs.d.ts",
   "dependencies": {
     "@manypkg/find-root": "^2.2.0",
     "@manypkg/tools": "^1.1.0"

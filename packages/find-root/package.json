@@ -4,6 +4,7 @@
   "license": "MIT",
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",
+  "types": "dist/manypkg-find-root.cjs.d.ts",
   "dependencies": {
     "@manypkg/tools": "^1.1.0",
     "find-up": "^4.1.0",

@@ -9,6 +9,7 @@
   "license": "MIT",
   "main": "dist/manypkg-cli.cjs.js",
   "module": "dist/manypkg-cli.esm.js",
+  "types": "dist/manypkg-cli.cjs.d.ts",
   "bin": {
     "manypkg": "./bin.js"
   },
