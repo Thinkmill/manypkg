@@ -86,7 +86,7 @@ describe("internal mismatch", () => {
     `);
   });
 
-  it.only.each(["npm:pkg-1@sometag", "npm:@someorg@sometag"])(
+  it.each(["npm:pkg-1@sometag", "npm:@someorg@sometag"])(
     "should not error when using tag %s",
     (range) => {
       let ws = getWS();
