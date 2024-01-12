@@ -85,4 +85,19 @@ describe("internal mismatch", () => {
       ]
     `);
   });
+
+  it.only.each(["npm:pkg-1@sometag", "npm:@someorg@sometag"])(
+    "should not error when using tag %s",
+    (range) => {
+      let ws = getWS();
+      let dependsOnOne = getFakeWS("depends-on-one");
+      dependsOnOne.packageJson.dependencies = {
+        "pkg-1": range,
+      };
+      ws.set("depends-on-one", dependsOnOne);
+      let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
+      expect(errors.length).toEqual(0);
+    }
+  );
+  
 });
