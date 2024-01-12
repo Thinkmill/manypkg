@@ -87,7 +87,7 @@ describe("internal mismatch", () => {
   });
 
   // regression test for https://github.com/Thinkmill/manypkg/issues/193
-  it.each(["npm:pkg-1@sometag", "npm:someorg@pkg-1@sometag"])(
+  it.each(["npm:pkg-1@sometag", "npm:@someorg/pkg-1@sometag"])(
     "should not error when using tag %s",
     (range) => {
       let ws = getWS();
