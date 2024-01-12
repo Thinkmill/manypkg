@@ -25,8 +25,8 @@ export default makeCheck<ErrorType>({
           
           if (
             dependencyWorkspace !== undefined &&
-            !semver.satisfies(dependencyWorkspace.packageJson.version, range) && 
-            !range.startsWith("npm:")
+            !range.startsWith("npm:") &&
+            !semver.satisfies(dependencyWorkspace.packageJson.version, range)
           ) {
             errors.push({
               type: "INTERNAL_MISMATCH",
