@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.21.2
+
+### Patch Changes
+
+- [#194](https://github.com/Thinkmill/manypkg/pull/194) [`56a64c5`](https://github.com/Thinkmill/manypkg/commit/56a64c5d29565195d0f5013425ee1e2e5fdbe754) Thanks [@KATT](https://github.com/KATT)! - fix: allow tags in `npm:x`-deps
+
 ## 0.21.1
 
 ### Patch Changes
