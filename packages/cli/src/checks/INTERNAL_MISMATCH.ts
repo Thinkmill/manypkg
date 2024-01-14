@@ -22,8 +22,10 @@ export default makeCheck<ErrorType>({
         for (let depName in deps) {
           let range = deps[depName];
           let dependencyWorkspace = allWorkspaces.get(depName);
+          
           if (
             dependencyWorkspace !== undefined &&
+            !range.startsWith("npm:") &&
             !semver.satisfies(dependencyWorkspace.packageJson.version, range)
           ) {
             errors.push({
