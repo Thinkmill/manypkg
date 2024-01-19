@@ -1,4 +1,5 @@
 import fixturez from "fixturez";
+import path from 'node:path';
 import { getPackages, getPackagesSync } from "./";
 
 const f = fixturez(__dirname);
@@ -7,19 +8,24 @@ type GetPackages = typeof getPackages | typeof getPackagesSync;
 
 let runTests = (getPackages: GetPackages) => {
   it("should resolve workspaces for yarn", async () => {
-    const allPackages = await getPackages(f.copy("yarn-workspace-base"));
+    const dir = f.copy("yarn-workspace-base");
 
-    if (allPackages.packages === null) {
-      return expect(allPackages.packages).not.toBeNull();
+    // Test for both root and subdirectories
+    for (const location of ['.', 'packages', 'packages/pkg-a']) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "yarn-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "yarn-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("yarn");
     }
-
-    expect(allPackages.packages[0].packageJson.name).toEqual(
-      "yarn-workspace-base-pkg-a"
-    );
-    expect(allPackages.packages[1].packageJson.name).toEqual(
-      "yarn-workspace-base-pkg-b"
-    );
-    expect(allPackages.tool.type).toEqual("yarn");
   });
 
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", async () => {
@@ -38,35 +44,45 @@ let runTests = (getPackages: GetPackages) => {
   });
 
   it("should resolve workspaces for bolt", async () => {
-    const allPackages = await getPackages(f.copy("bolt-workspace"));
+    const dir = f.copy("bolt-workspace");
 
-    if (allPackages.packages === null) {
-      return expect(allPackages.packages).not.toBeNull();
+    // Test for both root and subdirectories
+    for (const location of ['.', 'packages', 'packages/pkg-b']) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "bolt-workspace-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "bolt-workspace-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("bolt");
     }
-
-    expect(allPackages.packages[0].packageJson.name).toEqual(
-      "bolt-workspace-pkg-a"
-    );
-    expect(allPackages.packages[1].packageJson.name).toEqual(
-      "bolt-workspace-pkg-b"
-    );
-    expect(allPackages.tool.type).toEqual("bolt");
   });
 
   it("should resolve workspaces for pnpm", async () => {
-    const allPackages = await getPackages(f.copy("pnpm-workspace-base"));
+    const dir = f.copy("pnpm-workspace-base");
 
-    if (allPackages.packages === null) {
-      return expect(allPackages.packages).not.toBeNull();
+    // Test for both root and subdirectories
+    for (const location of ['.', 'packages', 'packages/pkg-a']) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "pnpm-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "pnpm-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("pnpm");
     }
-
-    expect(allPackages.packages[0].packageJson.name).toEqual(
-      "pnpm-workspace-base-pkg-a"
-    );
-    expect(allPackages.packages[1].packageJson.name).toEqual(
-      "pnpm-workspace-base-pkg-b"
-    );
-    expect(allPackages.tool.type).toEqual("pnpm");
   });
 
   it("should resolve workspace for pnpm with exclude rules", async () => {
@@ -85,20 +101,25 @@ let runTests = (getPackages: GetPackages) => {
   });
 
   it("should resolve workspaces for lerna", async () => {
-    const allPackages = await getPackages(f.copy("lerna-workspace-base"));
+    const dir = f.copy("lerna-workspace-base");
 
-    if (allPackages.packages === null) {
-      return expect(allPackages.packages).not.toBeNull();
+    // Test for both root and subdirectories
+    for (const location of ['.', 'packages', 'packages/pkg-b']) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "lerna-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "lerna-workspace-base-pkg-b"
+      );
+      expect(allPackages.packages).toHaveLength(2);
+      expect(allPackages.tool.type).toEqual("lerna");
     }
-
-    expect(allPackages.packages[0].packageJson.name).toEqual(
-      "lerna-workspace-base-pkg-a"
-    );
-    expect(allPackages.packages[1].packageJson.name).toEqual(
-      "lerna-workspace-base-pkg-b"
-    );
-    expect(allPackages.packages).toHaveLength(2);
-    expect(allPackages.tool.type).toEqual("lerna");
   });
 
   it("should resolve workspaces for lerna without explicit packages config", async () => {
