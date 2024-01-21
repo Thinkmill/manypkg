@@ -60,11 +60,31 @@ let runTests = (getPackages: GetPackages) => {
       return expect(allPackages.packages).not.toBeNull();
     }
 
+    expect(allPackages.packages).toHaveLength(8);
+
     expect(allPackages.packages[0].packageJson.name).toEqual(
-      "pnpm-workspace-base-pkg-a"
+      "pnpm-workspace-base-pkg-g"
     );
     expect(allPackages.packages[1].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-h"
+    );
+    expect(allPackages.packages[2].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-c"
+    );
+    expect(allPackages.packages[3].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-d"
+    );
+    expect(allPackages.packages[4].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-a"
+    );
+    expect(allPackages.packages[5].packageJson.name).toEqual(
       "pnpm-workspace-base-pkg-b"
+    );
+    expect(allPackages.packages[6].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-e"
+    );
+    expect(allPackages.packages[7].packageJson.name).toEqual(
+      "pnpm-workspace-base-pkg-f"
     );
     expect(allPackages.tool.type).toEqual("pnpm");
   });

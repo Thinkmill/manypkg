@@ -1,2 +1,7 @@
 packages:
-  - '**'
+  - 'packages/**'
+  - 'other-packages/*'
+  - 'pkg-e/'
+  - 'pkg-f'
+  - 'more-packages/pkg-g'
+  - 'more-packages/pkg-h/'

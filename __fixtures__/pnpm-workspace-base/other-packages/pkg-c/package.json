@@ -1,0 +1,7 @@
+{
+  "name": "pnpm-workspace-base-pkg-c",
+  "version": "1.0.0",
+  "dependencies": {
+    "pnpm-workspace-base-pkg-d": "1.0.0"
+  }
+}
