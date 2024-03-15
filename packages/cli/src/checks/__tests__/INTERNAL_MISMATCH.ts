@@ -14,6 +14,16 @@ describe("internal mismatch", () => {
     let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
     expect(errors.length).toEqual(0);
   });
+  it("should allow workspace: protocol", () => {
+    let ws = getWS();
+    let dependsOnOne = getFakeWS("depends-on-one");
+    dependsOnOne.packageJson.dependencies = {
+      "pkg-1": "workspace:^",
+    };
+    ws.set("depends-on-one", dependsOnOne);
+    let errors = makeCheck.validate(dependsOnOne, ws, rootWorkspace, {});
+    expect(errors.length).toEqual(0);
+  });
   it("should error if internal version is not compatible", () => {
     let ws = getWS();
     let dependsOnOne = getFakeWS("depends-on-one");
@@ -100,5 +110,4 @@ describe("internal mismatch", () => {
       expect(errors.length).toEqual(0);
     }
   );
-  
 });
