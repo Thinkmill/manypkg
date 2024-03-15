@@ -100,8 +100,7 @@ So that only a single version of an external package will be installed because h
 
 ### How it's fixed
 
-The most commonly used range of the dependency is set as the range at every non-peer dependency place it is depended on.
-If for some reason, every range is used the same amount of times, they'll all be fixed to the highest version.
+The most commonly used range of the dependency is set as the range at every non-peer dependency place it is depended on. If for some reason, every range is used the same amount of times, they'll all be fixed to the highest version.
 
 ### Examples
 
@@ -286,6 +285,18 @@ Having a `repository` field is helpful so there is a link to the source of a pac
 #### How it's fixed
 
 This is fixed by setting the correct URL.
+
+## `workspace:` protocol required
+
+If `"workspaceProtocol": "require"` is set in the `manypkg` config in the root `package.json`, all dependencies on internal packages are required to use the `workspace:` protocol.
+
+### Why it's a rule
+
+If you want to enforce the usage of the `workspace:` protocol.
+
+#### How it's fixed
+
+Dependencies are changed to `workspace:^`. Anything else is also allowed after the `workspace:` though.
 
 ## License
 
