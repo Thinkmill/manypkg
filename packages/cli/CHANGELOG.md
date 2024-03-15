@@ -1,5 +1,14 @@
 # @manypkg/cli
 
+## 0.21.3
+
+### Patch Changes
+
+- [#204](https://github.com/Thinkmill/manypkg/pull/204) [`b56869a`](https://github.com/Thinkmill/manypkg/commit/b56869a23d04bf0dedcb8e399aa339a5e35172b1) Thanks [@emmatown](https://github.com/emmatown)! - Allow dependecies to use the `workspace:` protocol and support adding `"workspaceProtocol": "require"` to the `manypkg` config to require it.
+
+- Updated dependencies [[`3c9641c`](https://github.com/Thinkmill/manypkg/commit/3c9641c94980a887fdb4366698ad69199883ff84)]:
+  - @manypkg/get-packages@2.2.1
+
 ## 0.21.2
 
 ### Patch Changes
