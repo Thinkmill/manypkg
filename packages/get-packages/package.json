@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/get-packages",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "license": "MIT",
   "main": "dist/manypkg-get-packages.cjs.js",
   "dependencies": {

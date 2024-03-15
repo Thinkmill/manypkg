@@ -1,5 +1,11 @@
 # @manypkg/get-packages
 
+## 2.2.1
+
+### Patch Changes
+
+- [#201](https://github.com/Thinkmill/manypkg/pull/201) [`3c9641c`](https://github.com/Thinkmill/manypkg/commit/3c9641c94980a887fdb4366698ad69199883ff84) Thanks [@manzoorwanijk](https://github.com/manzoorwanijk)! - Fixed the error for getPackages when given a non-root directory
+
 ## 2.2.0
 
 ### Minor Changes
