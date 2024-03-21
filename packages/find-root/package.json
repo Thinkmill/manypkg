@@ -4,6 +4,11 @@
   "license": "MIT",
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkmill/manypkg.git",
+    "directory": "packages/find-root"
+  },
   "dependencies": {
     "@manypkg/tools": "^1.1.0",
     "find-up": "^4.1.0",

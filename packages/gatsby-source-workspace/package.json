@@ -6,6 +6,11 @@
     "gatsby-node.js",
     "index.js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkmill/manypkg.git",
+    "directory": "packages/gatsby-source-workspace"
+  },
   "dependencies": {
     "find-workspaces-root": "^0.2.0",
     "fs-extra": "^8.1.0",
