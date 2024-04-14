@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.21.4
+
+### Patch Changes
+
+- [#206](https://github.com/Thinkmill/manypkg/pull/206) [`c2c4a3b`](https://github.com/Thinkmill/manypkg/commit/c2c4a3b80d593c81d92878c161cc69cd141ac806) Thanks [@bdkopen](https://github.com/bdkopen)! - Fix `manypkg upgrade @scope` upgrading packages like `@scope-something/a`
+
 ## 0.21.3
 
 ### Patch Changes
