@@ -24,7 +24,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
       let packageNames = Object.keys(deps);
       packageNames.forEach((pkgName) => {
-        if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
+        if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
           requiresUpdate = true;
           packagesToUpdate.add(pkgName);
         }
@@ -42,7 +42,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
       let packageNames = Object.keys(deps);
       packageNames.forEach((pkgName) => {
-        if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
+        if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
           rootRequiresUpdate = true;
           packagesToUpdate.add(pkgName);
         }
