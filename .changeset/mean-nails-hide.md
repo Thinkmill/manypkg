@@ -5,4 +5,4 @@
 "@manypkg/tools": patch
 ---
 
-Add git repository info to package.json
+Add git repository info to `package.json`
