@@ -1,5 +1,14 @@
 # @manypkg/find-root
 
+## 2.2.2
+
+### Patch Changes
+
+- [#208](https://github.com/Thinkmill/manypkg/pull/208) [`361a34f`](https://github.com/Thinkmill/manypkg/commit/361a34faac94f7a954bbe00321647fc99ae76c17) Thanks [@benmccann](https://github.com/benmccann)! - Add git repository info to `package.json`
+
+- Updated dependencies [[`361a34f`](https://github.com/Thinkmill/manypkg/commit/361a34faac94f7a954bbe00321647fc99ae76c17)]:
+  - @manypkg/tools@1.1.1
+
 ## 2.2.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/get-packages",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thinkmill/manypkg.git",
@@ -9,8 +9,8 @@
   "license": "MIT",
   "main": "dist/manypkg-get-packages.cjs.js",
   "dependencies": {
-    "@manypkg/find-root": "^2.2.0",
-    "@manypkg/tools": "^1.1.0"
+    "@manypkg/find-root": "^2.2.2",
+    "@manypkg/tools": "^1.1.1"
   },
   "devDependencies": {
     "jest-fixtures": "^0.6.0"

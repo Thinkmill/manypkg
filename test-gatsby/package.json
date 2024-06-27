@@ -1,9 +1,9 @@
 {
   "name": "test-gatsby-thing",
   "private": true,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {
-    "@manypkg/gatsby-source-workspace": "0.5.0",
+    "@manypkg/gatsby-source-workspace": "0.5.1",
     "@mdx-js/mdx": "^1.5.1",
     "@mdx-js/react": "^1.5.1",
     "gatsby": "^2.15.28",
