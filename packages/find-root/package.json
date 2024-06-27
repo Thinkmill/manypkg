@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/find-root",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thinkmill/manypkg.git",
@@ -10,7 +10,7 @@
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",
   "dependencies": {
-    "@manypkg/tools": "^1.1.0",
+    "@manypkg/tools": "^1.1.1",
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0"
   },

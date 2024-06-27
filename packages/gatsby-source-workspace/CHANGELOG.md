@@ -1,5 +1,11 @@
 # @manypkg/gatsby-source-workspace
 
+## 0.5.1
+
+### Patch Changes
+
+- [#208](https://github.com/Thinkmill/manypkg/pull/208) [`361a34f`](https://github.com/Thinkmill/manypkg/commit/361a34faac94f7a954bbe00321647fc99ae76c17) Thanks [@benmccann](https://github.com/benmccann)! - Add git repository info to `package.json`
+
 ## 0.5.0
 
 ### Minor Changes
