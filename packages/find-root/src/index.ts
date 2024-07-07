@@ -1,6 +1,6 @@
 import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 
 import {
   Tool,
@@ -115,7 +115,7 @@ export async function findRoot(
   let rootDir = await findUp(
     async (directory) => {
       try {
-        await fs.access(path.join(directory, "package.json"));
+        await fs.promises.access(path.join(directory, "package.json"));
         return directory;
       } catch (err) {
         if (!isNoEntryError(err)) {
