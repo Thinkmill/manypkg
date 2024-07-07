@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 
 import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
@@ -18,9 +18,9 @@ export const BoltTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await fs.readJson(
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(directory, "package.json")
-      )) as BoltPackageJSON;
+      )).toString()) as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -35,9 +35,9 @@ export const BoltTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = fs.readJsonSync(
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(directory, "package.json")
-      ) as BoltPackageJSON;
+      ).toString()) as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -54,9 +54,9 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = (await fs.readJson(
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(rootDir, "package.json")
-      )) as BoltPackageJSON;
+      )).toString()) as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
           `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
@@ -88,9 +88,9 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = fs.readJsonSync(
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(rootDir, "package.json")
-      ) as BoltPackageJSON;
+      ).toString()) as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
           `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`

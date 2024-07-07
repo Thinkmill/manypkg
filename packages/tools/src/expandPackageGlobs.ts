@@ -1,8 +1,8 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 import globby from "globby";
 
-import { Tool, Package, PackageJSON, Packages, MonorepoRoot } from "./Tool";
+import { Package, PackageJSON } from "./Tool";
 
 /**
  * This internal method takes a list of one or more directory globs and the absolute path
@@ -26,19 +26,21 @@ export async function expandPackageGlobs(
   const discoveredPackages: Array<Package | undefined> = await Promise.all(
     directories.map((dir) =>
       fs
-        .readJson(path.join(dir, "package.json"))
+        .promises
+        .readFile(path.join(dir, "package.json"))
         .catch((err) => {
           if (err && (err as { code: string }).code === "ENOENT") {
             return undefined;
           }
           throw err;
         })
-        .then((result: PackageJSON | undefined) => {
-          if (result) {
+        .then((result: Buffer | undefined) => {
+          const s = result?.toString();
+          if (s) {
             return {
               dir: path.resolve(dir),
               relativeDir: path.relative(directory, dir),
-              packageJson: result,
+              packageJson: JSON.parse(s),
             };
           }
         })
@@ -68,9 +70,9 @@ export function expandPackageGlobsSync(
   const discoveredPackages: Array<Package | undefined> = directories.map(
     (dir) => {
       try {
-        const packageJson: PackageJSON = fs.readJsonSync(
+        const packageJson: PackageJSON = JSON.parse(fs.readFileSync(
           path.join(dir, "package.json")
-        );
+        ).toString());
         return {
           dir: path.resolve(dir),
           relativeDir: path.relative(directory, dir),

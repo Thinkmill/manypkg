@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 
 import {
   Tool,
@@ -23,9 +23,9 @@ export const LernaTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const lernaJson = (await fs.readJson(
+      const lernaJson = JSON.parse((await fs.promises.readFile(
         path.join(directory, "lerna.json")
-      )) as LernaJson;
+      )).toString()) as LernaJson;
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
@@ -40,9 +40,9 @@ export const LernaTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const lernaJson = fs.readJsonSync(
+      const lernaJson = JSON.parse(fs.readFileSync(
         path.join(directory, "lerna.json")
-      ) as LernaJson;
+      ).toString()) as LernaJson;
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
@@ -59,10 +59,12 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = await fs.readJson(path.join(rootDir, "lerna.json"));
-      const pkgJson = (await fs.readJson(
+      const lernaJson = JSON.parse((await fs.promises.readFile(
+        path.join(rootDir, "lerna.json")
+      )).toString()) as LernaJson;
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(rootDir, "package.json")
-      )) as PackageJSON;
+      )).toString()) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
@@ -89,12 +91,12 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = fs.readJsonSync(
+      const lernaJson = JSON.parse(fs.readFileSync(
         path.join(rootDir, "lerna.json")
-      ) as LernaJson;
-      const pkgJson = fs.readJsonSync(
+      ).toString()) as LernaJson;
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(rootDir, "package.json")
-      ) as PackageJSON;
+      ).toString()) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {

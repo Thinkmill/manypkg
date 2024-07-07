@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 import jju from "jju";
 
 import {
@@ -24,7 +24,7 @@ export const RushTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      await fs.readFile(path.join(directory, "rush.json"), "utf8");
+      await fs.promises.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -52,7 +52,7 @@ export const RushTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const rushText: string = await fs.readFile(
+      const rushText: string = await fs.promises.readFile(
         path.join(rootDir, "rush.json"),
         "utf8"
       );
@@ -69,7 +69,9 @@ export const RushTool: Tool = {
           return {
             dir,
             relativeDir: path.relative(directory, dir),
-            packageJson: await fs.readJson(path.join(dir, "package.json")),
+            packageJson: JSON.parse((await fs.promises.readFile(
+              path.join(dir, "package.json")
+            )).toString()),
           };
         })
       );
@@ -107,9 +109,9 @@ export const RushTool: Tool = {
         path.resolve(rootDir, project.projectFolder)
       );
       const packages: Package[] = directories.map((dir: string) => {
-        const packageJson: PackageJSON = fs.readJsonSync(
+        const packageJson: PackageJSON = JSON.parse(fs.readFileSync(
           path.join(dir, "package.json")
-        );
+        ).toString());
         return {
           dir,
           relativeDir: path.relative(directory, dir),

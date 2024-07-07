@@ -1,9 +1,8 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 
 import {
   Tool,
-  Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
@@ -22,9 +21,9 @@ export const YarnTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await fs.readJson(
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(directory, "package.json")
-      )) as YarnPackageJSON;
+      )).toString()) as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -44,9 +43,9 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = fs.readJsonSync(
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(directory, "package.json")
-      ) as YarnPackageJSON;
+      ).toString()) as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -68,9 +67,9 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = (await fs.readJson(
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(rootDir, "package.json")
-      )) as YarnPackageJSON;
+      )).toString()) as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
@@ -99,9 +98,9 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = fs.readJsonSync(
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(rootDir, "package.json")
-      ) as YarnPackageJSON;
+      ).toString()) as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;

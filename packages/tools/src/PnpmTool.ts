@@ -1,6 +1,6 @@
 import path from "path";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
-import fs from "fs-extra";
+import fs from "fs";
 
 import {
   Tool,
@@ -64,9 +64,9 @@ export const PnpmTool: Tool = {
       const manifest = await readYamlFile<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = (await fs.readJson(
+      const pkgJson = JSON.parse((await fs.promises.readFile(
         path.join(rootDir, "package.json")
-      )) as PackageJSON;
+      )).toString()) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
@@ -96,9 +96,9 @@ export const PnpmTool: Tool = {
       const manifest = readYamlFileSync<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = fs.readJsonSync(
+      const pkgJson = JSON.parse(fs.readFileSync(
         path.join(rootDir, "package.json")
-      ) as PackageJSON;
+      ).toString()) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
