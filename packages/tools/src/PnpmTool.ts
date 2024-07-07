@@ -13,18 +13,11 @@ import {
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
 
-function stripBom(s: string) {
-	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
-	// conversion translates it to FEFF (UTF-16 BOM).
-	return s.charCodeAt(0) === 0xFEFF ? s.slice(1) : s;
+async function readYamlFile<T = unknown>(path: string): Promise<T> {
+  return fs.promises.readFile(path, 'utf8').then(data => yaml.load(data)) as Promise<T>;
 }
-
-const parse = (data: string) => yaml.load(stripBom(data))
-async function readYamlFile<T = unknown>(path: string) {
-  return fs.promises.readFile(path, 'utf8').then(data => parse(data));
-}
-function readYamlFileSync<T = unknown>(path: string) {
-  return parse(fs.readFileSync(path, 'utf8'));
+function readYamlFileSync<T = unknown>(path: string): T {
+  return yaml.load(fs.readFileSync(path, 'utf8')) as T;
 }
 
 export interface PnpmWorkspaceYaml {
