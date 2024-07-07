@@ -64,9 +64,7 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = JSON.parse((await fs.promises.readFile(
-        path.join(rootDir, "package.json")
-      )).toString()) as YarnPackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
