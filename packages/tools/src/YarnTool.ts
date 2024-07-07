@@ -11,6 +11,7 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export interface YarnPackageJSON extends PackageJSON {
   workspaces?: string[] | { packages: string[] };
@@ -21,9 +22,7 @@ export const YarnTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = JSON.parse((await fs.promises.readFile(
-        path.join(directory, "package.json")
-      )).toString()) as YarnPackageJSON;
+      const pkgJson = await readJson(directory, "package.json") as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -43,9 +42,7 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = JSON.parse(fs.readFileSync(
-        path.join(directory, "package.json")
-      ).toString()) as YarnPackageJSON;
+      const pkgJson = readJsonSync(directory, "package.json") as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||

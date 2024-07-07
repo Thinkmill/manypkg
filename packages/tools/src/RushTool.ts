@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import fsp from "fs/promises";
 import jju from "jju";
 
 import {
@@ -25,7 +26,7 @@ export const RushTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      await fs.promises.readFile(path.join(directory, "rush.json"), "utf8");
+      await fsp.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -51,7 +52,7 @@ export const RushTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const rushText: string = await fs.promises.readFile(
+      const rushText: string = await fsp.readFile(
         path.join(rootDir, "rush.json"),
         "utf8"
       );

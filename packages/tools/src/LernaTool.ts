@@ -56,9 +56,7 @@ export const LernaTool: Tool = {
 
     try {
       const lernaJson = await readJson(rootDir, "lerna.json") as LernaJson;
-      const pkgJson = JSON.parse((await fs.promises.readFile(
-        path.join(rootDir, "package.json")
-      )).toString()) as PackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
