@@ -1,10 +1,9 @@
 import path from "path";
-import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
+import yaml from "js-yaml";
 import fs from "fs-extra";
 
 import {
   Tool,
-  Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
@@ -13,6 +12,20 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+
+function stripBom(s: string) {
+	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+	// conversion translates it to FEFF (UTF-16 BOM).
+	return s.charCodeAt(0) === 0xFEFF ? s.slice(1) : s;
+}
+
+const parse = (data: string) => yaml.load(stripBom(data))
+async function readYamlFile<T = unknown>(path: string) {
+  return fs.promises.readFile(path, 'utf8').then(data => parse(data));
+}
+function readYamlFileSync<T = unknown>(path: string) {
+  return parse(fs.readFileSync(path, 'utf8'));
+}
 
 export interface PnpmWorkspaceYaml {
   packages?: string[];
