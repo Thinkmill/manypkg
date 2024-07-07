@@ -1,10 +1,8 @@
 import path from "path";
 import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
-import fs from "fs";
 
 import {
   Tool,
-  Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
@@ -13,6 +11,7 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export interface PnpmWorkspaceYaml {
   packages?: string[];
@@ -64,9 +63,7 @@ export const PnpmTool: Tool = {
       const manifest = await readYamlFile<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = JSON.parse((await fs.promises.readFile(
-        path.join(rootDir, "package.json")
-      )).toString()) as PackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
@@ -96,9 +93,7 @@ export const PnpmTool: Tool = {
       const manifest = readYamlFileSync<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = JSON.parse(fs.readFileSync(
-        path.join(rootDir, "package.json")
-      ).toString()) as PackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {

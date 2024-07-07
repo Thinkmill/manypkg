@@ -1,5 +1,4 @@
 import path from "path";
-import fs from "fs";
 
 import {
   Tool,
@@ -8,6 +7,7 @@ import {
   Packages,
   InvalidMonorepoError,
 } from "./Tool";
+import { readJson, readJsonSync } from "./utils";
 
 export const RootTool: Tool = {
   type: "root",
@@ -26,9 +26,7 @@ export const RootTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = JSON.parse((await fs.promises.readFile(
-        path.join(rootDir, "package.json")
-      )).toString()) as PackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const pkg: Package = {
         dir: rootDir,
         relativeDir: ".",
@@ -55,9 +53,7 @@ export const RootTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = JSON.parse(fs.readFileSync(
-        path.join(rootDir, "package.json")
-      ).toString()) as PackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const pkg: Package = {
         dir: rootDir,
         relativeDir: ".",

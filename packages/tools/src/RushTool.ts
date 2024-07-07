@@ -9,6 +9,7 @@ import {
   Packages,
   InvalidMonorepoError,
 } from "./Tool";
+import { readJson, readJsonSync } from "./utils";
 
 interface RushJson {
   projects: RushProject[];
@@ -32,7 +33,6 @@ export const RushTool: Tool = {
       }
       throw err;
     }
-    return false;
   },
 
   isMonorepoRootSync(directory: string): boolean {
@@ -45,7 +45,6 @@ export const RushTool: Tool = {
       }
       throw err;
     }
-    return false;
   },
 
   async getPackages(directory: string): Promise<Packages> {
@@ -69,9 +68,7 @@ export const RushTool: Tool = {
           return {
             dir,
             relativeDir: path.relative(directory, dir),
-            packageJson: JSON.parse((await fs.promises.readFile(
-              path.join(dir, "package.json")
-            )).toString()),
+            packageJson: await readJson(dir, "package.json"),
           };
         })
       );
@@ -109,9 +106,7 @@ export const RushTool: Tool = {
         path.resolve(rootDir, project.projectFolder)
       );
       const packages: Package[] = directories.map((dir: string) => {
-        const packageJson: PackageJSON = JSON.parse(fs.readFileSync(
-          path.join(dir, "package.json")
-        ).toString());
+        const packageJson: PackageJSON = readJsonSync(dir, "package.json");
         return {
           dir,
           relativeDir: path.relative(directory, dir),
