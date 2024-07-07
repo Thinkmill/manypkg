@@ -12,7 +12,7 @@
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "jju": "^1.4.0",
-    "read-yaml-file": "^1.1.0"
+    "read-yaml-file": "^2.1.0"
   },
   "devDependencies": {
     "@types/jju": "^1.4.2",
