@@ -1,5 +1,4 @@
 import path from "path";
-import fs from "fs";
 
 import {
   Tool,
@@ -93,9 +92,7 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = JSON.parse(fs.readFileSync(
-        path.join(rootDir, "package.json")
-      ).toString()) as YarnPackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
