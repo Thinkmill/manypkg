@@ -1,6 +1,6 @@
-import findUp, { sync as findUpSync } from "find-up";
 import path from "path";
 import fs from "fs-extra";
+import fsp from "fs/promises";
 
 import {
   Tool,
@@ -98,7 +98,7 @@ export async function findRoot(
           }
         });
     },
-    { cwd, type: "directory" }
+    cwd
   );
 
   if (monorepoRoot) {
@@ -123,7 +123,7 @@ export async function findRoot(
         }
       }
     },
-    { cwd, type: "directory" }
+    cwd
   );
 
   if (!rootDir) {
@@ -158,7 +158,7 @@ export function findRootSync(
         }
       }
     },
-    { cwd, type: "directory" }
+    cwd
   );
 
   if (monorepoRoot) {
@@ -177,7 +177,7 @@ export function findRootSync(
       const exists = fs.existsSync(path.join(directory, "package.json"));
       return exists ? directory : undefined;
     },
-    { cwd, type: "directory" }
+    cwd
   );
 
   if (!rootDir) {
@@ -188,4 +188,32 @@ export function findRootSync(
     tool: RootTool,
     rootDir,
   };
+}
+
+export async function findUp(matcher: (directory: string) => Promise<string | undefined>, cwd = process.cwd()) {
+	let directory = path.resolve(cwd);
+	const { root } = path.parse(directory);
+
+	while (directory && directory !== root) {
+		const filePath = await matcher(directory);
+		if (filePath) {
+			return path.resolve(directory, filePath);
+		}
+
+		directory = path.dirname(directory);
+	}
+}
+
+export function findUpSync(matcher: (directory: string) => string | undefined, cwd = process.cwd()) {
+	let directory = path.resolve(cwd);
+	const { root } = path.parse(directory);
+
+	while (directory && directory !== root) {
+		const filePath = matcher(directory);
+		if (filePath) {
+			return path.resolve(directory, filePath);
+		}
+
+		directory = path.dirname(directory);
+	}
 }
