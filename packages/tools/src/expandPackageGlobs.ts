@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import fsp from "fs/promises";
 import globby from "globby";
 
 import { Package, PackageJSON } from "./Tool";
@@ -25,8 +26,7 @@ export async function expandPackageGlobs(
 
   const discoveredPackages: Array<Package | undefined> = await Promise.all(
     directories.map((dir) =>
-      fs
-        .promises
+      fsp
         .readFile(path.join(dir, "package.json"))
         .catch((err) => {
           if (err && (err as { code: string }).code === "ENOENT") {
