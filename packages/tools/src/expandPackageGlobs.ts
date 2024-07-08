@@ -1,9 +1,9 @@
 import path from "path";
-import fs from "fs";
 import fsp from "fs/promises";
 import globby from "globby";
 
 import { Package, PackageJSON } from "./Tool";
+import { readJsonSync } from "./utils";
 
 /**
  * This internal method takes a list of one or more directory globs and the absolute path
@@ -70,9 +70,7 @@ export function expandPackageGlobsSync(
   const discoveredPackages: Array<Package | undefined> = directories.map(
     (dir) => {
       try {
-        const packageJson: PackageJSON = JSON.parse(fs.readFileSync(
-          path.join(dir, "package.json")
-        ).toString());
+        const packageJson: PackageJSON = readJsonSync(dir, "package.json");
         return {
           dir: path.resolve(dir),
           relativeDir: path.relative(directory, dir),
