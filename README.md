@@ -116,7 +116,7 @@ Used to determine which checks/fixes should ignored by the Manypkg cli. The defa
 }
 ```
 
-To ignore a rule, find the rule in the [Checks section](#checks) below and add its "Key" value to the array. For example, to disable all rules:
+To ignore a rule, find the rule in the [Checks section](#checks) below and add its "Key" value to the array. For example, to disable the [External mismatch rule](#external-mismatch):
 
 ```json
 {
