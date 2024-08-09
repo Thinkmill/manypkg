@@ -27,20 +27,19 @@ export async function expandPackageGlobs(
   const discoveredPackages: Array<Package | undefined> = await Promise.all(
     directories.map((dir) =>
       fsp
-        .readFile(path.join(dir, "package.json"))
+        .readFile(path.join(dir, "package.json"), "utf-8")
         .catch((err) => {
           if (err && (err as { code: string }).code === "ENOENT") {
             return undefined;
           }
           throw err;
         })
-        .then((result: Buffer | undefined) => {
-          const s = result?.toString();
-          if (s) {
+        .then((result) => {
+          if (result) {
             return {
               dir: path.resolve(dir),
               relativeDir: path.relative(directory, dir),
-              packageJson: JSON.parse(s),
+              packageJson: JSON.parse(result),
             };
           }
         })
