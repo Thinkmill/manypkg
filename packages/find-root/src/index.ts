@@ -1,6 +1,5 @@
 import path from "path";
 import fs from "fs-extra";
-import fsp from "fs/promises";
 
 import {
   Tool,
@@ -190,7 +189,7 @@ export function findRootSync(
   };
 }
 
-export async function findUp(matcher: (directory: string) => Promise<string | undefined>, cwd = process.cwd()) {
+async function findUp(matcher: (directory: string) => Promise<string | undefined>, cwd: string) {
 	let directory = path.resolve(cwd);
 	const { root } = path.parse(directory);
 
@@ -204,7 +203,7 @@ export async function findUp(matcher: (directory: string) => Promise<string | un
 	}
 }
 
-export function findUpSync(matcher: (directory: string) => string | undefined, cwd = process.cwd()) {
+function findUpSync(matcher: (directory: string) => string | undefined, cwd: string) {
 	let directory = path.resolve(cwd);
 	const { root } = path.parse(directory);
 
