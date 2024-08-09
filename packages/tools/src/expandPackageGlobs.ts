@@ -1,5 +1,4 @@
 import path from "path";
-import fs from "fs-extra";
 import fsp from "fs/promises";
 import glob from "fast-glob";
 
