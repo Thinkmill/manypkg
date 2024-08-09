@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
-import { glob, globSync } from "tinyglobby";
+import glob from "fast-glob";
 
 import { Tool, Package, PackageJSON, Packages, MonorepoRoot } from "./Tool";
 
@@ -16,7 +16,6 @@ export async function expandPackageGlobs(
   const relativeDirectories: string[] = await glob(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
-    expandDirectories: false,
     ignore: ["**/node_modules"],
   });
   const directories = relativeDirectories
@@ -55,10 +54,9 @@ export function expandPackageGlobsSync(
   packageGlobs: string[],
   directory: string
 ): Package[] {
-  const relativeDirectories: string[] = globSync(packageGlobs, {
+  const relativeDirectories: string[] = glob.sync(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
-    expandDirectories: false,
     ignore: ["**/node_modules"],
   });
   const directories = relativeDirectories
