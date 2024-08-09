@@ -3,12 +3,7 @@ import yaml from "js-yaml";
 import fs from "fs";
 import fsp from "fs/promises";
 
-import {
-  Tool,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -16,10 +11,12 @@ import {
 import { readJson, readJsonSync } from "./utils";
 
 async function readYamlFile<T = unknown>(path: string): Promise<T> {
-  return fsp.readFile(path, 'utf8').then(data => yaml.load(data)) as Promise<T>;
+  return fsp
+    .readFile(path, "utf8")
+    .then((data) => yaml.load(data)) as Promise<T>;
 }
 function readYamlFileSync<T = unknown>(path: string): T {
-  return yaml.load(fs.readFileSync(path, 'utf8')) as T;
+  return yaml.load(fs.readFileSync(path, "utf8")) as T;
 }
 
 export interface PnpmWorkspaceYaml {
@@ -72,7 +69,7 @@ export const PnpmTool: Tool = {
       const manifest = await readYamlFile<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
+      const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {

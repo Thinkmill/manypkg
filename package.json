@@ -8,6 +8,8 @@
     "test-gatsby"
   ],
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "postinstall": "preconstruct dev && manypkg check",
     "release": "preconstruct build && changeset publish",
     "test": "jest",

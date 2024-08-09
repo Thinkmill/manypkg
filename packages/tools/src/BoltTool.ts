@@ -18,7 +18,10 @@ export const BoltTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = await readJson(directory, "package.json") as BoltPackageJSON;
+      const pkgJson = (await readJson(
+        directory,
+        "package.json"
+      )) as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -33,7 +36,10 @@ export const BoltTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = readJsonSync(directory, "package.json") as BoltPackageJSON;
+      const pkgJson = readJsonSync(
+        directory,
+        "package.json"
+      ) as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -50,7 +56,10 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = await readJson(rootDir, "package.json") as BoltPackageJSON;
+      const pkgJson = (await readJson(
+        rootDir,
+        "package.json"
+      )) as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
           `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`

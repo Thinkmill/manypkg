@@ -7,23 +7,25 @@ This library exports `getPackages` and `getPackagesSync`. It is intended mostly 
 ```typescript
 import { getPackages, getPackagesSync } from "@manypkg/get-packages";
 
-const { tool, packages, rootPackage, rootDir } = await getPackages(process.cwd());
+const { tool, packages, rootPackage, rootDir } = await getPackages(
+  process.cwd()
+);
 const { tool, packages, rootPackage, rootDir } = getPackagesSync(process.cwd());
 
 // From @manypkg/tools
 
 interface Tool {
-    readonly type: string;
-    isMonorepoRoot(directory: string): Promise<boolean>;
-    isMonorepoRootSync(directory: string): boolean;
-    getPackages(directory: string): Promise<Packages>;
-    getPackagesSync(directory: string): Packages;
+  readonly type: string;
+  isMonorepoRoot(directory: string): Promise<boolean>;
+  isMonorepoRootSync(directory: string): boolean;
+  getPackages(directory: string): Promise<Packages>;
+  getPackagesSync(directory: string): Packages;
 }
 
 interface Package {
-    packageJson: PackageJSON;
-    dir: string;
-    relativeDir: string;
+  packageJson: PackageJSON;
+  dir: string;
+  relativeDir: string;
 }
 
 interface Packages {

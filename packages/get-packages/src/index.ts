@@ -1,4 +1,3 @@
-
 import path from "path";
 import { findRoot, findRootSync, FindRootOptions } from "@manypkg/find-root";
 import { Packages, MonorepoRoot, Tool } from "@manypkg/tools";
@@ -37,7 +36,9 @@ export async function getPackages(
   options?: GetPackagesOptions
 ): Promise<Packages> {
   const monorepoRoot: MonorepoRoot = await findRoot(dir, options);
-  const packages: Packages = await monorepoRoot.tool.getPackages(monorepoRoot.rootDir);
+  const packages: Packages = await monorepoRoot.tool.getPackages(
+    monorepoRoot.rootDir
+  );
 
   validatePackages(packages);
 
@@ -52,7 +53,9 @@ export function getPackagesSync(
   options?: GetPackagesOptions
 ): Packages {
   const monorepoRoot: MonorepoRoot = findRootSync(dir, options);
-  const packages: Packages = monorepoRoot.tool.getPackagesSync(monorepoRoot.rootDir);
+  const packages: Packages = monorepoRoot.tool.getPackagesSync(
+    monorepoRoot.rootDir
+  );
 
   validatePackages(packages);
 

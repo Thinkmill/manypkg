@@ -78,28 +78,25 @@ export async function findRoot(
   let monorepoRoot: MonorepoRoot | undefined;
   const tools = options.tools || DEFAULT_TOOLS;
 
-  await findUp(
-    async (directory) => {
-      return Promise.all(
-        tools.map(async (tool): Promise<MonorepoRoot | undefined> => {
-          if (await tool.isMonorepoRoot(directory)) {
-            return {
-              tool: tool,
-              rootDir: directory,
-            };
-          }
-        })
-      )
-        .then((x) => x.find((value) => value))
-        .then((result) => {
-          if (result) {
-            monorepoRoot = result;
-            return directory;
-          }
-        });
-    },
-    cwd
-  );
+  await findUp(async (directory) => {
+    return Promise.all(
+      tools.map(async (tool): Promise<MonorepoRoot | undefined> => {
+        if (await tool.isMonorepoRoot(directory)) {
+          return {
+            tool: tool,
+            rootDir: directory,
+          };
+        }
+      })
+    )
+      .then((x) => x.find((value) => value))
+      .then((result) => {
+        if (result) {
+          monorepoRoot = result;
+          return directory;
+        }
+      });
+  }, cwd);
 
   if (monorepoRoot) {
     return monorepoRoot;
@@ -112,19 +109,16 @@ export async function findRoot(
   // If there is no monorepo root, but we can find a single package json file, we will
   // return a "RootTool" repo, which is the special case where we just have a root package
   // with no monorepo implementation (i.e.: a normal package folder).
-  let rootDir = await findUp(
-    async (directory) => {
-      try {
-        await fsp.access(path.join(directory, "package.json"));
-        return directory;
-      } catch (err) {
-        if (!isNoEntryError(err)) {
-          throw err;
-        }
+  let rootDir = await findUp(async (directory) => {
+    try {
+      await fsp.access(path.join(directory, "package.json"));
+      return directory;
+    } catch (err) {
+      if (!isNoEntryError(err)) {
+        throw err;
       }
-    },
-    cwd
-  );
+    }
+  }, cwd);
 
   if (!rootDir) {
     throw new NoPkgJsonFound(cwd);
@@ -146,20 +140,17 @@ export function findRootSync(
   let monorepoRoot: MonorepoRoot | undefined;
   const tools = options.tools || DEFAULT_TOOLS;
 
-  findUpSync(
-    (directory) => {
-      for (const tool of tools) {
-        if (tool.isMonorepoRootSync(directory)) {
-          monorepoRoot = {
-            tool: tool,
-            rootDir: directory,
-          };
-          return directory;
-        }
+  findUpSync((directory) => {
+    for (const tool of tools) {
+      if (tool.isMonorepoRootSync(directory)) {
+        monorepoRoot = {
+          tool: tool,
+          rootDir: directory,
+        };
+        return directory;
       }
-    },
-    cwd
-  );
+    }
+  }, cwd);
 
   if (monorepoRoot) {
     return monorepoRoot;
@@ -172,13 +163,10 @@ export function findRootSync(
   // If there is no monorepo root, but we can find a single package json file, we will
   // return a "RootTool" repo, which is the special case where we just have a root package
   // with no monorepo implementation (i.e.: a normal package folder).
-  const rootDir = findUpSync(
-    (directory) => {
-      const exists = fs.existsSync(path.join(directory, "package.json"));
-      return exists ? directory : undefined;
-    },
-    cwd
-  );
+  const rootDir = findUpSync((directory) => {
+    const exists = fs.existsSync(path.join(directory, "package.json"));
+    return exists ? directory : undefined;
+  }, cwd);
 
   if (!rootDir) {
     throw new NoPkgJsonFound(cwd);
@@ -190,30 +178,36 @@ export function findRootSync(
   };
 }
 
-async function findUp(matcher: (directory: string) => Promise<string | undefined>, cwd: string) {
-	let directory = path.resolve(cwd);
-	const { root } = path.parse(directory);
+async function findUp(
+  matcher: (directory: string) => Promise<string | undefined>,
+  cwd: string
+) {
+  let directory = path.resolve(cwd);
+  const { root } = path.parse(directory);
 
-	while (directory && directory !== root) {
-		const filePath = await matcher(directory);
-		if (filePath) {
-			return path.resolve(directory, filePath);
-		}
+  while (directory && directory !== root) {
+    const filePath = await matcher(directory);
+    if (filePath) {
+      return path.resolve(directory, filePath);
+    }
 
-		directory = path.dirname(directory);
-	}
+    directory = path.dirname(directory);
+  }
 }
 
-function findUpSync(matcher: (directory: string) => string | undefined, cwd: string) {
-	let directory = path.resolve(cwd);
-	const { root } = path.parse(directory);
+function findUpSync(
+  matcher: (directory: string) => string | undefined,
+  cwd: string
+) {
+  let directory = path.resolve(cwd);
+  const { root } = path.parse(directory);
 
-	while (directory && directory !== root) {
-		const filePath = matcher(directory);
-		if (filePath) {
-			return path.resolve(directory, filePath);
-		}
+  while (directory && directory !== root) {
+    const filePath = matcher(directory);
+    if (filePath) {
+      return path.resolve(directory, filePath);
+    }
 
-		directory = path.dirname(directory);
-	}
+    directory = path.dirname(directory);
+  }
 }

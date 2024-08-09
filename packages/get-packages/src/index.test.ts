@@ -1,5 +1,5 @@
 import fixturez from "fixturez";
-import path from 'node:path';
+import path from "node:path";
 import { getPackages, getPackagesSync } from "./";
 
 const f = fixturez(__dirname);
@@ -11,7 +11,7 @@ let runTests = (getPackages: GetPackages) => {
     const dir = f.copy("yarn-workspace-base");
 
     // Test for both root and subdirectories
-    for (const location of ['.', 'packages', 'packages/pkg-a']) {
+    for (const location of [".", "packages", "packages/pkg-a"]) {
       const allPackages = await getPackages(path.join(dir, location));
 
       if (allPackages.packages === null) {
@@ -47,7 +47,7 @@ let runTests = (getPackages: GetPackages) => {
     const dir = f.copy("bolt-workspace");
 
     // Test for both root and subdirectories
-    for (const location of ['.', 'packages', 'packages/pkg-b']) {
+    for (const location of [".", "packages", "packages/pkg-b"]) {
       const allPackages = await getPackages(path.join(dir, location));
 
       if (allPackages.packages === null) {
@@ -68,7 +68,7 @@ let runTests = (getPackages: GetPackages) => {
     const dir = f.copy("pnpm-workspace-base");
 
     // Test for both root and subdirectories
-    for (const location of ['.', 'packages', 'packages/pkg-a']) {
+    for (const location of [".", "packages", "packages/pkg-a"]) {
       const allPackages = await getPackages(path.join(dir, location));
 
       if (allPackages.packages === null) {
@@ -104,7 +104,7 @@ let runTests = (getPackages: GetPackages) => {
     const dir = f.copy("lerna-workspace-base");
 
     // Test for both root and subdirectories
-    for (const location of ['.', 'packages', 'packages/pkg-b']) {
+    for (const location of [".", "packages", "packages/pkg-b"]) {
       const allPackages = await getPackages(path.join(dir, location));
 
       if (allPackages.packages === null) {

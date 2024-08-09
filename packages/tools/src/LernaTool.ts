@@ -1,11 +1,6 @@
 import path from "path";
 
-import {
-  Tool,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -22,7 +17,7 @@ export const LernaTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const lernaJson = await readJson(directory, "lerna.json") as LernaJson;
+      const lernaJson = (await readJson(directory, "lerna.json")) as LernaJson;
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
@@ -54,8 +49,8 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = await readJson(rootDir, "lerna.json") as LernaJson;
-      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
+      const lernaJson = (await readJson(rootDir, "lerna.json")) as LernaJson;
+      const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
