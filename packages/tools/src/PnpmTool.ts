@@ -1,6 +1,7 @@
 import path from "path";
 import yaml from "js-yaml";
-import fs from "fs-extra";
+import fs from "fs";
+import fsp from "fs/promises";
 
 import {
   Tool,
@@ -12,9 +13,10 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 async function readYamlFile<T = unknown>(path: string): Promise<T> {
-  return fs.promises.readFile(path, 'utf8').then(data => yaml.load(data)) as Promise<T>;
+  return fsp.readFile(path, 'utf8').then(data => yaml.load(data)) as Promise<T>;
 }
 function readYamlFileSync<T = unknown>(path: string): T {
   return yaml.load(fs.readFileSync(path, 'utf8')) as T;
@@ -70,9 +72,7 @@ export const PnpmTool: Tool = {
       const manifest = await readYamlFile<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = (await fs.readJson(
-        path.join(rootDir, "package.json")
-      )) as PackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {
@@ -102,9 +102,7 @@ export const PnpmTool: Tool = {
       const manifest = readYamlFileSync<{ packages?: string[] }>(
         path.join(rootDir, "pnpm-workspace.yaml")
       );
-      const pkgJson = fs.readJsonSync(
-        path.join(rootDir, "package.json")
-      ) as PackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
       return {

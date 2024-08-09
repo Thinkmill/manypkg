@@ -10,9 +10,7 @@
   "main": "dist/manypkg-find-root.cjs.js",
   "module": "dist/manypkg-find-root.esm.js",
   "dependencies": {
-    "@manypkg/tools": "^1.1.1",
-    "find-up": "^4.1.0",
-    "fs-extra": "^8.1.0"
+    "@manypkg/tools": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",

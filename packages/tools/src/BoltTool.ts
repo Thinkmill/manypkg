@@ -1,11 +1,11 @@
 import path from "path";
-import fs from "fs-extra";
 
 import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export interface BoltPackageJSON extends PackageJSON {
   bolt?: {
@@ -18,9 +18,7 @@ export const BoltTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
-      )) as BoltPackageJSON;
+      const pkgJson = await readJson(directory, "package.json") as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -35,9 +33,7 @@ export const BoltTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
-      ) as BoltPackageJSON;
+      const pkgJson = readJsonSync(directory, "package.json") as BoltPackageJSON;
       if (pkgJson.bolt && pkgJson.bolt.workspaces) {
         return true;
       }
@@ -54,9 +50,7 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = (await fs.readJson(
-        path.join(rootDir, "package.json")
-      )) as BoltPackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
           `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
@@ -88,9 +82,7 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = fs.readJsonSync(
-        path.join(rootDir, "package.json")
-      ) as BoltPackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as BoltPackageJSON;
       if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
         throw new InvalidMonorepoError(
           `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
