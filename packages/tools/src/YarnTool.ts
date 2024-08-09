@@ -1,11 +1,6 @@
 import path from "path";
 
-import {
-  Tool,
-  PackageJSON,
-  Packages,
-  InvalidMonorepoError,
-} from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
@@ -21,7 +16,10 @@ export const YarnTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = await readJson(directory, "package.json") as YarnPackageJSON;
+      const pkgJson = (await readJson(
+        directory,
+        "package.json"
+      )) as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -41,7 +39,10 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = readJsonSync(directory, "package.json") as YarnPackageJSON;
+      const pkgJson = readJsonSync(
+        directory,
+        "package.json"
+      ) as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -63,7 +64,10 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = await readJson(rootDir, "package.json") as YarnPackageJSON;
+      const pkgJson = (await readJson(
+        rootDir,
+        "package.json"
+      )) as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;

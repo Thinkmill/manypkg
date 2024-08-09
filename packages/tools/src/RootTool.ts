@@ -26,7 +26,7 @@ export const RootTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
+      const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const pkg: Package = {
         dir: rootDir,
         relativeDir: ".",
