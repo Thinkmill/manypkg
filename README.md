@@ -80,6 +80,64 @@ As an example, let's say there are two packages which both have a `dist` dir, `m
 yarn manypkg exec rm -rf dist
 ```
 
+## Configuration
+
+Manypkg supports a number of options. Options can be provided using the `manypkg` key in your root `package.json` file:
+
+```json
+{
+  "name": "monorepo-root",
+  "private": true,
+  "manypkg": {}
+}
+```
+
+### `defaultBranch`
+
+Used by the [Incorrect `repository` field](#incorrect-repository-field) rule to determine the correct name for repositories. The default value is `master`.
+
+```json
+{
+  "manypkg": {
+    "defaultBranch": "master"
+  }
+}
+```
+
+### `ignoredRules`
+
+Used to determine which checks/fixes should ignored by the Manypkg cli. The default value is `[]` (all checks/fixes enabled).
+
+```json
+{
+  "manypkg": {
+    "ignoredRules": []
+  }
+}
+```
+
+To ignore a rule, find the rule in the [Checks section](#checks) below and add its "Key" value to the array. For example, to disable the [External mismatch rule](#external-mismatch):
+
+```json
+{
+  "manypkg": {
+    "ignoredRules": ["EXTERNAL_MISMATCH"]
+  }
+}
+```
+
+### `workspaceProtocol`
+
+Used to determine whether the `workspace:` protocol for internal packages is required (`require`) or allowed (`allow`). The default value is `allow`.
+
+```json
+{
+  "manypkg": {
+    "workspaceProtocol": "allow"
+  }
+}
+```
+
 ## Dictionary
 
 - **private package** - A package that has `private: true`/is not published. It does not refer to a package published to a private registry here.
@@ -91,6 +149,8 @@ yarn manypkg exec rm -rf dist
 ## Checks
 
 ## External mismatch
+
+Key: `EXTERNAL_MISMATCH`
 
 The ranges for all dependencies(excluding `peerDependencies`) on external packages should exactly match(`===`). It's important to note that this check does not enforce that only a single version of an external package is installed, only that two versions of an external package will never be installed because they're specified as dependencies of internal packages.
 
@@ -208,6 +268,8 @@ There are some cases where you might want to intentionally have conflicts betwee
 
 ## Internal mismatch
 
+Key: `INTERNAL_MISMATCH`
+
 The ranges for all regular dependencies, devDependencies and optionalDependencies(not peerDependencies) on internal packages should include the version of the internal package.
 
 ### Why it's a rule
@@ -219,6 +281,8 @@ So that an internal package that depends on another internal package will always
 If the range is a [caret range](https://github.com/npm/node-semver#caret-ranges-123-025-004) or a [tilde range](https://github.com/npm/node-semver#tilde-ranges-123-12-1) with no other comparators, the range is set as a caret or tilde range respectively with the version of the internal package. If it is any other range, the range is set to the exact version of the internal package.
 
 ## Invalid dev and peer dependency relationship
+
+Key: `INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP`
 
 All `peerDependencies` should also be specified in `devDependencies` and the range specified in `devDependencies` should be a subset of the range for that dependency in `peerDependencies`.
 
@@ -232,6 +296,8 @@ The range for the dependency specified in `peerDependencies` is added to `devDep
 
 ## Root has devDependencies
 
+Key: `ROOT_HAS_DEV_DEPENDENCIES`
+
 The root package should not have any `devDependencies`, instead all dependencies should be in `dependencies`
 
 ### Why it's a rule
@@ -244,6 +310,8 @@ All `devDependencies` in the root `package.json` are moved to `dependencies`.
 
 ## Multiple dependency types
 
+Key: `MULTIPLE_DEPENDENCY_TYPES`
+
 A dependency shouldn't be specified in more than one of `dependencies`, `devDependencies` or `optionalDependencies`.
 
 ### How it's fixed
@@ -251,6 +319,8 @@ A dependency shouldn't be specified in more than one of `dependencies`, `devDepe
 The dep is removed from `devDependencies` or `optionalDependencies` if it's also in `dependencies`, if it's in `devDependencies` and `optionalDependencies`, it is removed from `dependencies`.
 
 ## Invalid package name
+
+Key: `INVALID_PACKAGE_NAME`
 
 There are rules from npm about what a package name can be and a package will fail to publish if those rules are not met.
 
@@ -264,6 +334,8 @@ This requires manual fixing as automatically fixing this may lead to valid but i
 
 ## Unsorted dependencies
 
+Key: `UNSORTED_DEPENDENCIES`
+
 Dependencies in the dependency fields(`dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`) should be sorted alphabetically.
 
 ### Why it's a rule
@@ -276,6 +348,8 @@ This is fixed by sorting deps by key alphabetically.
 
 ## Incorrect `repository` field
 
+Key: `INCORRECT_REPOSITORY_FIELD`
+
 If a GitHub repo URL is in the `repository` field in the root `package.json`, all of the packages should have a `repository` field which goes into the directory of the package.
 
 ### Why it's a rule
@@ -287,6 +361,8 @@ Having a `repository` field is helpful so there is a link to the source of a pac
 This is fixed by setting the correct URL.
 
 ## `workspace:` protocol required
+
+Key: `WORKSPACE_REQUIRED`
 
 If `"workspaceProtocol": "require"` is set in the `manypkg` config in the root `package.json`, all dependencies on internal packages are required to use the `workspace:` protocol.
 
