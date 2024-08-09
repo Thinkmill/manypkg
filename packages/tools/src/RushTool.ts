@@ -1,5 +1,6 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
+import fsp from "fs/promises";
 import jju from "jju";
 
 import {
@@ -9,6 +10,7 @@ import {
   Packages,
   InvalidMonorepoError,
 } from "./Tool";
+import { readJson, readJsonSync } from "./utils";
 
 interface RushJson {
   projects: RushProject[];
@@ -24,7 +26,7 @@ export const RushTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      await fs.readFile(path.join(directory, "rush.json"), "utf8");
+      await fsp.readFile(path.join(directory, "rush.json"), "utf8");
       return true;
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -32,7 +34,6 @@ export const RushTool: Tool = {
       }
       throw err;
     }
-    return false;
   },
 
   isMonorepoRootSync(directory: string): boolean {
@@ -45,14 +46,13 @@ export const RushTool: Tool = {
       }
       throw err;
     }
-    return false;
   },
 
   async getPackages(directory: string): Promise<Packages> {
     const rootDir = path.resolve(directory);
 
     try {
-      const rushText: string = await fs.readFile(
+      const rushText: string = await fsp.readFile(
         path.join(rootDir, "rush.json"),
         "utf8"
       );
@@ -69,7 +69,7 @@ export const RushTool: Tool = {
           return {
             dir,
             relativeDir: path.relative(directory, dir),
-            packageJson: await fs.readJson(path.join(dir, "package.json")),
+            packageJson: await readJson(dir, "package.json"),
           };
         })
       );
@@ -107,9 +107,7 @@ export const RushTool: Tool = {
         path.resolve(rootDir, project.projectFolder)
       );
       const packages: Package[] = directories.map((dir: string) => {
-        const packageJson: PackageJSON = fs.readJsonSync(
-          path.join(dir, "package.json")
-        );
+        const packageJson: PackageJSON = readJsonSync(dir, "package.json");
         return {
           dir,
           relativeDir: path.relative(directory, dir),

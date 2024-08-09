@@ -1,9 +1,7 @@
 import path from "path";
-import fs from "fs-extra";
 
 import {
   Tool,
-  Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
@@ -12,6 +10,7 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export interface YarnPackageJSON extends PackageJSON {
   workspaces?: string[] | { packages: string[] };
@@ -22,9 +21,7 @@ export const YarnTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await fs.readJson(
-        path.join(directory, "package.json")
-      )) as YarnPackageJSON;
+      const pkgJson = await readJson(directory, "package.json") as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -44,9 +41,7 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = fs.readJsonSync(
-        path.join(directory, "package.json")
-      ) as YarnPackageJSON;
+      const pkgJson = readJsonSync(directory, "package.json") as YarnPackageJSON;
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -68,9 +63,7 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = (await fs.readJson(
-        path.join(rootDir, "package.json")
-      )) as YarnPackageJSON;
+      const pkgJson = await readJson(rootDir, "package.json") as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
@@ -99,9 +92,7 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = fs.readJsonSync(
-        path.join(rootDir, "package.json")
-      ) as YarnPackageJSON;
+      const pkgJson = readJsonSync(rootDir, "package.json") as YarnPackageJSON;
       const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;

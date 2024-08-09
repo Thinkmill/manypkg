@@ -1,9 +1,7 @@
 import path from "path";
-import fs from "fs-extra";
 
 import {
   Tool,
-  Package,
   PackageJSON,
   Packages,
   InvalidMonorepoError,
@@ -12,6 +10,7 @@ import {
   expandPackageGlobs,
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export interface LernaJson {
   useWorkspaces?: boolean;
@@ -23,9 +22,7 @@ export const LernaTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const lernaJson = (await fs.readJson(
-        path.join(directory, "lerna.json")
-      )) as LernaJson;
+      const lernaJson = await readJson(directory, "lerna.json") as LernaJson;
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
@@ -40,9 +37,7 @@ export const LernaTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const lernaJson = fs.readJsonSync(
-        path.join(directory, "lerna.json")
-      ) as LernaJson;
+      const lernaJson = readJsonSync(directory, "lerna.json") as LernaJson;
       if (lernaJson.useWorkspaces !== true) {
         return true;
       }
@@ -59,10 +54,8 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = await fs.readJson(path.join(rootDir, "lerna.json"));
-      const pkgJson = (await fs.readJson(
-        path.join(rootDir, "package.json")
-      )) as PackageJSON;
+      const lernaJson = await readJson(rootDir, "lerna.json") as LernaJson;
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {
@@ -89,12 +82,8 @@ export const LernaTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const lernaJson = fs.readJsonSync(
-        path.join(rootDir, "lerna.json")
-      ) as LernaJson;
-      const pkgJson = fs.readJsonSync(
-        path.join(rootDir, "package.json")
-      ) as PackageJSON;
+      const lernaJson = readJsonSync(rootDir, "lerna.json") as LernaJson;
+      const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       return {

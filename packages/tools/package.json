@@ -10,12 +10,12 @@
   "main": "dist/manypkg-tools.cjs.js",
   "dependencies": {
     "fast-glob": "^3.3.2",
-    "fs-extra": "^8.1.0",
     "jju": "^1.4.0",
-    "read-yaml-file": "^1.1.0"
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/jju": "^1.4.2",
+    "@types/js-yaml": "^4.0.9",
     "jest-fixtures": "^0.6.0"
   },
   "engines": {
