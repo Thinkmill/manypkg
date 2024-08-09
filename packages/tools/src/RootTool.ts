@@ -1,5 +1,4 @@
 import path from "path";
-import fs from "fs-extra";
 
 import {
   Tool,
@@ -8,7 +7,7 @@ import {
   Packages,
   InvalidMonorepoError,
 } from "./Tool";
-import { expandPackageGlobs } from "./expandPackageGlobs";
+import { readJson, readJsonSync } from "./utils";
 
 export const RootTool: Tool = {
   type: "root",
@@ -27,9 +26,7 @@ export const RootTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson: PackageJSON = await fs.readJson(
-        path.join(rootDir, "package.json")
-      );
+      const pkgJson = await readJson(rootDir, "package.json") as PackageJSON;
       const pkg: Package = {
         dir: rootDir,
         relativeDir: ".",
@@ -56,9 +53,7 @@ export const RootTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson: PackageJSON = fs.readJsonSync(
-        path.join(rootDir, "package.json")
-      );
+      const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const pkg: Package = {
         dir: rootDir,
         relativeDir: ".",
