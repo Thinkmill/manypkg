@@ -1,5 +1,7 @@
 import path from "path";
-import readYamlFile, { sync as readYamlFileSync } from "read-yaml-file";
+import yaml from "js-yaml";
+import fs from "fs";
+import fsp from "fs/promises";
 
 import {
   Tool,
@@ -12,6 +14,13 @@ import {
   expandPackageGlobsSync,
 } from "./expandPackageGlobs";
 import { readJson, readJsonSync } from "./utils";
+
+async function readYamlFile<T = unknown>(path: string): Promise<T> {
+  return fsp.readFile(path, 'utf8').then(data => yaml.load(data)) as Promise<T>;
+}
+function readYamlFileSync<T = unknown>(path: string): T {
+  return yaml.load(fs.readFileSync(path, 'utf8')) as T;
+}
 
 export interface PnpmWorkspaceYaml {
   packages?: string[];
