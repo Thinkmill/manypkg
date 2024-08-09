@@ -1,5 +1,15 @@
 # @manypkg/tools
 
+## 1.1.2
+
+### Patch Changes
+
+- [#214](https://github.com/Thinkmill/manypkg/pull/214) [`66cdbc0`](https://github.com/Thinkmill/manypkg/commit/66cdbc0ab4f493351724b05189dc89d51d4dadf6) Thanks [@benmccann](https://github.com/benmccann)! - Replace `globby` with `fast-glob` to remove extra dependencies
+
+- [#213](https://github.com/Thinkmill/manypkg/pull/213) [`18c0ce3`](https://github.com/Thinkmill/manypkg/commit/18c0ce3667192e5128d8962267aff7e61cce23a4) Thanks [@benmccann](https://github.com/benmccann)! - Replace `read-yaml-file` with `js-yaml`
+
+- [#212](https://github.com/Thinkmill/manypkg/pull/212) [`c0a5e5d`](https://github.com/Thinkmill/manypkg/commit/c0a5e5dcd096898fa1c196d9bbe19587055e2924) Thanks [@benmccann](https://github.com/benmccann)! - Remove fs-extra from dependencies
+
 ## 1.1.1
 
 ### Patch Changes
