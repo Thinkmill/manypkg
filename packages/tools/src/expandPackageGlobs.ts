@@ -1,6 +1,6 @@
 import path from "path";
 import fsp from "fs/promises";
-import globby from "globby";
+import glob from "fast-glob";
 
 import { Package, PackageJSON } from "./Tool";
 import { readJsonSync } from "./utils";
@@ -14,10 +14,9 @@ export async function expandPackageGlobs(
   packageGlobs: string[],
   directory: string
 ): Promise<Package[]> {
-  const relativeDirectories: string[] = await globby(packageGlobs, {
+  const relativeDirectories: string[] = await glob(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
-    expandDirectories: false,
     ignore: ["**/node_modules"],
   });
   const directories = relativeDirectories
@@ -56,10 +55,9 @@ export function expandPackageGlobsSync(
   packageGlobs: string[],
   directory: string
 ): Package[] {
-  const relativeDirectories: string[] = globby.sync(packageGlobs, {
+  const relativeDirectories: string[] = glob.sync(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
-    expandDirectories: false,
     ignore: ["**/node_modules"],
   });
   const directories = relativeDirectories

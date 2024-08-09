@@ -9,7 +9,7 @@
   "license": "MIT",
   "main": "dist/manypkg-tools.cjs.js",
   "dependencies": {
-    "globby": "^11.0.0",
+    "fast-glob": "^3.3.2",
     "jju": "^1.4.0",
     "js-yaml": "^4.1.0"
   },
