@@ -8,23 +8,23 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: workspace => {
+  validate: (workspace) => {
     for (let depType of DEPENDENCY_TYPES) {
       let deps = workspace.packageJson[depType];
       if (deps && !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())) {
         return [
           {
             type: "UNSORTED_DEPENDENCIES",
-            workspace
-          }
+            workspace,
+          },
         ];
       }
     }
     return [];
   },
-  fix: error => {
+  fix: (error) => {
     sortDeps(error.workspace);
   },
-  print: error =>
-    `${error.workspace.packageJson.name}'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`
+  print: (error) =>
+    `${error.workspace.packageJson.name}'s dependencies are unsorted, this can cause large diffs when packages are added, resulting in dependencies being sorted`,
 });

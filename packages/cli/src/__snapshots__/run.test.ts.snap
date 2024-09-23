@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Run command should execute "@manypkg/basic-fixture-pkg-two start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -14,8 +13,7 @@ hello start
 `;
 
 exports[`Run command should execute "package start" and exit with 1: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-☔️ error an identifier must only match a single package but \\"package\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "package" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-one
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
@@ -25,8 +23,7 @@ exports[`Run command should execute "package start" and exit with 1: stderr 1`] 
 exports[`Run command should execute "package start" and exit with 1: stdout 1`] = `""`;
 
 exports[`Run command should execute "package-one start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -38,8 +35,7 @@ hello start
 `;
 
 exports[`Run command should execute "package-one test" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -51,16 +47,14 @@ testing
 `;
 
 exports[`Run command should execute "package-three start" and exit with 1: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-☔️ error No matching packages found
+"☔️ error No matching packages found
 "
 `;
 
 exports[`Run command should execute "package-three start" and exit with 1: stdout 1`] = `""`;
 
 exports[`Run command should execute "package-two start" and exit with 1: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-☔️ error an identifier must only match a single package but \\"package-two\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "package-two" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
 "
@@ -69,10 +63,9 @@ exports[`Run command should execute "package-two start" and exit with 1: stderr 
 exports[`Run command should execute "package-two start" and exit with 1: stdout 1`] = `""`;
 
 exports[`Run command should execute "package-two-one something" and exit with 1: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
-error Command \\"something\\" not found.
+error Command "something" not found.
 "
 `;
 
@@ -82,8 +75,7 @@ exports[`Run command should execute "package-two-one something" and exit with 1:
 `;
 
 exports[`Run command should execute "package-two-one start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -95,8 +87,7 @@ hello start
 `;
 
 exports[`Run command should execute "packages/package-two start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -108,8 +99,7 @@ hello start
 `;
 
 exports[`Run command should execute "pkg-one start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;
@@ -121,8 +111,7 @@ hello start
 `;
 
 exports[`Run command should execute "pkg-two start" and exit with 1: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-☔️ error an identifier must only match a single package but \\"pkg-two\\" matches the following packages: 
+"☔️ error an identifier must only match a single package but "pkg-two" matches the following packages: 
 ☔️ error @manypkg/basic-fixture-pkg-two
 ☔️ error @manypkg/basic-fixture-pkg-two-one
 "
@@ -131,8 +120,7 @@ exports[`Run command should execute "pkg-two start" and exit with 1: stderr 1`] 
 exports[`Run command should execute "pkg-two start" and exit with 1: stdout 1`] = `""`;
 
 exports[`Run command should execute "pkg-two-one start" and exit with 0: stderr 1`] = `
-"Browserslist: caniuse-lite is outdated. Please run next command \`yarn upgrade\`
-warning package.json: No license field
+"warning package.json: No license field
 warning ../../package.json: No license field
 "
 `;

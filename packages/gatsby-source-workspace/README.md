@@ -8,7 +8,7 @@
 // gatsby-config.js
 
 module.exports = {
-  plugins: [{ resolve: "@manypkg/gatsby-source-workspace" }]
+  plugins: [{ resolve: "@manypkg/gatsby-source-workspace" }],
 };
 ```
 
@@ -42,10 +42,10 @@ module.exports = {
     {
       resolve: "@manypkg/gatsby-source-workspace",
       options: {
-        workspaceFilter: workspace => !workspace.packageJSON.private
-      }
-    }
-  ]
+        workspaceFilter: (workspace) => !workspace.packageJSON.private,
+      },
+    },
+  ],
 };
 ```
 
@@ -71,12 +71,12 @@ module.exports = {
         extraFields: [
           {
             name: "license",
-            definition: `String`
-          }
-        ]
-      }
-    }
-  ]
+            definition: `String`,
+          },
+        ],
+      },
+    },
+  ],
 };
 ```
 
@@ -113,13 +113,13 @@ module.exports = {
           {
             name: "readme",
             definition: `String`,
-            getFieldInfo: async ws =>
-              await fs.readFile(path.join(ws.dir, "README.md"), "utf-8")
-          }
-        ]
-      }
-    }
-  ]
+            getFieldInfo: async (ws) =>
+              await fs.readFile(path.join(ws.dir, "README.md"), "utf-8"),
+          },
+        ],
+      },
+    },
+  ],
 };
 ```
 

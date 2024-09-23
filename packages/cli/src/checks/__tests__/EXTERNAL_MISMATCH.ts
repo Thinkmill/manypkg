@@ -1,7 +1,7 @@
 import internalMismatch from "../EXTERNAL_MISMATCH";
-import { getWS, getFakeWS } from "../../test-helpers";
+import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
 
-let rootWorkspace = getFakeWS("root");
+let rootWorkspace = getRootWS();
 
 it("should error if the ranges are valid and they are not equal", () => {
   let ws = getWS();
@@ -10,7 +10,7 @@ it("should error if the ranges are valid and they are not equal", () => {
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
@@ -20,21 +20,22 @@ it("should error if the ranges are valid and they are not equal", () => {
   errors = internalMismatch.validate(ws.get("pkg-1")!, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "1.0.0",
-        "expectedRange": "2.0.0",
+        "mostCommonDependencyRange": "2.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+        "workspace": {
+          "dir": "fake/monorepo/packages/pkg-1",
+          "packageJson": {
+            "dependencies": {
               "something": "1.0.0",
             },
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -48,13 +49,13 @@ it("should error and return the correct expectedRange when the ranges are valid,
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -69,21 +70,22 @@ it("should error and return the correct expectedRange when the ranges are valid,
   errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
-        "expectedRange": "1.0.0",
+        "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
-          "dir": "some/fake/dir/pkg-2",
-          "packageJson": Object {
-            "dependencies": Object {
+        "workspace": {
+          "dir": "fake/monorepo/packages/pkg-2",
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-2",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-2",
         },
       },
     ]
@@ -97,13 +99,13 @@ it("should error and return the correct expectedRange when the ranges are valid,
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -113,25 +115,25 @@ it("should error and return the correct expectedRange when the ranges are valid,
     rootWorkspace,
     {}
   );
-  console.log(errors);
 
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
-        "expectedRange": "1.0.0",
+        "mostCommonDependencyRange": "1.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+        "workspace": {
+          "dir": "fake/monorepo/packages/pkg-1",
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -148,13 +150,13 @@ it("should error and return the correct expectedRange when the ranges are valid,
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "3.0.0"
+    something: "3.0.0",
   };
 
   ws.set("pkg-3", pkg3);
@@ -166,21 +168,22 @@ it("should error and return the correct expectedRange when the ranges are valid,
   );
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "1.0.0",
-        "expectedRange": "3.0.0",
+        "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
-          "dir": "some/fake/dir/pkg-1",
-          "packageJson": Object {
-            "dependencies": Object {
+        "workspace": {
+          "dir": "fake/monorepo/packages/pkg-1",
+          "packageJson": {
+            "dependencies": {
               "something": "1.0.0",
             },
             "name": "pkg-1",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-1",
         },
       },
     ]
@@ -189,21 +192,22 @@ it("should error and return the correct expectedRange when the ranges are valid,
   errors = internalMismatch.validate(pkg2, ws, rootWorkspace, {});
   expect(errors.length).toEqual(1);
   expect(errors).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "dependencyName": "something",
         "dependencyRange": "2.0.0",
-        "expectedRange": "3.0.0",
+        "mostCommonDependencyRange": "3.0.0",
         "type": "EXTERNAL_MISMATCH",
-        "workspace": Object {
-          "dir": "some/fake/dir/pkg-2",
-          "packageJson": Object {
-            "dependencies": Object {
+        "workspace": {
+          "dir": "fake/monorepo/packages/pkg-2",
+          "packageJson": {
+            "dependencies": {
               "something": "2.0.0",
             },
             "name": "pkg-2",
             "version": "1.0.0",
           },
+          "relativeDir": "packages/pkg-2",
         },
       },
     ]
@@ -220,7 +224,7 @@ it("should not error if the value is not a valid semver range", () => {
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "git:x"
+    something: "git:x",
   };
   ws.set("pkg-2", pkg2);
 
@@ -238,14 +242,14 @@ it("should not error if the range is included in the allowedDependencyVersions o
 
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   const options = {
     allowedDependencyVersions: {
-      something: ["1.0.0", "2.0.0"]
-    }
+      something: ["1.0.0", "2.0.0"],
+    },
   };
 
   let errors = internalMismatch.validate(pkg2, ws, rootWorkspace, options);
@@ -263,8 +267,8 @@ it("should not error if the range is included in the allowedDependencyVersions o
 it("should error and fix the version to the closest allowed one when adding an allowed major", () => {
   const options = {
     allowedDependencyVersions: {
-      something: ["^1.0.0", "2.0.0"]
-    }
+      something: ["^1.0.0", "2.0.0"],
+    },
   };
 
   let ws = getWS();
@@ -274,21 +278,21 @@ it("should error and fix the version to the closest allowed one when adding an a
   // version 1.0.0 is the most commonly used one
   let pkg1a = getFakeWS("pkg-1a");
   pkg1a.packageJson.dependencies = {
-    something: "^1.0.0"
+    something: "^1.0.0",
   };
   ws.set("pkg-1a", pkg1a);
 
   // version 2.0.0 is allowed
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "2.0.0"
+    something: "2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   // try to add version 2.1.0
   let pkg2a = getFakeWS("pkg-2a");
   pkg2a.packageJson.dependencies = {
-    something: "^2.1.0"
+    something: "^2.1.0",
   };
   ws.set("pkg-2a", pkg2a);
 
@@ -298,7 +302,7 @@ it("should error and fix the version to the closest allowed one when adding an a
     expect.objectContaining({
       dependencyName: "something",
       dependencyRange: "^2.1.0",
-      expectedRange: '2.0.0'
+      mostCommonDependencyRange: "2.0.0",
     })
   );
   internalMismatch.fix(errors[0], options);
@@ -307,7 +311,7 @@ it("should error and fix the version to the closest allowed one when adding an a
   // try to add version 1.0.1
   let pkg1b = getFakeWS("pkg-1b");
   pkg1b.packageJson.dependencies = {
-    something: "^1.0.1"
+    something: "^1.0.1",
   };
   ws.set("pkg-1b", pkg1b);
 
@@ -317,7 +321,7 @@ it("should error and fix the version to the closest allowed one when adding an a
     expect.objectContaining({
       dependencyName: "something",
       dependencyRange: "^1.0.1",
-      expectedRange: '^1.0.0'
+      mostCommonDependencyRange: "^1.0.0",
     })
   );
   internalMismatch.fix(errors[0], options);
@@ -327,8 +331,8 @@ it("should error and fix the version to the closest allowed one when adding an a
 it("should error and fix the version to the highest allowed one when adding a newer major", () => {
   const options = {
     allowedDependencyVersions: {
-      something: ["1.0.0", "^2.0.0"]
-    }
+      something: ["1.0.0", "^2.0.0"],
+    },
   };
 
   let ws = getWS();
@@ -338,21 +342,21 @@ it("should error and fix the version to the highest allowed one when adding a ne
   // version 1.0.0 is the most commonly used one
   let pkg1a = getFakeWS("pkg-1a");
   pkg1a.packageJson.dependencies = {
-    something: "1.0.0"
+    something: "1.0.0",
   };
   ws.set("pkg-1a", pkg1a);
 
   // version 2.0.0 is allowed
   let pkg2 = getFakeWS("pkg-2");
   pkg2.packageJson.dependencies = {
-    something: "^2.0.0"
+    something: "^2.0.0",
   };
   ws.set("pkg-2", pkg2);
 
   // try to add version 3.0.0
   let pkg3 = getFakeWS("pkg-3");
   pkg3.packageJson.dependencies = {
-    something: "3.0.0"
+    something: "3.0.0",
   };
   ws.set("pkg-3", pkg3);
 
@@ -362,7 +366,7 @@ it("should error and fix the version to the highest allowed one when adding a ne
     expect.objectContaining({
       dependencyName: "something",
       dependencyRange: "3.0.0",
-      expectedRange: '^2.0.0'
+      mostCommonDependencyRange: "^2.0.0",
     })
   );
   internalMismatch.fix(errors[0], options);
