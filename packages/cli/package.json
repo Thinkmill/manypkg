@@ -1,14 +1,17 @@
 {
-  "name": "@manypkg/cli",
-  "version": "0.21.4",
+  "name": "@atlassian/manypkg-cli",
+  "version": "0.21.4-2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkmill/manypkg.git",
+    "url": "https://github.com/atlassian-forks/manypkg",
     "directory": "packages/cli"
   },
   "license": "MIT",
-  "main": "dist/manypkg-cli.cjs.js",
-  "module": "dist/manypkg-cli.esm.js",
+  "publishConfig": {
+    "registry": "https://packages.atlassian.com/api/npm/atlassian-npm/"
+  },
+  "main": "dist/atlassian-manypkg-cli.cjs.js",
+  "module": "dist/atlassian-manypkg-cli.esm.js",
   "bin": {
     "manypkg": "./bin.js"
   },
