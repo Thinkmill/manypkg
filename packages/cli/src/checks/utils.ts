@@ -7,19 +7,20 @@ import { ExitError } from "../errors";
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
   "devDependencies",
-  "optionalDependencies"
+  "optionalDependencies",
 ] as const;
 
 export const DEPENDENCY_TYPES = [
   "dependencies",
   "devDependencies",
   "optionalDependencies",
-  "peerDependencies"
+  "peerDependencies",
 ] as const;
 
 export type Options = {
   defaultBranch?: string;
   ignoredRules?: string[];
+  workspaceProtocol?: "allow" | "require";
   allowedDependencyVersions?: { [dependency: string]: string[] };
 };
 
@@ -28,7 +29,6 @@ type RootCheck<ErrorType> = {
   validate: (
     rootPackage: Package,
     allPackages: Map<string, Package>,
-    rootWorkspace: Package,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -43,7 +43,6 @@ type RootCheckWithFix<ErrorType> = {
   validate: (
     rootPackage: Package,
     allPackages: Map<string, Package>,
-    rootWorkspace: Package,
     options: Options
   ) => ErrorType[];
   fix: (
@@ -58,7 +57,7 @@ type AllCheck<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package,
+    rootWorkspace: Package | undefined,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -73,7 +72,7 @@ type AllCheckWithFix<ErrorType> = {
   validate: (
     workspace: Package,
     allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package,
+    rootWorkspace: Package | undefined,
     options: Options
   ) => ErrorType[];
   fix: (
@@ -112,7 +111,7 @@ export function sortDeps(pkg: Package) {
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   let cache = new WeakMap<any, any>();
   // @ts-ignore
-  return arg => {
+  return (arg) => {
     if (cache.has(arg)) {
       // $FlowFixMe
       return cache.get(arg);
@@ -195,7 +194,7 @@ export function getClosestAllowedRange(
 ) {
   const major = semver.major(getVersionFromRange(range));
   const allowedVersionsWithSameMajor = allowedVersions.filter(
-    version => semver.major(getVersionFromRange(version)) === major
+    (version) => semver.major(getVersionFromRange(version)) === major
   );
   const possibleRanges =
     allowedVersionsWithSameMajor.length > 0

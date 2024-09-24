@@ -1,22 +1,30 @@
 {
   "name": "@manypkg/gatsby-source-workspace",
-  "version": "0.4.1",
+  "version": "0.5.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkmill/manypkg.git",
+    "directory": "packages/gatsby-source-workspace"
+  },
   "license": "MIT",
-  "peerDependencies": {
-    "gatsby": "^2.15.28"
+  "files": [
+    "gatsby-node.js",
+    "index.js"
+  ],
+  "dependencies": {
+    "find-workspaces-root": "^0.2.0",
+    "fs-extra": "^8.1.0",
+    "get-workspaces": "^0.6.0"
   },
   "devDependencies": {
     "gatsby": "^2.15.28",
     "react": "^16.10.1",
     "react-dom": "^16.10.1"
   },
-  "dependencies": {
-    "find-workspaces-root": "^0.2.0",
-    "fs-extra": "^8.1.0",
-    "get-workspaces": "^0.6.0"
+  "peerDependencies": {
+    "gatsby": "^2.15.28"
   },
-  "files": [
-    "gatsby-node.js",
-    "index.js"
-  ]
+  "engines": {
+    "node": ">=14.18.0"
+  }
 }

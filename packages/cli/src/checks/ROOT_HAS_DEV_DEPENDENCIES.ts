@@ -9,16 +9,16 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "root",
-  validate: rootWorkspace => {
+  validate: (rootWorkspace) => {
     if (rootWorkspace.packageJson.devDependencies) {
       return [{ type: "ROOT_HAS_DEV_DEPENDENCIES", workspace: rootWorkspace }];
     }
     return [];
   },
-  fix: error => {
+  fix: (error) => {
     error.workspace.packageJson.dependencies = sortObject({
       ...error.workspace.packageJson.devDependencies,
-      ...error.workspace.packageJson.dependencies
+      ...error.workspace.packageJson.dependencies,
     });
 
     delete error.workspace.packageJson.devDependencies;
@@ -31,5 +31,5 @@ export default makeCheck<ErrorType>({
     )} vs ${chalk.green(
       "dependencies"
     )} in a private package does not affect anything and creates confusion.`;
-  }
+  },
 });

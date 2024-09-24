@@ -1,4 +1,4 @@
-// @flow
+import path from "path";
 import * as logger from "./logger";
 import { getPackages, Packages, Package } from "@manypkg/get-packages";
 import { Options } from "./checks/utils";
@@ -17,26 +17,22 @@ type RootPackage = Package & {
   };
 };
 type PackagesWithConfig = Packages & {
-  root: RootPackage;
+  rootPackage?: RootPackage;
 };
 
 let defaultOptions = {
-  defaultBranch: "master"
+  defaultBranch: "master",
 };
 
 let runChecks = (
   allWorkspaces: Map<string, Package>,
-  rootWorkspace: RootPackage,
+  rootWorkspace: RootPackage | undefined,
   shouldFix: boolean,
   options: Options
 ) => {
   let hasErrored = false;
   let requiresInstall = false;
-  let ignoredRules = new Set(
-    (rootWorkspace.packageJson.manypkg &&
-      rootWorkspace.packageJson.manypkg.ignoredRules) ||
-      []
-  );
+  let ignoredRules = new Set(options.ignoredRules || []);
   for (let [ruleName, check] of Object.entries(checks)) {
     if (ignoredRules.has(ruleName)) {
       continue;
@@ -53,7 +49,7 @@ let runChecks = (
         if (shouldFix && check.fix !== undefined) {
           for (let error of errors) {
             let output = check.fix(error as any, options) || {
-              requiresInstall: false
+              requiresInstall: false,
             };
             if (output.requiresInstall) {
               requiresInstall = true;
@@ -67,17 +63,12 @@ let runChecks = (
         }
       }
     }
-    if (check.type === "root") {
-      let errors = check.validate(
-        rootWorkspace,
-        allWorkspaces,
-        rootWorkspace,
-        options
-      );
+    if (check.type === "root" && rootWorkspace) {
+      let errors = check.validate(rootWorkspace, allWorkspaces, options);
       if (shouldFix && check.fix !== undefined) {
         for (let error of errors) {
           let output = check.fix(error as any, options) || {
-            requiresInstall: false
+            requiresInstall: false,
           };
           if (output.requiresInstall) {
             requiresInstall = true;
@@ -100,11 +91,11 @@ async function execCmd(args: string[]) {
   let { packages } = await getPackages(process.cwd());
   let highestExitCode = 0;
   await Promise.all(
-    packages.map(pkg => {
+    packages.map((pkg) => {
       return execLimit(async () => {
         let { code } = await spawn(args[0], args.slice(1), {
           cwd: pkg.dir,
-          stdio: "inherit"
+          stdio: "inherit",
         });
         highestExitCode = Math.max(code, highestExitCode);
       });
@@ -134,22 +125,24 @@ async function execCmd(args: string[]) {
     throw new ExitError(1);
   }
   let shouldFix = things[0] === "fix";
-  let { packages, root, tool } = (await getPackages(
+  let { tool, packages, rootPackage, rootDir } = (await getPackages(
     process.cwd()
   )) as PackagesWithConfig;
 
   let options: Options = {
     ...defaultOptions,
-    ...root.packageJson.manypkg
+    ...rootPackage?.packageJson.manypkg,
   };
 
   let packagesByName = new Map<string, Package>(
-    packages.map(x => [x.packageJson.name, x])
+    packages.map((x) => [x.packageJson.name, x])
   );
-  packagesByName.set(root.packageJson.name, root);
+  if (rootPackage) {
+    packagesByName.set(rootPackage.packageJson.name, rootPackage);
+  }
   let { hasErrored, requiresInstall } = runChecks(
     packagesByName,
-    root,
+    rootPackage,
     shouldFix,
     options
   );
@@ -160,7 +153,7 @@ async function execCmd(args: string[]) {
       })
     );
     if (requiresInstall) {
-      await install(tool, root.dir);
+      await install(tool.type, rootDir);
     }
 
     logger.success(`fixed workspaces!`);
@@ -170,7 +163,7 @@ async function execCmd(args: string[]) {
   } else {
     logger.success(`workspaces valid!`);
   }
-})().catch(err => {
+})().catch((err) => {
   if (err instanceof ExitError) {
     process.exit(err.code);
   } else {

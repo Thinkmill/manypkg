@@ -1,4 +1,3 @@
-// @flow
 import chalk from "chalk";
 import util from "util";
 
@@ -10,7 +9,7 @@ export function format(
   let prefix = {
     error: chalk.red("error"),
     success: chalk.green("success"),
-    info: chalk.cyan("info")
+    info: chalk.cyan("info"),
   }[messageType];
   let fullPrefix = "☔️ " + prefix + (scope === undefined ? "" : " " + scope);
   return (

@@ -15,7 +15,7 @@ const PackagesList = () => {
   `);
   return (
     <div>
-      {data.allWorkspaceInfo.nodes.map(ws => (
+      {data.allWorkspaceInfo.nodes.map((ws) => (
         <div key={ws.id}>
           {/*
             TODO: Already, the link not being the name is a problem - need to associate the base url for a ws as a value on it, instead of this.

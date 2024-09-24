@@ -11,36 +11,36 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: workspace => {
+  validate: (workspace) => {
     if (!workspace.packageJson.name) {
       return [
         {
           type: "INVALID_PACKAGE_NAME",
           workspace,
-          errors: ["name cannot be undefined"]
-        }
+          errors: ["name cannot be undefined"],
+        },
       ];
     }
     let validationErrors = validateNpmPackageName(workspace.packageJson.name);
     let errors = [
       ...(validationErrors.errors || []),
-      ...(validationErrors.warnings || [])
+      ...(validationErrors.warnings || []),
     ];
     if (errors.length) {
       return [
         {
           type: "INVALID_PACKAGE_NAME",
           workspace,
-          errors
-        }
+          errors,
+        },
       ];
     }
     return [];
   },
-  print: error => {
+  print: (error) => {
     if (!error.workspace.packageJson.name) {
       return `The package at ${JSON.stringify(
-        error.workspace.dir
+        error.workspace.relativeDir
       )} does not have a name`;
     }
     return `${
@@ -48,5 +48,5 @@ export default makeCheck<ErrorType>({
     } is an invalid package name for the following reasons:\n${error.errors.join(
       "\n"
     )}`;
-  }
+  },
 });

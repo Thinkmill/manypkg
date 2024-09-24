@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs-extra");
 
-const getReadmePath = async packageDir => {
+const getReadmePath = async (packageDir) => {
   if (await fs.pathExists(path.join(packageDir, "docs", "README.md"))) {
     return path.join(packageDir, "docs", "README.md");
   } else if (await fs.pathExists(path.join(packageDir, "README.md"))) {
@@ -19,7 +19,7 @@ exports.createPages = async ({ graphql, actions }, pluginOptions) => {
 
   createPage({
     path: packagesBaseUrl,
-    component: path.resolve("./src/templates/packages-list.js")
+    component: path.resolve("./src/templates/packages-list.js"),
   });
 
   let result = await graphql(
@@ -51,7 +51,7 @@ exports.createPages = async ({ graphql, actions }, pluginOptions) => {
   for (let ws of allWorkspaceInfo) {
     let readmePath = await getReadmePath(ws.dir);
 
-    let mdxInfo = allMdx.find(mdx => mdx.fileAbsolutePath === readmePath);
+    let mdxInfo = allMdx.find((mdx) => mdx.fileAbsolutePath === readmePath);
 
     // Decision made here - we are stripping the scope from the url - this tidies things and was rarely if ever
     // useful. This should probably be possible to reverse with config.
@@ -60,7 +60,7 @@ exports.createPages = async ({ graphql, actions }, pluginOptions) => {
     createPage({
       path: wsBaseUrl,
       component: path.resolve("./src/templates/workspace-page.js"),
-      context: { id: mdxInfo.id }
+      context: { id: mdxInfo.id },
     });
   }
 };

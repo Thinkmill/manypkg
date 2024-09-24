@@ -1,14 +1,15 @@
-import { getPackages, Packages } from "@manypkg/get-packages";
+import { getPackages } from "@manypkg/get-packages";
 import semver from "semver";
 import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils";
-import getPackageJson from "package-json";
 import pLimit from "p-limit";
 
 import { writePackage, install } from "./utils";
 
 export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing
-  let { packages, tool, root } = await getPackages(process.cwd());
+  let { packages, tool, rootPackage, rootDir } = await getPackages(
+    process.cwd()
+  );
   let isScope = name.startsWith("@") && !name.includes("/");
   let newVersion = semver.validRange(tag) ? tag : null;
 
@@ -17,13 +18,13 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   let filteredPackages = packages.filter(({ packageJson }) => {
     let requiresUpdate = false;
 
-    DEPENDENCY_TYPES.forEach(t => {
+    DEPENDENCY_TYPES.forEach((t) => {
       let deps = packageJson[t];
       if (!deps) return;
 
       let packageNames = Object.keys(deps);
-      packageNames.forEach(pkgName => {
-        if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
+      packageNames.forEach((pkgName) => {
+        if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
           requiresUpdate = true;
           packagesToUpdate.add(pkgName);
         }
@@ -33,26 +34,28 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
     return requiresUpdate;
   });
 
-  let rootRequiresUpdate = false;
-  DEPENDENCY_TYPES.forEach(t => {
-    let deps = root.packageJson[t];
-    if (!deps) return;
+  if (rootPackage) {
+    let rootRequiresUpdate = false;
+    DEPENDENCY_TYPES.forEach((t) => {
+      let deps = rootPackage!.packageJson[t];
+      if (!deps) return;
 
-    let packageNames = Object.keys(deps);
-    packageNames.forEach(pkgName => {
-      if ((isScope && pkgName.startsWith(name)) || pkgName === name) {
-        rootRequiresUpdate = true;
-        packagesToUpdate.add(pkgName);
+      let packageNames = Object.keys(deps);
+      packageNames.forEach((pkgName) => {
+        if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
+          rootRequiresUpdate = true;
+          packagesToUpdate.add(pkgName);
+        }
+      });
+
+      if (rootRequiresUpdate) {
+        filteredPackages.push(rootPackage!);
       }
     });
-
-    if (rootRequiresUpdate) {
-      filteredPackages.push(root);
-    }
-  });
+  }
 
   let newVersions = await Promise.all(
-    [...packagesToUpdate].map(async pkgName => {
+    [...packagesToUpdate].map(async (pkgName) => {
       if (!newVersion) {
         let info = await getPackageInfo(pkgName);
 
@@ -67,7 +70,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
   );
 
   filteredPackages.forEach(({ packageJson }) => {
-    DEPENDENCY_TYPES.forEach(t => {
+    DEPENDENCY_TYPES.forEach((t) => {
       let deps = packageJson[t];
 
       if (deps) {
@@ -88,17 +91,17 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
   await Promise.all([...filteredPackages].map(writePackage));
 
-  await install(tool, root.dir);
+  await install(tool.type, rootDir);
 }
 
 const npmRequestLimit = pLimit(40);
 
 export function getPackageInfo(pkgName: string) {
   return npmRequestLimit(async () => {
-    let result = await getPackageJson(pkgName, {
-      allVersions: true
-    });
+    const getPackageJson = (await import("package-json")).default;
 
-    return result;
+    return getPackageJson(pkgName, {
+      allVersions: true,
+    });
   });
 }

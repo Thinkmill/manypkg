@@ -2,7 +2,7 @@ import {
   makeCheck,
   getMostCommonRangeMap,
   getClosestAllowedRange,
-  NORMAL_DEPENDENCY_TYPES
+  NORMAL_DEPENDENCY_TYPES,
 } from "./utils";
 import { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
@@ -12,7 +12,7 @@ type ErrorType = {
   workspace: Package;
   dependencyName: string;
   dependencyRange: string;
-  expectedRange: string;
+  mostCommonDependencyRange: string;
 };
 
 export default makeCheck<ErrorType>({
@@ -40,9 +40,9 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyName: depName,
               dependencyRange: range,
-              expectedRange: allowedVersions
+              mostCommonDependencyRange: allowedVersions
                 ? getClosestAllowedRange(range, allowedVersions)
-                : mostCommonRange
+                : mostCommonRange,
             });
           }
         }
@@ -50,16 +50,16 @@ export default makeCheck<ErrorType>({
     }
     return errors;
   },
-  fix: error => {
+  fix: (error) => {
     for (let depType of NORMAL_DEPENDENCY_TYPES) {
       let deps = error.workspace.packageJson[depType];
       if (deps && deps[error.dependencyName]) {
-        deps[error.dependencyName] = error.expectedRange;
+        deps[error.dependencyName] = error.mostCommonDependencyRange;
       }
     }
     return { requiresInstall: true };
   },
-  print: error =>
-    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the range should be set to ${error.expectedRange}`,
-  type: "all"
+  print: (error) =>
+    `${error.workspace.packageJson.name} has a dependency on ${error.dependencyName}@${error.dependencyRange} but the most common range in the repo is ${error.mostCommonDependencyRange}, the range should be set to ${error.mostCommonDependencyRange}`,
+  type: "all",
 });

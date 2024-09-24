@@ -1,5 +1,62 @@
 # @manypkg/cli
 
+## 0.21.4
+
+### Patch Changes
+
+- [#206](https://github.com/Thinkmill/manypkg/pull/206) [`c2c4a3b`](https://github.com/Thinkmill/manypkg/commit/c2c4a3b80d593c81d92878c161cc69cd141ac806) Thanks [@bdkopen](https://github.com/bdkopen)! - Fix `manypkg upgrade @scope` upgrading packages like `@scope-something/a`
+
+## 0.21.3
+
+### Patch Changes
+
+- [#204](https://github.com/Thinkmill/manypkg/pull/204) [`b56869a`](https://github.com/Thinkmill/manypkg/commit/b56869a23d04bf0dedcb8e399aa339a5e35172b1) Thanks [@emmatown](https://github.com/emmatown)! - Allow dependecies to use the `workspace:` protocol and support adding `"workspaceProtocol": "require"` to the `manypkg` config to require it.
+
+- Updated dependencies [[`3c9641c`](https://github.com/Thinkmill/manypkg/commit/3c9641c94980a887fdb4366698ad69199883ff84)]:
+  - @manypkg/get-packages@2.2.1
+
+## 0.21.2
+
+### Patch Changes
+
+- [#194](https://github.com/Thinkmill/manypkg/pull/194) [`56a64c5`](https://github.com/Thinkmill/manypkg/commit/56a64c5d29565195d0f5013425ee1e2e5fdbe754) Thanks [@KATT](https://github.com/KATT)! - fix: allow tags in `npm:x`-deps
+
+## 0.21.1
+
+### Patch Changes
+
+- [#181](https://github.com/Thinkmill/manypkg/pull/181) [`1e31ced`](https://github.com/Thinkmill/manypkg/commit/1e31cedbbe09c15cbf38c43c8c286f6af62ef18c) Thanks [@fbartho](https://github.com/fbartho)! - Updated `package-json` dependency.
+
+## 0.21.0
+
+### Minor Changes
+
+- [#174](https://github.com/Thinkmill/manypkg/pull/174) [`de0fff3`](https://github.com/Thinkmill/manypkg/commit/de0fff37af9e6dc21b75b7115381483c1e85b8a7) Thanks [@steve-taylor](https://github.com/steve-taylor)! - Restored support for Bolt monorepos.
+
+### Patch Changes
+
+- Updated dependencies [[`de0fff3`](https://github.com/Thinkmill/manypkg/commit/de0fff37af9e6dc21b75b7115381483c1e85b8a7)]:
+  - @manypkg/get-packages@2.2.0
+
+## 0.20.0
+
+### Minor Changes
+
+- [#165](https://github.com/Thinkmill/manypkg/pull/165) [`7b9c4f6`](https://github.com/Thinkmill/manypkg/commit/7b9c4f6d9a73de8b3cc45af5abc8af47f6b9206c) Thanks [@Andarist](https://github.com/Andarist)! - Removed support for Bolt monorepos.
+
+* [#162](https://github.com/Thinkmill/manypkg/pull/162) [`f046017`](https://github.com/Thinkmill/manypkg/commit/f046017af2349f0c1bbc5b25224da0ede8ddc2d6) Thanks [@Andarist](https://github.com/Andarist)! - Increased the transpilation target of the source files to `node@14.x`. At the same time added this as `package.json#engines` to explicitly declare the minimum node version supported by this package.
+
+### Patch Changes
+
+- Updated dependencies [[`7b9c4f6`](https://github.com/Thinkmill/manypkg/commit/7b9c4f6d9a73de8b3cc45af5abc8af47f6b9206c), [`f046017`](https://github.com/Thinkmill/manypkg/commit/f046017af2349f0c1bbc5b25224da0ede8ddc2d6), [`a01efc9`](https://github.com/Thinkmill/manypkg/commit/a01efc9c25900b7d21b6d517a2021b021f8b3922)]:
+  - @manypkg/get-packages@2.0.0
+
+## 0.19.2
+
+### Patch Changes
+
+- [#136](https://github.com/Thinkmill/manypkg/pull/136) [`6063c55`](https://github.com/Thinkmill/manypkg/commit/6063c559907580c15b78160eb529438b18c67017) Thanks [@ChalkPE](https://github.com/ChalkPE)! - Remove unused `get-workspaces` dependency
+
 ## 0.19.1
 
 ### Patch Changes

@@ -13,8 +13,8 @@ async function getGatsbyConfig() {
       {
         resolve: `gatsby-source-filesystem`,
         options: {
-          path: `${__dirname}/src/pages`
-        }
+          path: `${__dirname}/src/pages`,
+        },
       },
       {
         resolve: "@manypkg/gatsby-source-workspace",
@@ -24,15 +24,15 @@ async function getGatsbyConfig() {
             {
               name: "changelog",
               definition: `String`,
-              getFieldInfo: async ws =>
-                await fs.readFile(path.join(ws.dir, "changelog.md"), "utf-8")
+              getFieldInfo: async (ws) =>
+                await fs.readFile(path.join(ws.dir, "changelog.md"), "utf-8"),
             },
             {
               name: "license",
-              definition: `String`
-            }
-          ]
-        }
+              definition: `String`,
+            },
+          ],
+        },
       },
       {
         resolve: `gatsby-source-filesystem`,
@@ -40,8 +40,8 @@ async function getGatsbyConfig() {
           path: workspacesRoot,
           // This syntax matches all FILES that are not .md, but does not match on folders
           // If it matches on folders, this plugin does not run successfully
-          ignore: ["**/.cache/**/*", "**/*.!(md)"]
-        }
+          ignore: ["**/.cache/**/*", "**/*.!(md)"],
+        },
       },
       {
         resolve: `gatsby-source-filesystem`,
@@ -49,16 +49,16 @@ async function getGatsbyConfig() {
           path: workspacesRoot,
           // This syntax matches all FILES that are not .md, but does not match on folders
           // If it matches on folders, this plugin does not run successfully
-          ignore: ["**/.cache/**/*", "**/*.!(mdx)"]
-        }
+          ignore: ["**/.cache/**/*", "**/*.!(mdx)"],
+        },
       },
       {
         resolve: `gatsby-plugin-mdx`,
         options: {
-          extensions: [`.mdx`, `.md`]
-        }
-      }
-    ]
+          extensions: [`.mdx`, `.md`],
+        },
+      },
+    ],
   };
 }
 module.exports = getGatsbyConfig();
