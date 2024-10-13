@@ -1,5 +1,5 @@
 import { makeCheck, sortObject } from "./utils";
-import chalk from "chalk";
+import pc from "picocolors";
 import { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
@@ -24,11 +24,9 @@ export default makeCheck<ErrorType>({
     delete error.workspace.packageJson.devDependencies;
   },
   print: () => {
-    return `the root package.json contains ${chalk.yellow(
+    return `the root package.json contains ${pc.yellow(
       "devDependencies"
-    )}, this is disallowed as ${chalk.yellow(
-      "devDependencies"
-    )} vs ${chalk.green(
+    )}, this is disallowed as ${pc.yellow("devDependencies")} vs ${pc.green(
       "dependencies"
     )} in a private package does not affect anything and creates confusion.`;
   },

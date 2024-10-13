@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import pc from "picocolors";
 import util from "util";
 
 export function format(
@@ -7,9 +7,9 @@ export function format(
   scope?: string
 ) {
   let prefix = {
-    error: chalk.red("error"),
-    success: chalk.green("success"),
-    info: chalk.cyan("info"),
+    error: pc.red("error"),
+    success: pc.green("success"),
+    info: pc.cyan("info"),
   }[messageType];
   let fullPrefix = "☔️ " + prefix + (scope === undefined ? "" : " " + scope);
   return (
