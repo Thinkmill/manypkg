@@ -2,4 +2,4 @@
 "@manypkg/cli": minor
 ---
 
-Replace fs-extra with native node:fs/promises
+Replace `fs-extra` with native `node:fs/promises`
