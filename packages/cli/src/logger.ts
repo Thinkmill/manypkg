@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import util from "util";
 
-export function format(
+function format(
   args: Array<any>,
   messageType: "error" | "success" | "info",
   scope?: string

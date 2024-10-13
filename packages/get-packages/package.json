@@ -13,7 +13,7 @@
     "@manypkg/tools": "^1.1.1"
   },
   "devDependencies": {
-    "jest-fixtures": "^0.6.0"
+    "fixturez": "^1.1.0"
   },
   "engines": {
     "node": ">=14.18.0"

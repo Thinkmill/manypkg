@@ -1,7 +1,7 @@
 import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils";
 import { Package } from "@manypkg/get-packages";
 
-export type ErrorType = {
+type ErrorType = {
   type: "WORKSPACE_REQUIRED";
   workspace: Package;
   depType: typeof NORMAL_DEPENDENCY_TYPES[number];

@@ -79,12 +79,6 @@ type AllCheckWithFix<ErrorType> = {
   print: (error: ErrorType, options: Options) => string;
 };
 
-export type Check<ErrorType> =
-  | RootCheck<ErrorType>
-  | AllCheck<ErrorType>
-  | RootCheckWithFix<ErrorType>
-  | AllCheckWithFix<ErrorType>;
-
 export function sortObject(prevObj: { [key: string]: string }) {
   let newObj: { [key: string]: string } = {};
 
