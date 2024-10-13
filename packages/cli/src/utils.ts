@@ -1,4 +1,4 @@
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import { Package, Tool } from "@manypkg/get-packages";
 import path from "path";
 import spawn from "spawndamnit";

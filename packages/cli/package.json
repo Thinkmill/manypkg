@@ -17,7 +17,6 @@
     "chalk": "^2.4.2",
     "detect-indent": "^6.0.0",
     "find-up": "^4.1.0",
-    "fs-extra": "^8.1.0",
     "normalize-path": "^3.0.0",
     "p-limit": "^2.2.1",
     "package-json": "^8.1.0",
