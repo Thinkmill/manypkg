@@ -1,5 +1,5 @@
 import { getPackages } from "@manypkg/get-packages";
-import { PackageJSON } from "@changesets/types";
+import type { PackageJSON } from "@changesets/types";
 import spawn from "spawndamnit";
 import pLimit from "p-limit";
 

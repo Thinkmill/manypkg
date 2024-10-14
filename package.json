@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "postinstall": "preconstruct dev && manypkg check",
+    "knip": "knip",
     "release": "preconstruct build && changeset publish",
     "test": "jest",
     "test-gatsby": "cd test-gatsby && gatsby develop"
@@ -29,21 +30,18 @@
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
     "@preconstruct/cli": "^2.2.2",
-    "@types/fs-extra": "^8.0.1",
     "@types/jest": "^29.2.4",
     "@types/normalize-path": "^3.0.0",
     "@types/parse-github-url": "^1.0.0",
     "@types/semver": "^6.0.1",
     "jest": "^29.3.1",
     "jest-watch-typeahead": "^2.2.1",
+    "knip": "^5.33.3",
     "prettier": "^2.8.1",
     "prettier-plugin-packagejson": "^2.3.0",
     "typescript": "^5.3.2"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "engines": {
-    "node": ">=14.18.0"
-  },
   "preconstruct": {
     "packages": [
       "packages/!(gatsby)*"

@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install Dependencies
         run: yarn
@@ -30,10 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install Dependencies
         run: yarn
@@ -47,13 +47,30 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set Node.js 16.x
+      - name: Set Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install Dependencies
         run: yarn
 
       - name: Check Formatting
         run: yarn format:check
+
+  knip:
+    name: Knip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Check Knip
+        run: yarn knip

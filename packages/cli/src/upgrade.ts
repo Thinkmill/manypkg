@@ -96,7 +96,7 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
 const npmRequestLimit = pLimit(40);
 
-export function getPackageInfo(pkgName: string) {
+function getPackageInfo(pkgName: string) {
   return npmRequestLimit(async () => {
     const getPackageJson = (await import("package-json")).default;
 

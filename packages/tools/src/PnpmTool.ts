@@ -19,10 +19,6 @@ function readYamlFileSync<T = unknown>(path: string): T {
   return yaml.load(fs.readFileSync(path, "utf8")) as T;
 }
 
-export interface PnpmWorkspaceYaml {
-  packages?: string[];
-}
-
 export const PnpmTool: Tool = {
   type: "pnpm",
 

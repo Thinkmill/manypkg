@@ -15,7 +15,6 @@
   "dependencies": {
     "@manypkg/get-packages": "^2.2.1",
     "detect-indent": "^6.0.0",
-    "find-up": "^4.1.0",
     "normalize-path": "^3.0.0",
     "p-limit": "^2.2.1",
     "package-json": "^8.1.0",
@@ -27,6 +26,7 @@
     "validate-npm-package-name": "^5.0.1"
   },
   "devDependencies": {
+    "@changesets/types": "^5.2.1",
     "fixturez": "^1.1.0",
     "strip-ansi": "^6.0.0"
   },
