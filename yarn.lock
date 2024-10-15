@@ -2231,6 +2231,11 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-6.0.1.tgz#a984b405c702fa5a7ec6abc56b37f2ba35ef5af6"
   integrity sha512-ffCdcrEE5h8DqVxinQjo+2d1q+FV5z7iNtPofw3JsrltSoSVlOGaW0rY8XxtO9XukdTn8TaCGWmk2VFGhI70mg==
 
+"@types/semver@^7.3.9":
+  version "7.5.8"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.8.tgz#8268a8c57a3e4abd25c165ecd36237db7948a55e"
+  integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==
+
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
@@ -12774,13 +12779,13 @@ selfsigned@^1.10.7:
   dependencies:
     node-forge "0.9.0"
 
-sembear@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.5.0.tgz#c2816702770022c94f5e7a0fc92a20103ff98b33"
-  integrity sha512-TIKNdyDMViRifHrQC1OLM/o75ApE6dTISmsoCJrkgZmzKLpwgAgsq5gYvv0e7BZpuA0fT4N+Ya5ZxeH6hQv1Tw==
+sembear@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.6.0.tgz#b133a71b39b10803dfb1a316ebc40de3d35cf021"
+  integrity sha512-pM7oaCuhZGHr9hROGOXr85pJgap4S1YwECHGE7GyXbaRn5GUVvmdkB5Lsgr6zsAUiRMdWvgSYnkLLcqUK0Lyzw==
   dependencies:
-    "@types/semver" "^6.0.1"
-    semver "^6.3.0"
+    "@types/semver" "^7.3.9"
+    semver "^7.3.5"
 
 semver-diff@^2.0.0:
   version "2.1.0"
@@ -12816,7 +12821,7 @@ semver@^7.3.4, semver@^7.3.5:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@^7.6.0:
+semver@^7.6.0, semver@^7.6.3:
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
   integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
