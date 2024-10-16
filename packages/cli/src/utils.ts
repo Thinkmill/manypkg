@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { Package, Tool } from "@manypkg/get-packages";
 import path from "path";
-import spawn from "spawndamnit";
+import { exec } from "tinyexec";
 import detectIndent from "detect-indent";
 
 export async function writePackage(pkg: Package) {
@@ -24,13 +24,13 @@ export async function install(toolType: string, cwd: string) {
     yarn: "yarn",
   };
 
-  await spawn(
+  await exec(
     cliRunners[toolType],
     toolType === "pnpm"
       ? ["install"]
       : toolType === "lerna"
       ? ["bootstrap", "--since", "HEAD"]
       : [],
-    { cwd, stdio: "inherit" }
+    { nodeOptions: { cwd, stdio: "inherit" } }
   );
 }

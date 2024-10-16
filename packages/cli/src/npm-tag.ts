@@ -1,6 +1,6 @@
 import { getPackages } from "@manypkg/get-packages";
 import type { PackageJSON } from "@changesets/types";
-import spawn from "spawndamnit";
+import { exec } from "tinyexec";
 import pLimit from "p-limit";
 
 let npmLimit = pLimit(40);
@@ -30,7 +30,7 @@ async function tagApackage(
     flags.push("--otp", otpCode);
   }
 
-  return await spawn(
+  return await exec(
     "npm",
     [
       "dist-tag",
@@ -40,8 +40,10 @@ async function tagApackage(
       ...flags,
     ],
     {
-      stdio: "inherit",
-      env: Object.assign({}, process.env, envOverride),
+      nodeOptions: {
+        stdio: "inherit",
+        env: envOverride,
+      },
     }
   );
 }

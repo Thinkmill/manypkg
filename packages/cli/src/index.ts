@@ -8,7 +8,7 @@ import { writePackage, install } from "./utils";
 import { runCmd } from "./run";
 import { upgradeDependency } from "./upgrade";
 import { npmTagAll } from "./npm-tag";
-import spawn from "spawndamnit";
+import { exec } from "tinyexec";
 import pLimit from "p-limit";
 
 type RootPackage = Package & {
@@ -93,11 +93,13 @@ async function execCmd(args: string[]) {
   await Promise.all(
     packages.map((pkg) => {
       return execLimit(async () => {
-        let { code } = await spawn(args[0], args.slice(1), {
-          cwd: pkg.dir,
-          stdio: "inherit",
+        const { exitCode } = await exec(args[0], args.slice(1), {
+          nodeOptions: {
+            cwd: pkg.dir,
+            stdio: "inherit",
+          },
         });
-        highestExitCode = Math.max(code, highestExitCode);
+        highestExitCode = Math.max(exitCode ?? 1, highestExitCode);
       });
     })
   );
