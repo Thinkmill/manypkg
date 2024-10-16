@@ -2231,11 +2231,6 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-6.0.1.tgz#a984b405c702fa5a7ec6abc56b37f2ba35ef5af6"
   integrity sha512-ffCdcrEE5h8DqVxinQjo+2d1q+FV5z7iNtPofw3JsrltSoSVlOGaW0rY8XxtO9XukdTn8TaCGWmk2VFGhI70mg==
 
-"@types/semver@^7.3.9":
-  version "7.5.8"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.8.tgz#8268a8c57a3e4abd25c165ecd36237db7948a55e"
-  integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==
-
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
@@ -12779,12 +12774,11 @@ selfsigned@^1.10.7:
   dependencies:
     node-forge "0.9.0"
 
-sembear@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.6.0.tgz#b133a71b39b10803dfb1a316ebc40de3d35cf021"
-  integrity sha512-pM7oaCuhZGHr9hROGOXr85pJgap4S1YwECHGE7GyXbaRn5GUVvmdkB5Lsgr6zsAUiRMdWvgSYnkLLcqUK0Lyzw==
+sembear@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/sembear/-/sembear-0.7.0.tgz#a2a0cfecf8886818e49e9bca959188e3685105b3"
+  integrity sha512-XyLTEich2D02FODCkfdto3mB9DetWPLuTzr4tvoofe9SvyM27h4nQSbV3+iVcYQz94AFyKtqBv5pcZbj3k2hdA==
   dependencies:
-    "@types/semver" "^7.3.9"
     semver "^7.3.5"
 
 semver-diff@^2.0.0:
