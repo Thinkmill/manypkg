@@ -4,8 +4,6 @@ module.exports = {
       "@babel/preset-env",
       {
         targets: { node: 14 },
-        // necessary to preserve dynamic import of ESM-only modules
-        exclude: ["proposal-dynamic-import"],
       },
     ],
     "@babel/preset-typescript",
