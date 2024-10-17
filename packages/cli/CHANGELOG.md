@@ -1,5 +1,23 @@
 # @manypkg/cli
 
+## 0.22.0
+
+### Minor Changes
+
+- [#231](https://github.com/Thinkmill/manypkg/pull/231) [`aeb50f5`](https://github.com/Thinkmill/manypkg/commit/aeb50f53bae8c241792593d170547a788dbd86c9) Thanks [@VanTanev](https://github.com/VanTanev)! - Upgraded `package-json`, `semver` and `sembear` dependencies.
+
+- [#226](https://github.com/Thinkmill/manypkg/pull/226) [`2fafd9a`](https://github.com/Thinkmill/manypkg/commit/2fafd9a9f4fce590ad37b1b1e2286ff6f2db725e) Thanks [@VanTanev](https://github.com/VanTanev)! - Replace `chalk` with `picocolors`
+
+- [#228](https://github.com/Thinkmill/manypkg/pull/228) [`1cbdcb9`](https://github.com/Thinkmill/manypkg/commit/1cbdcb9d9905392cc90ff16111f4d6fc4722b90a) Thanks [@VanTanev](https://github.com/VanTanev)! - Remove the `find-up` dependency.
+
+- [#231](https://github.com/Thinkmill/manypkg/pull/231) [`aeb50f5`](https://github.com/Thinkmill/manypkg/commit/aeb50f53bae8c241792593d170547a788dbd86c9) Thanks [@VanTanev](https://github.com/VanTanev)! - Node.js version requirement raised to `>= 18.0.0`
+
+- [#224](https://github.com/Thinkmill/manypkg/pull/224) [`3c3198a`](https://github.com/Thinkmill/manypkg/commit/3c3198a4a0f51cdbb09be996f4c2ed78fa5ce2a1) Thanks [@VanTanev](https://github.com/VanTanev)! - Replace `spawndamnit` with `tinyexec` for fewer dependencies
+
+- [#229](https://github.com/Thinkmill/manypkg/pull/229) [`4a835ed`](https://github.com/Thinkmill/manypkg/commit/4a835ed40fe40b046810b60c00d918a5aa36dfc8) Thanks [@VanTanev](https://github.com/VanTanev)! - Update `validate-npm-package-name` to `5.0.1` to remove one transitive dependency.
+
+- [#225](https://github.com/Thinkmill/manypkg/pull/225) [`d0f4d92`](https://github.com/Thinkmill/manypkg/commit/d0f4d926040bca29b1f2dd9f366e60854fb16118) Thanks [@VanTanev](https://github.com/VanTanev)! - Replace `fs-extra` with native `node:fs/promises`
+
 ## 0.21.4
 
 ### Patch Changes
