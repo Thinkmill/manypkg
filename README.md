@@ -294,15 +294,15 @@ This is so that `peerDependencies` are available in the package during developme
 
 The range for the dependency specified in `peerDependencies` is added to `devDependencies` unless the package is already a non-peer dependency elsewhere in the repo in which, that range is used instead.
 
-## Root has devDependencies
+## Root has prod dependencies
 
-Key: `ROOT_HAS_DEV_DEPENDENCIES`
+Key: `ROOT_HAS_PROD_DEPENDENCIES`
 
-The root package should not have any `devDependencies`, instead all dependencies should be in `dependencies`
+The root package should not have any production `dependencies`, instead all dependencies should be in `devDependencies`.
 
 ### Why it's a rule
 
-The root `package.json` of a monorepo is not published so whether a dependency is in `devDependencies` or `dependencies` does not make a difference and having one place to put dependencies in the root means that people do not have to arbitrarily decide where a dependency should go every time they install one.
+The root `package.json` of a monorepo is not published so whether a dependency is in `devDependencies` or `dependencies` does not make a difference and having one place to put dependencies in the root means that people do not have to arbitrarily decide where a dependency should go every time they install one. We prefer `devDependencies` because a monorepo root should contain only tooling dependencies.
 
 ### How it's fixed
 

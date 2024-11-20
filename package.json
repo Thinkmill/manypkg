@@ -22,7 +22,7 @@
       "jest-watch-typeahead/testname"
     ]
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.20.5",
     "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.20.2",
