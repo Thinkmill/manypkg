@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.23.0
+
+### Minor Changes
+
+- [#236](https://github.com/Thinkmill/manypkg/pull/236) [`1a5ea55`](https://github.com/Thinkmill/manypkg/commit/1a5ea55d5cf4ba7117095a0f7d3cab6843fa1ae1) Thanks [@VanTanev](https://github.com/VanTanev)! - Change the `ROOT_HAS_DEV_DEPENDENCIES` rule to `ROOT_HAS_PROD_DEPENDENCIES`. Monorepo root should use `devDependencies` instead of `dependencies` for better support of production-only installs, useful in eg Docker builds.
+
 ## 0.22.0
 
 ### Minor Changes
