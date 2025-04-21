@@ -1,4 +1,4 @@
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
 

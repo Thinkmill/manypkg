@@ -1,7 +1,11 @@
 import path from "path";
 import * as logger from "./logger.ts";
-import { getPackages, Packages, Package } from "@manypkg/get-packages";
-import { Options } from "./checks/utils.ts";
+import {
+  getPackages,
+  type Packages,
+  type Package,
+} from "@manypkg/get-packages";
+import type { Options } from "./checks/utils.ts";
 import { checks } from "./checks/index.ts";
 import { ExitError } from "./errors.ts";
 import { writePackage, install } from "./utils.ts";

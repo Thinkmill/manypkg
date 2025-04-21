@@ -2,9 +2,9 @@ import {
   makeCheck,
   NORMAL_DEPENDENCY_TYPES,
   versionRangeToRangeType,
-} from "./utils";
+} from "./utils.ts";
 import semver from "semver";
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";

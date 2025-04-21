@@ -10,7 +10,7 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "preconstruct dev && manypkg check",
+    "postinstall": "preconstruct dev && NODE_OPTIONS=--experimental-strip-types packages/cli/bin.js check",
     "knip": "knip",
     "release": "preconstruct build && changeset publish",
     "test": "jest",

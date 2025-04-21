@@ -2,8 +2,8 @@ import {
   makeCheck,
   getMostCommonRangeMap,
   NORMAL_DEPENDENCY_TYPES,
-} from "./utils";
-import { Package } from "@manypkg/get-packages";
+} from "./utils.ts";
+import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
 
 type ErrorType = {

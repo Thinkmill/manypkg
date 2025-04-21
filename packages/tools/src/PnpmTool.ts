@@ -3,7 +3,12 @@ import yaml from "js-yaml";
 import fs from "fs";
 import fsp from "fs/promises";
 
-import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool.ts";
+import {
+  type Tool,
+  type PackageJSON,
+  type Packages,
+  InvalidMonorepoError,
+} from "./Tool.ts";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,

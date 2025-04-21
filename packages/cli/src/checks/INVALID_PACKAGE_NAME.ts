@@ -1,7 +1,7 @@
-import { makeCheck, sortObject } from "./utils";
+import { makeCheck, sortObject } from "./utils.ts";
 // @ts-ignore
 import validateNpmPackageName from "validate-npm-package-name";
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "INVALID_PACKAGE_NAME";

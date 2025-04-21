@@ -1,10 +1,10 @@
 import path from "path";
 
 import {
-  Tool,
-  Package,
-  PackageJSON,
-  Packages,
+  type Tool,
+  type Package,
+  type PackageJSON,
+  type Packages,
   InvalidMonorepoError,
 } from "./Tool.ts";
 import { readJson, readJsonSync } from "./utils.ts";

@@ -1,5 +1,5 @@
-import { makeCheck, getMostCommonRangeMap } from "./utils";
-import { Package } from "@manypkg/get-packages";
+import { makeCheck, getMostCommonRangeMap } from "./utils.ts";
+import type { Package } from "@manypkg/get-packages";
 import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
 import semver from "semver";
 
