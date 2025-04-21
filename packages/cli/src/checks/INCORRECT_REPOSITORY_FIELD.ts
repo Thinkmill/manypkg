@@ -1,8 +1,8 @@
 import parseGithubUrl from "parse-github-url";
 import normalizePath from "normalize-path";
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 
-import { makeCheck } from "./utils";
+import { makeCheck } from "./utils.ts";
 
 type ErrorType = {
   type: "INCORRECT_REPOSITORY_FIELD";

@@ -2,7 +2,7 @@ import path from "path";
 import fsp from "fs/promises";
 import { glob, globSync } from "tinyglobby";
 
-import { Package, PackageJSON } from "./Tool.ts";
+import type { Package, PackageJSON } from "./Tool.ts";
 import { readJsonSync } from "./utils.ts";
 
 /**

@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 import path from "path";
 import { exec } from "tinyexec";
 import detectIndent from "detect-indent";

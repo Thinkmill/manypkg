@@ -1,6 +1,11 @@
 import path from "path";
 
-import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool.ts";
+import {
+  type Tool,
+  type PackageJSON,
+  type Packages,
+  InvalidMonorepoError,
+} from "./Tool.ts";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,

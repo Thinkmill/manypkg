@@ -1,5 +1,5 @@
-import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils";
-import { Package } from "@manypkg/get-packages";
+import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils.ts";
+import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "WORKSPACE_REQUIRED";

@@ -3,9 +3,9 @@ import fs from "fs";
 import fsp from "fs/promises";
 
 import {
-  Tool,
+  type Tool,
   RootTool,
-  MonorepoRoot,
+  type MonorepoRoot,
   BoltTool,
   LernaTool,
   PnpmTool,
