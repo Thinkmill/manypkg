@@ -7,8 +7,11 @@
     "directory": "packages/find-root"
   },
   "license": "MIT",
-  "main": "dist/manypkg-find-root.cjs.js",
-  "module": "dist/manypkg-find-root.esm.js",
+  "type": "module",
+  "exports": {
+    ".": "./dist/manypkg-find-root.js",
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "@manypkg/tools": "^1.1.2"
   },
