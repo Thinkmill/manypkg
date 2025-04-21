@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-import("@manypkg/cli");
+import "@manypkg/cli";
