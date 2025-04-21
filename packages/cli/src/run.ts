@@ -1,10 +1,10 @@
 import { getPackages } from "@manypkg/get-packages";
 import { exec } from "tinyexec";
-import * as logger from "./logger";
-import { ExitError } from "./errors";
+import * as logger from "./logger.ts";
+import { ExitError } from "./errors.ts";
 
 export async function runCmd(args: string[], cwd: string) {
-  let { packages, rootDir } = await getPackages(cwd);
+  let { packages } = await getPackages(cwd);
 
   const exactMatchingPackage = packages.find((pkg) => {
     return pkg.packageJson.name === args[0] || pkg.relativeDir === args[0];

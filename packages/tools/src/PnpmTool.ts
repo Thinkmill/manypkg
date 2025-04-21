@@ -3,12 +3,12 @@ import yaml from "js-yaml";
 import fs from "fs";
 import fsp from "fs/promises";
 
-import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool.ts";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
-} from "./expandPackageGlobs";
-import { readJson, readJsonSync } from "./utils";
+} from "./expandPackageGlobs.ts";
+import { readJson, readJsonSync } from "./utils.ts";
 
 async function readYamlFile<T = unknown>(path: string): Promise<T> {
   return fsp

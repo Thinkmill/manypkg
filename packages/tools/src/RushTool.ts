@@ -9,8 +9,8 @@ import {
   PackageJSON,
   Packages,
   InvalidMonorepoError,
-} from "./Tool";
-import { readJson, readJsonSync } from "./utils";
+} from "./Tool.ts";
+import { readJson, readJsonSync } from "./utils.ts";
 
 interface RushJson {
   projects: RushProject[];
