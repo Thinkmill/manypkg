@@ -7,8 +7,11 @@
     "directory": "packages/cli"
   },
   "license": "MIT",
-  "main": "dist/manypkg-cli.cjs.js",
-  "module": "dist/manypkg-cli.esm.js",
+  "type": "module",
+  "exports": {
+    ".": "./dist/manypkg-cli.js",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "manypkg": "./bin.js"
   },
