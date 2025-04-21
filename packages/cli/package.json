@@ -16,7 +16,7 @@
     "@manypkg/get-packages": "^2.2.1",
     "detect-indent": "^6.0.0",
     "normalize-path": "^3.0.0",
-    "p-limit": "^2.2.1",
+    "p-limit": "^6.2.0",
     "package-json": "^10.0.1",
     "parse-github-url": "^1.0.2",
     "picocolors": "^1.1.0",
