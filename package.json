@@ -46,9 +46,9 @@
     "packages": [
       "packages/!(gatsby)*"
     ],
-		"exports": {
-			"importConditionDefaultExport": "default"
-		},
+    "exports": {
+      "importConditionDefaultExport": "default"
+    },
     "___experimentalFlags_WILL_CHANGE_IN_PATCH": {
       "distInRoot": true,
       "importsConditions": true,
