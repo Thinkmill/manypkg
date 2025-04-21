@@ -4,7 +4,7 @@ import { Package } from "@manypkg/get-packages";
 type ErrorType = {
   type: "WORKSPACE_REQUIRED";
   workspace: Package;
-  depType: typeof NORMAL_DEPENDENCY_TYPES[number];
+  depType: (typeof NORMAL_DEPENDENCY_TYPES)[number];
   depName: string;
 };
 

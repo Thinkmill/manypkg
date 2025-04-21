@@ -1,0 +1,6 @@
+{
+  "endOfLine": "auto",
+  "proseWrap": "never",
+  "trailingComma": "es5",
+  "plugins": ["prettier-plugin-packagejson"]
+}

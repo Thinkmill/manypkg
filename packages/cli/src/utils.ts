@@ -29,8 +29,8 @@ export async function install(toolType: string, cwd: string) {
     toolType === "pnpm"
       ? ["install"]
       : toolType === "lerna"
-      ? ["bootstrap", "--since", "HEAD"]
-      : [],
+        ? ["bootstrap", "--since", "HEAD"]
+        : [],
     { nodeOptions: { cwd, stdio: "inherit" } }
   );
 }
