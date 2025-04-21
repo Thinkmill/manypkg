@@ -2,4 +2,4 @@
 "@manypkg/find-root": minor
 ---
 
-feat: export DEFAULT_TOOLS
+Added `DEFAULT_TOOLS` export
