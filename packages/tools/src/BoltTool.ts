@@ -1,11 +1,11 @@
 import path from "path";
 
-import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool";
+import { Tool, PackageJSON, Packages, InvalidMonorepoError } from "./Tool.ts";
 import {
   expandPackageGlobs,
   expandPackageGlobsSync,
-} from "./expandPackageGlobs";
-import { readJson, readJsonSync } from "./utils";
+} from "./expandPackageGlobs.ts";
+import { readJson, readJsonSync } from "./utils.ts";
 
 export interface BoltPackageJSON extends PackageJSON {
   bolt?: {
