@@ -22,9 +22,6 @@
       "jest-watch-typeahead/testname"
     ]
   },
-  "resolutions": {
-    "prettier": "^3.5.3"
-  },
   "devDependencies": {
     "@babel/core": "^7.20.5",
     "@babel/plugin-transform-runtime": "^7.19.6",
