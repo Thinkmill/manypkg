@@ -11,15 +11,8 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install Dependencies
-        run: yarn
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/ci-setup
 
       - name: Run Tests
         run: yarn test
@@ -28,15 +21,8 @@ jobs:
     name: TypeScript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install Dependencies
-        run: yarn
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/ci-setup
 
       - name: Check Types
         run: yarn tsc
@@ -45,15 +31,8 @@ jobs:
     name: Formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install Dependencies
-        run: yarn
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/ci-setup
 
       - name: Check Formatting
         run: yarn format:check
@@ -62,15 +41,8 @@ jobs:
     name: Knip
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install Dependencies
-        run: yarn
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/ci-setup
 
       - name: Check Knip
         run: yarn knip
