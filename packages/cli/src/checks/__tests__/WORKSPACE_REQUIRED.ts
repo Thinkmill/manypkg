@@ -1,5 +1,5 @@
-import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
-import makeCheck from "../WORKSPACE_REQUIRED";
+import { getFakeWS, getRootWS, getWS } from "../../test-helpers.ts";
+import makeCheck from "../WORKSPACE_REQUIRED.ts";
 let rootWorkspace = getRootWS();
 
 test("should not error if not using workspaceProtocol: require", () => {

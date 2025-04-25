@@ -1,5 +1,5 @@
-import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH";
-import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
+import { getFakeWS, getRootWS, getWS } from "../../test-helpers.ts";
+import makeCheck, { ErrorType } from "../INTERNAL_MISMATCH.ts";
 
 let rootWorkspace = getRootWS();
 

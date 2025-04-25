@@ -1,7 +1,7 @@
-import path from "path";
+import path from "node:path";
 import yaml from "js-yaml";
-import fs from "fs";
-import fsp from "fs/promises";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 
 import {
   type Tool,

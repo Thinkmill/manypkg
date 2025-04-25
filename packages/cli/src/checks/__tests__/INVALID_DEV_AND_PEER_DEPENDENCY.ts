@@ -1,5 +1,5 @@
-import makeCheck from "../INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
-import { getWS, getFakeWS, getRootWS } from "../../test-helpers";
+import { getFakeWS, getRootWS, getWS } from "../../test-helpers.ts";
+import makeCheck from "../INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP.ts";
 
 let rootWorkspace = getRootWS();
 
