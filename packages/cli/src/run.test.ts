@@ -1,9 +1,14 @@
-import { runCmd } from "./run";
 import fixturez from "fixturez";
-import { exec } from "tinyexec";
 import stripAnsi from "strip-ansi";
+import { exec } from "tinyexec";
 
 const f = fixturez(__dirname);
+
+function stripNodeWarnings(str: string) {
+  return str
+    .replace(/^\(node:\d+\) ExperimentalWarning:.+(\r?\n)?/gm, "")
+    .replace(/^\(Use \`node --trace-warnings \.\.\.\`.+(\r?\n)?/gm, "");
+}
 
 describe("Run command", () => {
   it.each([
@@ -19,21 +24,27 @@ describe("Run command", () => {
     ["pkg-two", "start", 1],
     ["@manypkg/basic-fixture-pkg-two", "start", 0],
     ["pkg-two-one", "start", 0],
-    // @ts-ignore
   ])(
     'should execute "%s %s" and exit with %i',
     async (arg0, arg1, expectedExitCode) => {
       const { exitCode, stdout, stderr } = await exec(
-        require.resolve("../bin"),
-        // @ts-ignore
-        ["run", arg0, arg1],
+        "node",
+        [require.resolve("../bin.js"), "run", arg0, arg1],
         {
-          nodeOptions: { cwd: f.find("basic-with-scripts") },
+          nodeOptions: {
+            cwd: f.find("basic-with-scripts"),
+            env: {
+              ...process.env,
+              NODE_OPTIONS: "--experimental-strip-types",
+            },
+          },
         }
       );
       expect(exitCode).toBe(expectedExitCode);
       expect(stripAnsi(stdout.toString())).toMatchSnapshot("stdout");
-      expect(stripAnsi(stderr.toString())).toMatchSnapshot("stderr");
+      expect(stripAnsi(stripNodeWarnings(stderr.toString()))).toMatchSnapshot(
+        "stderr"
+      );
     }
   );
 });

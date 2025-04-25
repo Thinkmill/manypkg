@@ -1,6 +1,6 @@
-import fs from "fs";
-import fsp from "fs/promises";
-import path from "path";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import path from "node:path";
 
 export const readJson = async (directory: string, file: string) =>
   JSON.parse(await fsp.readFile(path.join(directory, file), "utf-8"));

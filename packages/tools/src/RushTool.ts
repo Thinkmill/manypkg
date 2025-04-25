@@ -1,6 +1,6 @@
-import path from "path";
-import fs from "fs";
-import fsp from "fs/promises";
+import path from "node:path";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 import jju from "jju";
 
 import {
