@@ -10,21 +10,11 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: ./.github/actions/ci-setup
 
-      - name: Set Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".node-version"
-
-      - name: Install Yarn
-        run: npm install --global yarn
-
-      - name: Install Dependencies
-        run: yarn
       - run: git branch -a
 
       - name: "Create Pull Request or Publish to npm"
