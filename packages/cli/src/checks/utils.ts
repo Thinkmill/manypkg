@@ -97,14 +97,10 @@ export function sortDeps(pkg: Package) {
   }
 }
 
-// export type Package = Package;
-
 function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
   let cache = new WeakMap<any, any>();
-  // @ts-ignore
   return (arg) => {
     if (cache.has(arg)) {
-      // $FlowFixMe
       return cache.get(arg);
     }
     let ret = func(arg);
