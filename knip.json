@@ -1,9 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreWorkspaces": ["test-gatsby", "packages/gatsby-source-workspace"],
   "workspaces": {
     ".": {
-      "ignoreBinaries": ["gatsby", "packages/cli/bin.js"]
+      "ignoreBinaries": ["packages/cli/bin.js"]
     }
   },
   "ignore": ["__fixtures__/**"]
