@@ -43,27 +43,6 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.tool.type).toEqual("yarn");
   });
 
-  it("should resolve workspaces for bolt", async () => {
-    const dir = f.copy("bolt-workspace");
-
-    // Test for both root and subdirectories
-    for (const location of [".", "packages", "packages/pkg-b"]) {
-      const allPackages = await getPackages(path.join(dir, location));
-
-      if (allPackages.packages === null) {
-        return expect(allPackages.packages).not.toBeNull();
-      }
-
-      expect(allPackages.packages[0].packageJson.name).toEqual(
-        "bolt-workspace-pkg-a"
-      );
-      expect(allPackages.packages[1].packageJson.name).toEqual(
-        "bolt-workspace-pkg-b"
-      );
-      expect(allPackages.tool.type).toEqual("bolt");
-    }
-  });
-
   it("should resolve workspaces for pnpm", async () => {
     const dir = f.copy("pnpm-workspace-base");
 

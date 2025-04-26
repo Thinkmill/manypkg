@@ -6,7 +6,6 @@ import {
   type Tool,
   RootTool,
   type MonorepoRoot,
-  BoltTool,
   LernaTool,
   PnpmTool,
   RushTool,
@@ -25,7 +24,6 @@ export const DEFAULT_TOOLS: Tool[] = [
   PnpmTool,
   LernaTool,
   RushTool,
-  BoltTool,
   RootTool,
 ];
 
