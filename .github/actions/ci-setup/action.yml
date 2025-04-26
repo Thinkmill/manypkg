@@ -3,12 +3,16 @@ name: Setup CI
 runs:
   using: composite
   steps:
+    - name: Enable corepack
+      shell: bash
+      run: corepack enable
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version-file: ".node-version"
-      run: corepack enable
+        cache: "yarn"
 
     - name: Install dependencies
       shell: bash
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
