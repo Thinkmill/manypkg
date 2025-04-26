@@ -2,7 +2,7 @@ import fixturez from "fixturez";
 import path from "node:path";
 import { getPackages, getPackagesSync } from "./index.ts";
 
-const f = fixturez(__dirname);
+const f = fixturez(import.meta.url);
 
 type GetPackages = typeof getPackages | typeof getPackagesSync;
 

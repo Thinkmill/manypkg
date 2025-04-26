@@ -6,5 +6,12 @@
       "ignoreBinaries": ["gatsby", "packages/cli/bin.js"]
     }
   },
-  "ignore": ["__fixtures__/**"]
+  "jest": {
+    "config": ["package.json"],
+    "entry": [
+      "**/__tests__/**/*.ts",
+      "**/?(*.)+(test).ts",
+      "**/__fixtures__/**/*.[jt]s"
+    ]
+  }
 }

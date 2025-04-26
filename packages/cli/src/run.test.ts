@@ -1,8 +1,10 @@
 import fixturez from "fixturez";
 import stripAnsi from "strip-ansi";
 import { exec } from "tinyexec";
+import { createRequire } from "node:module";
 
-const f = fixturez(__dirname);
+const f = fixturez(import.meta.url);
+const require = createRequire(import.meta.url);
 
 function stripNodeWarnings(str: string) {
   return str
@@ -35,7 +37,8 @@ describe("Run command", () => {
             cwd: f.find("basic-with-scripts"),
             env: {
               ...process.env,
-              NODE_OPTIONS: "--experimental-strip-types",
+              NODE_OPTIONS:
+                "--experimental-strip-types --disable-warning=ExperimentalWarning",
             },
           },
         }

@@ -17,22 +17,22 @@
   },
   "dependencies": {
     "@manypkg/get-packages": "^2.2.1",
-    "detect-indent": "^6.0.0",
+    "detect-indent": "^7.0.1",
     "normalize-path": "^3.0.0",
     "p-limit": "^6.2.0",
     "package-json": "^10.0.1",
-    "parse-github-url": "^1.0.2",
-    "picocolors": "^1.1.0",
+    "parse-github-url": "^1.0.3",
+    "picocolors": "^1.1.1",
     "sembear": "^0.7.0",
-    "semver": "^7.6.3",
-    "tinyexec": "^0.3.1",
+    "semver": "^7.7.1",
+    "tinyexec": "^1.0.1",
     "validate-npm-package-name": "^6.0.0"
   },
   "devDependencies": {
-    "@changesets/types": "^5.2.1",
+    "@changesets/types": "^6.1.0",
     "@types/validate-npm-package-name": "^4.0.2",
     "fixturez": "^1.1.0",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^7.1.0"
   },
   "engines": {
     "node": ">=18.0.0"

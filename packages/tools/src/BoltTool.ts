@@ -12,7 +12,7 @@ import {
 } from "./expandPackageGlobs.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
-export interface BoltPackageJSON extends PackageJSON {
+interface BoltPackageJSON extends PackageJSON {
   bolt?: {
     workspaces?: string[];
   };

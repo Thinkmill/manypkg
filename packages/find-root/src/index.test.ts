@@ -4,7 +4,7 @@ import { findRoot, findRootSync } from "./index.ts";
 
 import { LernaTool, PnpmTool, RootTool, YarnTool } from "@manypkg/tools";
 
-let f = fixturez(__dirname);
+const f = fixturez(import.meta.url);
 
 type FindRoot = typeof findRoot | typeof findRootSync;
 

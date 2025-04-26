@@ -4,7 +4,7 @@
 //
 // Who can say? ¯\_(ツ)_/¯
 
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 import crypto from "node:crypto";
 
 export let getRootWS = (): Package => {
