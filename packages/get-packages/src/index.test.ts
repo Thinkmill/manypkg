@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import fixturez from "fixturez";
 import path from "node:path";
 import { getPackages, getPackagesSync } from "./index.ts";
