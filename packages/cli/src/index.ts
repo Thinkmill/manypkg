@@ -25,7 +25,7 @@ type PackagesWithConfig = Packages & {
 };
 
 let defaultOptions = {
-  defaultBranch: "master",
+  defaultBranch: "main",
 };
 
 let runChecks = (
