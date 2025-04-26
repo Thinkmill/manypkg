@@ -17,7 +17,8 @@
     "@manypkg/tools": "^1.1.1"
   },
   "devDependencies": {
-    "fixturez": "^1.1.0"
+    "fixturez": "^1.1.0",
+    "vitest": "^3.1.2"
   },
   "engines": {
     "node": ">=14.18.0"

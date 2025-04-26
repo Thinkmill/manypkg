@@ -1,9 +1,10 @@
+import { describe, expect, it } from "vitest";
 import {
   getFakeString,
   getFakeWS,
   getRootWS,
   getWS,
-} from "../../test-helpers.ts";
+} from "./test-helpers.ts";
 import check from "../INCORRECT_REPOSITORY_FIELD.ts";
 
 describe("incorrect repository field", () => {
