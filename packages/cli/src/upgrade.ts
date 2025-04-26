@@ -1,9 +1,9 @@
 import { getPackages } from "@manypkg/get-packages";
 import semver from "semver";
-import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils";
+import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils.ts";
 import pLimit from "p-limit";
 
-import { writePackage, install } from "./utils";
+import { writePackage, install } from "./utils.ts";
 
 export async function upgradeDependency([name, tag = "latest"]: string[]) {
   // handle no name is missing

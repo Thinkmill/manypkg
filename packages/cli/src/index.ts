@@ -1,13 +1,17 @@
-import path from "path";
-import * as logger from "./logger";
-import { getPackages, Packages, Package } from "@manypkg/get-packages";
-import { Options } from "./checks/utils";
-import { checks } from "./checks";
-import { ExitError } from "./errors";
-import { writePackage, install } from "./utils";
-import { runCmd } from "./run";
-import { upgradeDependency } from "./upgrade";
-import { npmTagAll } from "./npm-tag";
+import path from "node:path";
+import * as logger from "./logger.ts";
+import {
+  getPackages,
+  type Packages,
+  type Package,
+} from "@manypkg/get-packages";
+import type { Options } from "./checks/utils.ts";
+import { checks } from "./checks/index.ts";
+import { ExitError } from "./errors.ts";
+import { writePackage, install } from "./utils.ts";
+import { runCmd } from "./run.ts";
+import { upgradeDependency } from "./upgrade.ts";
+import { npmTagAll } from "./npm-tag.ts";
 import { exec } from "tinyexec";
 import pLimit from "p-limit";
 

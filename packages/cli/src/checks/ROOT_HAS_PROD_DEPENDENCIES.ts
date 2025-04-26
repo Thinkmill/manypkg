@@ -1,6 +1,6 @@
-import { makeCheck, sortObject } from "./utils";
+import { makeCheck, sortObject } from "./utils.ts";
 import pc from "picocolors";
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "ROOT_HAS_PROD_DEPENDENCIES";

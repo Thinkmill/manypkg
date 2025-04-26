@@ -1,6 +1,6 @@
-import { findRoot, findRootSync } from ".";
 import fixturez from "fixturez";
-import path from "path";
+import path from "node:path";
+import { findRoot, findRootSync } from "./index.ts";
 
 import { LernaTool, PnpmTool, RootTool, YarnTool } from "@manypkg/tools";
 

@@ -10,7 +10,7 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "preconstruct dev && manypkg check",
+    "postinstall": "preconstruct dev && NODE_OPTIONS=--experimental-strip-types packages/cli/bin.js check",
     "knip": "knip",
     "release": "preconstruct build && changeset publish",
     "test": "jest",
@@ -29,7 +29,7 @@
     "@babel/preset-typescript": "^7.18.6",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
-    "@preconstruct/cli": "^2.8.9",
+    "@preconstruct/cli": "^2.8.12",
     "@types/jest": "^29.2.4",
     "@types/normalize-path": "^3.0.0",
     "@types/parse-github-url": "^1.0.0",
@@ -46,8 +46,13 @@
     "packages": [
       "packages/!(gatsby)*"
     ],
+    "exports": {
+      "importConditionDefaultExport": "default"
+    },
     "___experimentalFlags_WILL_CHANGE_IN_PATCH": {
-      "keepDynamicImportAsDynamicImportInCommonJS": true
+      "distInRoot": true,
+      "importsConditions": true,
+      "typeModule": true
     }
   }
 }

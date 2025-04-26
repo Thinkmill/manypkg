@@ -1,6 +1,6 @@
 import fixturez from "fixturez";
 import path from "node:path";
-import { getPackages, getPackagesSync } from "./";
+import { getPackages, getPackagesSync } from "./index.ts";
 
 const f = fixturez(__dirname);
 

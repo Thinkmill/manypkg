@@ -1,16 +1,16 @@
-import path from "path";
-import fs from "fs";
-import fsp from "fs/promises";
+import path from "node:path";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 import jju from "jju";
 
 import {
-  Tool,
-  Package,
-  PackageJSON,
-  Packages,
+  type Tool,
+  type Package,
+  type PackageJSON,
+  type Packages,
   InvalidMonorepoError,
-} from "./Tool";
-import { readJson, readJsonSync } from "./utils";
+} from "./Tool.ts";
+import { readJson, readJsonSync } from "./utils.ts";
 
 interface RushJson {
   projects: RushProject[];

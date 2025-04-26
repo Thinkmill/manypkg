@@ -1,7 +1,7 @@
-export * from "./Tool";
-export { BoltTool } from "./BoltTool";
-export { LernaTool } from "./LernaTool";
-export { PnpmTool } from "./PnpmTool";
-export { RootTool } from "./RootTool";
-export { RushTool } from "./RushTool";
-export { YarnTool } from "./YarnTool";
+export * from "./Tool.ts";
+export { BoltTool } from "./BoltTool.ts";
+export { LernaTool } from "./LernaTool.ts";
+export { PnpmTool } from "./PnpmTool.ts";
+export { RootTool } from "./RootTool.ts";
+export { RushTool } from "./RushTool.ts";
+export { YarnTool } from "./YarnTool.ts";

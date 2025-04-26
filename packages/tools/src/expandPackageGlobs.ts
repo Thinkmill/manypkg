@@ -1,9 +1,9 @@
-import path from "path";
-import fsp from "fs/promises";
+import path from "node:path";
+import fsp from "node:fs/promises";
 import { glob, globSync } from "tinyglobby";
 
-import { Package, PackageJSON } from "./Tool";
-import { readJsonSync } from "./utils";
+import type { Package, PackageJSON } from "./Tool.ts";
+import { readJsonSync } from "./utils.ts";
 
 /**
  * This internal method takes a list of one or more directory globs and the absolute path

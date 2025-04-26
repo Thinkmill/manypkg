@@ -1,6 +1,10 @@
-import path from "path";
-import check from "../INCORRECT_REPOSITORY_FIELD";
-import { getWS, getFakeWS, getFakeString, getRootWS } from "../../test-helpers";
+import {
+  getFakeString,
+  getFakeWS,
+  getRootWS,
+  getWS,
+} from "../../test-helpers.ts";
+import check from "../INCORRECT_REPOSITORY_FIELD.ts";
 
 describe("incorrect repository field", () => {
   describe("github", () => {

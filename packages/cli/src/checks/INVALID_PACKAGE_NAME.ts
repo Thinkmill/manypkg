@@ -1,6 +1,6 @@
-import { Package } from "@manypkg/get-packages";
+import type { Package } from "@manypkg/get-packages";
+import { makeCheck } from "./utils.ts";
 import validateNpmPackageName from "validate-npm-package-name";
-import { makeCheck } from "./utils";
 
 type ErrorType = {
   type: "INVALID_PACKAGE_NAME";

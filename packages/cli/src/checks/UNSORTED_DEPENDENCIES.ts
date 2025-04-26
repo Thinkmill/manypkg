@@ -1,5 +1,10 @@
-import { makeCheck, DEPENDENCY_TYPES, sortDeps, isArrayEqual } from "./utils";
-import { Package } from "@manypkg/get-packages";
+import {
+  makeCheck,
+  DEPENDENCY_TYPES,
+  sortDeps,
+  isArrayEqual,
+} from "./utils.ts";
+import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";

@@ -3,7 +3,7 @@
   "ignoreWorkspaces": ["test-gatsby", "packages/gatsby-source-workspace"],
   "workspaces": {
     ".": {
-      "ignoreBinaries": ["gatsby", "manypkg"]
+      "ignoreBinaries": ["gatsby", "packages/cli/bin.js"]
     }
   },
   "ignore": ["__fixtures__/**"]

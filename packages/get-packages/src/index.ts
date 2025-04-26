@@ -1,11 +1,11 @@
-import path from "path";
+import path from "node:path";
 import {
   findRoot,
   findRootSync,
-  FindRootOptions,
+  type FindRootOptions,
   DEFAULT_TOOLS,
 } from "@manypkg/find-root";
-import { Packages, MonorepoRoot, Tool } from "@manypkg/tools";
+import type { Packages, MonorepoRoot } from "@manypkg/tools";
 
 export type { Tool, Package, Packages } from "@manypkg/tools";
 

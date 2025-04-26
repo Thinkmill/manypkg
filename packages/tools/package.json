@@ -7,7 +7,11 @@
     "directory": "packages/tools"
   },
   "license": "MIT",
-  "main": "dist/manypkg-tools.cjs.js",
+  "type": "module",
+  "exports": {
+    ".": "./dist/manypkg-tools.js",
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "jju": "^1.4.0",
     "js-yaml": "^4.1.0",

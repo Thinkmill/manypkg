@@ -1,23 +1,23 @@
-import path from "path";
+import path from "node:path";
 
 import {
-  Tool,
-  Package,
-  PackageJSON,
-  Packages,
+  type Tool,
+  type Package,
+  type PackageJSON,
+  type Packages,
   InvalidMonorepoError,
-} from "./Tool";
-import { readJson, readJsonSync } from "./utils";
+} from "./Tool.ts";
+import { readJson, readJsonSync } from "./utils.ts";
 
 export const RootTool: Tool = {
   type: "root",
 
-  async isMonorepoRoot(directory: string): Promise<boolean> {
+  async isMonorepoRoot(_directory: string): Promise<boolean> {
     // The single package tool is never the root of a monorepo.
     return false;
   },
 
-  isMonorepoRootSync(directory: string): boolean {
+  isMonorepoRootSync(_directory: string): boolean {
     // The single package tool is never the root of a monorepo.
     return false;
   },
