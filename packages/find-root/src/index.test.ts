@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import fixturez from "fixturez";
 import path from "node:path";
 import { findRoot, findRootSync } from "./index.ts";

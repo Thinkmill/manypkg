@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import fixturez from "fixturez";
 import stripAnsi from "strip-ansi";
 import { exec } from "tinyexec";
