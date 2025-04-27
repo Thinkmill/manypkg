@@ -3,7 +3,13 @@ import fixturez from "fixturez";
 import path from "node:path";
 import { findRoot, findRootSync } from "./index.ts";
 
-import { LernaTool, PnpmTool, RootTool, YarnTool } from "@manypkg/tools";
+import {
+  LernaTool,
+  NpmTool,
+  PnpmTool,
+  RootTool,
+  YarnTool,
+} from "@manypkg/tools";
 
 let f = fixturez(__dirname);
 
@@ -17,6 +23,17 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: YarnTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of an npm monorepo", async () => {
+    let tmpPath = f.copy("basic-npm");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: NpmTool.type,
       rootDir: tmpPath,
     });
   });
