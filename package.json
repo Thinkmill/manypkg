@@ -4,8 +4,7 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/*",
-    "test-gatsby"
+    "packages/*"
   ],
   "scripts": {
     "format": "prettier --write .",
@@ -13,8 +12,7 @@
     "postinstall": "preconstruct dev && NODE_OPTIONS=--experimental-strip-types packages/cli/bin.js check",
     "knip": "knip",
     "release": "preconstruct build && changeset publish",
-    "test": "vitest",
-    "test-gatsby": "cd test-gatsby && gatsby develop"
+    "test": "vitest"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
@@ -36,7 +34,7 @@
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "preconstruct": {
     "packages": [
-      "packages/!(gatsby)*"
+      "packages/*"
     ],
     "exports": {
       "importConditionDefaultExport": "default"
