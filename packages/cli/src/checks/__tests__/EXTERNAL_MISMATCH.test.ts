@@ -1,5 +1,6 @@
+import { expect, it } from "vitest";
 import internalMismatch from "../EXTERNAL_MISMATCH.ts";
-import { getWS, getFakeWS, getRootWS } from "../../test-helpers.ts";
+import { getWS, getFakeWS, getRootWS } from "./test-helpers.ts";
 
 let rootWorkspace = getRootWS();
 

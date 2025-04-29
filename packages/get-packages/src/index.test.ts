@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import fixturez from "fixturez";
 import path from "node:path";
 import { getPackages, getPackagesSync } from "./index.ts";
@@ -28,6 +29,27 @@ let runTests = (getPackages: GetPackages) => {
     }
   });
 
+  it("should resolve workspaces for npm", async () => {
+    const dir = f.copy("npm-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("npm");
+    }
+  });
+
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", async () => {
     const allPackages = await getPackages(f.copy("yarn-workspace-base"));
 
@@ -41,27 +63,6 @@ let runTests = (getPackages: GetPackages) => {
       "yarn-workspace-base-pkg-b"
     );
     expect(allPackages.tool.type).toEqual("yarn");
-  });
-
-  it("should resolve workspaces for bolt", async () => {
-    const dir = f.copy("bolt-workspace");
-
-    // Test for both root and subdirectories
-    for (const location of [".", "packages", "packages/pkg-b"]) {
-      const allPackages = await getPackages(path.join(dir, location));
-
-      if (allPackages.packages === null) {
-        return expect(allPackages.packages).not.toBeNull();
-      }
-
-      expect(allPackages.packages[0].packageJson.name).toEqual(
-        "bolt-workspace-pkg-a"
-      );
-      expect(allPackages.packages[1].packageJson.name).toEqual(
-        "bolt-workspace-pkg-b"
-      );
-      expect(allPackages.tool.type).toEqual("bolt");
-    }
   });
 
   it("should resolve workspaces for pnpm", async () => {

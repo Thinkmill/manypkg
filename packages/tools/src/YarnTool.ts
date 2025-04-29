@@ -1,4 +1,7 @@
 import path from "node:path";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import { F_OK } from "node:constants";
 
 import {
   type Tool,
@@ -21,10 +24,10 @@ export const YarnTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await readJson(
-        directory,
-        "package.json"
-      )) as YarnPackageJSON;
+      const [pkgJson] = await Promise.all([
+        readJson(directory, "package.json") as Promise<YarnPackageJSON>,
+        fsp.access(path.join(directory, "yarn.lock"), F_OK),
+      ]);
       if (pkgJson.workspaces) {
         if (
           Array.isArray(pkgJson.workspaces) ||
@@ -44,6 +47,7 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
+      fs.accessSync(path.join(directory, "yarn.lock"), F_OK);
       const pkgJson = readJsonSync(
         directory,
         "package.json"

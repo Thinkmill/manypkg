@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "npm-workspace-base",
+  "description": "Base npm workspace work",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ]
+}

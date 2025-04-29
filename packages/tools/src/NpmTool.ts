@@ -1,10 +1,13 @@
 import path from "node:path";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import { F_OK } from "node:constants";
 
 import {
-  type Tool,
+  InvalidMonorepoError,
   type PackageJSON,
   type Packages,
-  InvalidMonorepoError,
+  type Tool,
 } from "./Tool.ts";
 import {
   expandPackageGlobs,
@@ -12,23 +15,23 @@ import {
 } from "./expandPackageGlobs.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
-export interface BoltPackageJSON extends PackageJSON {
-  bolt?: {
-    workspaces?: string[];
-  };
+export interface NpmPackageJSON extends PackageJSON {
+  workspaces?: string[];
 }
 
-export const BoltTool: Tool = {
-  type: "bolt",
+export const NpmTool: Tool = {
+  type: "npm",
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      const pkgJson = (await readJson(
-        directory,
-        "package.json"
-      )) as BoltPackageJSON;
-      if (pkgJson.bolt && pkgJson.bolt.workspaces) {
-        return true;
+      const [pkgJson] = await Promise.all([
+        readJson(directory, "package.json") as Promise<NpmPackageJSON>,
+        fsp.access(path.join(directory, "package-lock.json"), F_OK),
+      ]);
+      if (pkgJson.workspaces) {
+        if (Array.isArray(pkgJson.workspaces)) {
+          return true;
+        }
       }
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -41,12 +44,12 @@ export const BoltTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      const pkgJson = readJsonSync(
-        directory,
-        "package.json"
-      ) as BoltPackageJSON;
-      if (pkgJson.bolt && pkgJson.bolt.workspaces) {
-        return true;
+      fs.accessSync(path.join(directory, "package-lock.json"), F_OK);
+      const pkgJson = readJsonSync(directory, "package.json") as NpmPackageJSON;
+      if (pkgJson.workspaces) {
+        if (Array.isArray(pkgJson.workspaces)) {
+          return true;
+        }
       }
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -64,16 +67,11 @@ export const BoltTool: Tool = {
       const pkgJson = (await readJson(
         rootDir,
         "package.json"
-      )) as BoltPackageJSON;
-      if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
-        throw new InvalidMonorepoError(
-          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
-        );
-      }
-      const packageGlobs: string[] = pkgJson.bolt.workspaces;
+      )) as NpmPackageJSON;
+      const packageGlobs: string[] = pkgJson.workspaces!;
 
       return {
-        tool: BoltTool,
+        tool: NpmTool,
         packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
@@ -85,7 +83,7 @@ export const BoltTool: Tool = {
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
         throw new InvalidMonorepoError(
-          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
+          `Directory ${rootDir} is not a valid ${NpmTool.type} monorepo root`
         );
       }
       throw err;
@@ -96,16 +94,11 @@ export const BoltTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = readJsonSync(rootDir, "package.json") as BoltPackageJSON;
-      if (!pkgJson.bolt || !pkgJson.bolt.workspaces) {
-        throw new InvalidMonorepoError(
-          `Directory ${directory} is not a valid ${BoltTool.type} monorepo root: missing bolt.workspaces entry`
-        );
-      }
-      const packageGlobs: string[] = pkgJson.bolt.workspaces;
+      const pkgJson = readJsonSync(rootDir, "package.json") as NpmPackageJSON;
+      const packageGlobs: string[] = pkgJson.workspaces!;
 
       return {
-        tool: BoltTool,
+        tool: NpmTool,
         packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
@@ -117,7 +110,7 @@ export const BoltTool: Tool = {
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
         throw new InvalidMonorepoError(
-          `Directory ${rootDir} is not a valid ${BoltTool.type} monorepo root: missing package.json`
+          `Directory ${rootDir} is not a valid ${NpmTool.type} monorepo root`
         );
       }
       throw err;

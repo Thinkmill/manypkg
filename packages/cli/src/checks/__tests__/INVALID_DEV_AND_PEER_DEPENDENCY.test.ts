@@ -1,4 +1,5 @@
-import { getFakeWS, getRootWS, getWS } from "../../test-helpers.ts";
+import { describe, expect, it } from "vitest";
+import { getFakeWS, getRootWS, getWS } from "./test-helpers.ts";
 import makeCheck from "../INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP.ts";
 
 let rootWorkspace = getRootWS();

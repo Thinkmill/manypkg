@@ -1,17 +1,16 @@
-import path from "node:path";
-import fs from "node:fs";
-import fsp from "node:fs/promises";
-
 import {
-  type Tool,
-  RootTool,
-  type MonorepoRoot,
-  BoltTool,
   LernaTool,
+  NpmTool,
   PnpmTool,
+  RootTool,
   RushTool,
   YarnTool,
+  type MonorepoRoot,
+  type Tool,
 } from "@manypkg/tools";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import path from "node:path";
 
 /**
  * A default ordering for monorepo tool checks.
@@ -23,9 +22,9 @@ import {
 export const DEFAULT_TOOLS: Tool[] = [
   YarnTool,
   PnpmTool,
+  NpmTool,
   LernaTool,
   RushTool,
-  BoltTool,
   RootTool,
 ];
 

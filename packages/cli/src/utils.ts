@@ -16,8 +16,8 @@ export async function writePackage(pkg: Package) {
 
 export async function install(toolType: string, cwd: string) {
   const cliRunners: Record<string, string> = {
-    bolt: "bolt",
     lerna: "lerna",
+    npm: "npm",
     pnpm: "pnpm",
     root: "yarn",
     rush: "rushx",
@@ -26,7 +26,7 @@ export async function install(toolType: string, cwd: string) {
 
   await exec(
     cliRunners[toolType],
-    toolType === "pnpm"
+    toolType === "npm" || toolType === "pnpm"
       ? ["install"]
       : toolType === "lerna"
         ? ["bootstrap", "--since", "HEAD"]
