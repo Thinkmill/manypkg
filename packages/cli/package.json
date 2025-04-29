@@ -32,7 +32,8 @@
     "@changesets/types": "^5.2.1",
     "@types/validate-npm-package-name": "^4.0.2",
     "fixturez": "^1.1.0",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^6.0.0",
+    "vitest": "^3.1.2"
   },
   "engines": {
     "node": ">=18.0.0"

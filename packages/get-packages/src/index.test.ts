@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import fixturez from "fixturez";
 import path from "node:path";
 import { getPackages, getPackagesSync } from "./index.ts";
@@ -25,6 +26,27 @@ let runTests = (getPackages: GetPackages) => {
         "yarn-workspace-base-pkg-b"
       );
       expect(allPackages.tool.type).toEqual("yarn");
+    }
+  });
+
+  it("should resolve workspaces for npm", async () => {
+    const dir = f.copy("npm-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("npm");
     }
   });
 

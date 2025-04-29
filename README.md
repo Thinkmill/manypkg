@@ -94,12 +94,12 @@ Manypkg supports a number of options. Options can be provided using the `manypkg
 
 ### `defaultBranch`
 
-Used by the [Incorrect `repository` field](#incorrect-repository-field) rule to determine the correct name for repositories. The default value is `master`.
+Used by the [Incorrect `repository` field](#incorrect-repository-field) rule to determine the correct name for repositories. The default value is `main`.
 
 ```json
 {
   "manypkg": {
-    "defaultBranch": "master"
+    "defaultBranch": "main"
   }
 }
 ```

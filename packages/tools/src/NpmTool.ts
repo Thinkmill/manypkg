@@ -4,10 +4,10 @@ import fsp from "node:fs/promises";
 import { F_OK } from "node:constants";
 
 import {
-  type Tool,
+  InvalidMonorepoError,
   type PackageJSON,
   type Packages,
-  InvalidMonorepoError,
+  type Tool,
 } from "./Tool.ts";
 import {
   expandPackageGlobs,
@@ -15,24 +15,21 @@ import {
 } from "./expandPackageGlobs.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
-export interface YarnPackageJSON extends PackageJSON {
-  workspaces?: string[] | { packages: string[] };
+export interface NpmPackageJSON extends PackageJSON {
+  workspaces?: string[];
 }
 
-export const YarnTool: Tool = {
-  type: "yarn",
+export const NpmTool: Tool = {
+  type: "npm",
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
       const [pkgJson] = await Promise.all([
-        readJson(directory, "package.json") as Promise<YarnPackageJSON>,
-        fsp.access(path.join(directory, "yarn.lock"), F_OK),
+        readJson(directory, "package.json") as Promise<NpmPackageJSON>,
+        fsp.access(path.join(directory, "package-lock.json"), F_OK),
       ]);
       if (pkgJson.workspaces) {
-        if (
-          Array.isArray(pkgJson.workspaces) ||
-          Array.isArray(pkgJson.workspaces.packages)
-        ) {
+        if (Array.isArray(pkgJson.workspaces)) {
           return true;
         }
       }
@@ -47,16 +44,10 @@ export const YarnTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      fs.accessSync(path.join(directory, "yarn.lock"), F_OK);
-      const pkgJson = readJsonSync(
-        directory,
-        "package.json"
-      ) as YarnPackageJSON;
+      fs.accessSync(path.join(directory, "package-lock.json"), F_OK);
+      const pkgJson = readJsonSync(directory, "package.json") as NpmPackageJSON;
       if (pkgJson.workspaces) {
-        if (
-          Array.isArray(pkgJson.workspaces) ||
-          Array.isArray(pkgJson.workspaces.packages)
-        ) {
+        if (Array.isArray(pkgJson.workspaces)) {
           return true;
         }
       }
@@ -76,13 +67,11 @@ export const YarnTool: Tool = {
       const pkgJson = (await readJson(
         rootDir,
         "package.json"
-      )) as YarnPackageJSON;
-      const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
-        ? pkgJson.workspaces
-        : pkgJson.workspaces!.packages;
+      )) as NpmPackageJSON;
+      const packageGlobs: string[] = pkgJson.workspaces!;
 
       return {
-        tool: YarnTool,
+        tool: NpmTool,
         packages: await expandPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
@@ -94,7 +83,7 @@ export const YarnTool: Tool = {
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
         throw new InvalidMonorepoError(
-          `Directory ${rootDir} is not a valid ${YarnTool.type} monorepo root`
+          `Directory ${rootDir} is not a valid ${NpmTool.type} monorepo root`
         );
       }
       throw err;
@@ -105,13 +94,11 @@ export const YarnTool: Tool = {
     const rootDir = path.resolve(directory);
 
     try {
-      const pkgJson = readJsonSync(rootDir, "package.json") as YarnPackageJSON;
-      const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
-        ? pkgJson.workspaces
-        : pkgJson.workspaces!.packages;
+      const pkgJson = readJsonSync(rootDir, "package.json") as NpmPackageJSON;
+      const packageGlobs: string[] = pkgJson.workspaces!;
 
       return {
-        tool: YarnTool,
+        tool: NpmTool,
         packages: expandPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
@@ -123,7 +110,7 @@ export const YarnTool: Tool = {
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
         throw new InvalidMonorepoError(
-          `Directory ${rootDir} is not a valid ${YarnTool.type} monorepo root`
+          `Directory ${rootDir} is not a valid ${NpmTool.type} monorepo root`
         );
       }
       throw err;

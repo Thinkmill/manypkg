@@ -1,14 +1,15 @@
-import path from "node:path";
+import jju from "jju";
+import { F_OK } from "node:constants";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
-import jju from "jju";
+import path from "node:path";
 
 import {
-  type Tool,
+  InvalidMonorepoError,
   type Package,
   type PackageJSON,
   type Packages,
-  InvalidMonorepoError,
+  type Tool,
 } from "./Tool.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
@@ -26,7 +27,7 @@ export const RushTool: Tool = {
 
   async isMonorepoRoot(directory: string): Promise<boolean> {
     try {
-      await fsp.readFile(path.join(directory, "rush.json"), "utf8");
+      await fsp.access(path.join(directory, "rush.json"), F_OK);
       return true;
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
@@ -38,7 +39,7 @@ export const RushTool: Tool = {
 
   isMonorepoRootSync(directory: string): boolean {
     try {
-      fs.readFileSync(path.join(directory, "rush.json"), "utf8");
+      fs.accessSync(path.join(directory, "rush.json"), F_OK);
       return true;
     } catch (err) {
       if (err && (err as { code: string }).code === "ENOENT") {
