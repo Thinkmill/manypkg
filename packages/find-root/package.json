@@ -16,7 +16,7 @@
     "@manypkg/tools": "^1.1.2"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
+    "@types/node": "^22.15.3",
     "fixturez": "^1.1.0",
     "vitest": "^3.1.2"
   },

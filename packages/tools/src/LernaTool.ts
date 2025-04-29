@@ -12,7 +12,7 @@ import {
 } from "./expandPackageGlobs.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
-export interface LernaJson {
+interface LernaJson {
   useWorkspaces?: boolean;
   packages?: string[];
 }

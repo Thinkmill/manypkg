@@ -15,7 +15,7 @@ import {
 } from "./expandPackageGlobs.ts";
 import { readJson, readJsonSync } from "./utils.ts";
 
-export interface NpmPackageJSON extends PackageJSON {
+interface NpmPackageJSON extends PackageJSON {
   workspaces?: string[];
 }
 
