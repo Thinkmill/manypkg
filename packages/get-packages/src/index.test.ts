@@ -29,6 +29,27 @@ let runTests = (getPackages: GetPackages) => {
     }
   });
 
+  it("should resolve workspaces for npm", async () => {
+    const dir = f.copy("npm-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "npm-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("npm");
+    }
+  });
+
   it("should resolve yarn workspaces if the yarn option is passed and packages field is used", async () => {
     const allPackages = await getPackages(f.copy("yarn-workspace-base"));
 
