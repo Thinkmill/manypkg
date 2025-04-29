@@ -1,5 +1,4 @@
 export * from "./Tool.ts";
-export { BoltTool } from "./BoltTool.ts";
 export { LernaTool } from "./LernaTool.ts";
 export { NpmTool } from "./NpmTool.ts";
 export { PnpmTool } from "./PnpmTool.ts";

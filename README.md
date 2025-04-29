@@ -22,7 +22,7 @@
 
 # Manypkg
 
-Manypkg is a linter for `package.json` files in Yarn, Bolt or pnpm monorepos.
+Manypkg is a linter for `package.json` files in Yarn, npm or pnpm monorepos.
 
 ## Install
 
@@ -166,7 +166,7 @@ The most commonly used range of the dependency is set as the range at every non-
 
 <details><summary>Incorrect example</summary>
 
-> NOTE: This example uses Yarn Workspaces but this will work the same with Bolt and pnpm
+> NOTE: This example uses Yarn Workspaces but this will work the same with npm and pnpm
 
 `package.json`
 
@@ -220,7 +220,7 @@ This example will cause an error because the range `2.0.0` for `some-external-pa
 
 <details><summary>Correct example</summary>
 
-> NOTE: This example uses Yarn Workspaces but this will work the same with Bolt and pnpm
+> NOTE: This example uses Yarn Workspaces but this will work the same with npm and pnpm
 
 `package.json`
 
