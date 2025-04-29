@@ -18,7 +18,7 @@
     "tinyglobby": "^0.2.13"
   },
   "devDependencies": {
-    "@types/jju": "^1.4.2",
+    "@types/jju": "^1.4.5",
     "@types/js-yaml": "^4.0.9"
   },
   "engines": {
