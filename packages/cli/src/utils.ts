@@ -27,7 +27,7 @@ export async function install(toolType: string, cwd: string) {
 
   await exec(
     cliRunners[toolType],
-    toolType === "pnpm"
+    toolType === "npm" || toolType === "pnpm"
       ? ["install"]
       : toolType === "lerna"
         ? ["bootstrap", "--since", "HEAD"]
