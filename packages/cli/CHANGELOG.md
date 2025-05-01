@@ -1,5 +1,22 @@
 # @manypkg/cli
 
+## 0.24.0
+
+### Minor Changes
+
+- [#248](https://github.com/Thinkmill/manypkg/pull/248) [`456ca21`](https://github.com/Thinkmill/manypkg/commit/456ca211db8adfa37b6360587fb0827da6adc441) Thanks [@bluwy](https://github.com/bluwy)! - Change the default value of the `defaultBranch` config from `"master"` to `"main"`
+
+- [#242](https://github.com/Thinkmill/manypkg/pull/242) [`1763058`](https://github.com/Thinkmill/manypkg/commit/1763058f9e6a1e85e5720656301d18ca10bda426) Thanks [@spanishpear](https://github.com/spanishpear)! - This package is now published as a [pure ESM package](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+
+- [#245](https://github.com/Thinkmill/manypkg/pull/245) [`a00f5f7`](https://github.com/Thinkmill/manypkg/commit/a00f5f7179cbe0ba60d7d8e0c47c512b67712da2) Thanks [@Andarist](https://github.com/Andarist)! - Drop support for Bolt
+
+- [#244](https://github.com/Thinkmill/manypkg/pull/244) [`f29df03`](https://github.com/Thinkmill/manypkg/commit/f29df03867a909c644e4838d62997427aeadc079) Thanks [@Andarist](https://github.com/Andarist)! - Add `"engines"` field for explicit node version support. The supported node versions are `>=20.0.0`.
+
+### Patch Changes
+
+- Updated dependencies [[`3cf8c4e`](https://github.com/Thinkmill/manypkg/commit/3cf8c4e5d49fa703df73eafd26c730491908de75), [`1763058`](https://github.com/Thinkmill/manypkg/commit/1763058f9e6a1e85e5720656301d18ca10bda426), [`a00f5f7`](https://github.com/Thinkmill/manypkg/commit/a00f5f7179cbe0ba60d7d8e0c47c512b67712da2), [`f29df03`](https://github.com/Thinkmill/manypkg/commit/f29df03867a909c644e4838d62997427aeadc079)]:
+  - @manypkg/get-packages@3.0.0
+
 ## 0.23.0
 
 ### Minor Changes
