@@ -74,10 +74,7 @@ export const BunTool: Tool = {
       if (!hasLockFile) {
         return false;
       }
-      const pkgJson = readJsonSync(
-        directory,
-        "package.json"
-      ) as BunPackageJSON;
+      const pkgJson = readJsonSync(directory, "package.json") as BunPackageJSON;
       if (pkgJson.workspaces) {
         if (Array.isArray(pkgJson.workspaces)) {
           return true;
@@ -148,4 +145,4 @@ export const BunTool: Tool = {
       throw err;
     }
   },
-}; 
+};
