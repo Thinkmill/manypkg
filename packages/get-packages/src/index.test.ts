@@ -101,6 +101,46 @@ let runTests = (getPackages: GetPackages) => {
     expect(allPackages.tool.type).toEqual("pnpm");
   });
 
+  it("should resolve workspaces for bun", async () => {
+    const dir = f.copy("bun-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "bun-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "bun-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("bun");
+    }
+  });
+
+  it("should resolve workspaces for bun with JSON lock file", async () => {
+    const dir = f.copy("basic-bun-json-lock");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/package-one"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "basic-bun-json-lock-package-one"
+      );
+      expect(allPackages.packages).toHaveLength(1);
+      expect(allPackages.tool.type).toEqual("bun");
+    }
+  });
+
   it("should resolve workspaces for lerna", async () => {
     const dir = f.copy("lerna-workspace-base");
 

@@ -4,6 +4,7 @@ import path from "node:path";
 import { findRoot, findRootSync } from "./index.ts";
 
 import {
+  BunTool,
   LernaTool,
   NpmTool,
   PnpmTool,
@@ -71,6 +72,40 @@ const runTests = (findRoot: FindRoot) => {
     expect(monorepoRoot).toEqual({
       tool: PnpmTool.type,
       rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of a bun monorepo", async () => {
+    let tmpPath = f.copy("basic-bun");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: BunTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of a bun monorepo with JSON lock file", async () => {
+    let tmpPath = f.copy("basic-bun-json-lock");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: BunTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it does not detect bun monorepo without lock file", async () => {
+    let tmpPath = f.copy("bun-no-lock");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    // Should be detected as a root tool since it has workspaces but no lock file
+    expect(monorepoRoot).toEqual({
+      tool: RootTool.type,
+      rootDir: path.join(tmpPath, "packages", "package-one"),
     });
   });
 
