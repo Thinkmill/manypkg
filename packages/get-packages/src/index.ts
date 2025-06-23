@@ -25,7 +25,12 @@ export class PackageJsonMissingNameError extends Error {
 /**
  * Configuration options for `getPackages` and `getPackagesSync` functions.
  */
-export interface GetPackagesOptions extends FindRootOptions {}
+export interface GetPackagesOptions extends FindRootOptions {
+  /**
+   * This prevents the getPackages function to fail on files like `{ "type": "module" }`.
+   */
+  ignorePackagesWithMissingName?: boolean;
+}
 
 /**
  * Given a starting folder, search that folder and its parents until a supported monorepo
@@ -63,11 +68,14 @@ export function getPackagesSync(
   if (!tool) throw new Error(`Could not find ${monorepoRoot.tool} tool`);
 
   const packages: Packages = tool.getPackagesSync(monorepoRoot.rootDir);
-  validatePackages(packages);
+  validatePackages(packages, options?.ignorePackagesWithMissingName);
   return packages;
 }
 
-function validatePackages(packages: Packages) {
+function validatePackages(
+  packages: Packages,
+  ignorePackagesWithMissingName = false
+): void {
   const pkgJsonsMissingNameField: string[] = [];
 
   for (const pkg of packages.packages) {
@@ -76,7 +84,10 @@ function validatePackages(packages: Packages) {
     }
   }
 
-  if (pkgJsonsMissingNameField.length > 0) {
+  if (
+    pkgJsonsMissingNameField.length > 0 &&
+    ignorePackagesWithMissingName === false
+  ) {
     pkgJsonsMissingNameField.sort();
     throw new PackageJsonMissingNameError(pkgJsonsMissingNameField);
   }
