@@ -306,7 +306,7 @@ The root `package.json` of a monorepo is not published so whether a dependency i
 
 ### How it's fixed
 
-All `devDependencies` in the root `package.json` are moved to `dependencies`.
+All `dependencies` in the root `package.json` are moved to `devDependencies`.
 
 ## Multiple dependency types
 
