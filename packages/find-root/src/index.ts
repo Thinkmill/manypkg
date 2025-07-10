@@ -1,4 +1,5 @@
 import {
+  BunTool,
   LernaTool,
   NpmTool,
   PnpmTool,
@@ -23,6 +24,7 @@ export const DEFAULT_TOOLS: Tool[] = [
   YarnTool,
   PnpmTool,
   NpmTool,
+  BunTool,
   LernaTool,
   RushTool,
   RootTool,
