@@ -22,7 +22,7 @@
 
 # Manypkg
 
-Manypkg is a linter for `package.json` files in Yarn, npm or pnpm monorepos.
+Manypkg is a linter for `package.json` files in Yarn, npm, pnpm, Bun or Lerna monorepos.
 
 ## Install
 

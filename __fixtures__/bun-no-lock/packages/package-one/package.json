@@ -1,0 +1,5 @@
+{
+  "name": "bun-no-lock-package-one",
+  "version": "1.0.0",
+  "main": "src/index.js"
+} 
