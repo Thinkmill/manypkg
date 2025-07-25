@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/cli",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thinkmill/manypkg.git",
@@ -16,7 +16,7 @@
     "manypkg": "./bin.js"
   },
   "dependencies": {
-    "@manypkg/get-packages": "^3.0.0",
+    "@manypkg/get-packages": "^3.1.0",
     "detect-indent": "^7.0.1",
     "normalize-path": "^3.0.0",
     "p-limit": "^6.2.0",

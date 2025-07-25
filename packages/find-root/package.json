@@ -1,6 +1,6 @@
 {
   "name": "@manypkg/find-root",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thinkmill/manypkg.git",
@@ -13,7 +13,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@manypkg/tools": "^2.0.0"
+    "@manypkg/tools": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
