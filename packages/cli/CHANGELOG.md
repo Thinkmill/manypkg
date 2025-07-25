@@ -1,5 +1,16 @@
 # @manypkg/cli
 
+## 0.25.0
+
+### Minor Changes
+
+- [#254](https://github.com/Thinkmill/manypkg/pull/254) [`2c06ac0`](https://github.com/Thinkmill/manypkg/commit/2c06ac09397b825dc3cae3c29a1f08bbd09a4ab1) Thanks [@cjkihl](https://github.com/cjkihl)! - Add Bun support
+
+### Patch Changes
+
+- Updated dependencies [[`2c06ac0`](https://github.com/Thinkmill/manypkg/commit/2c06ac09397b825dc3cae3c29a1f08bbd09a4ab1)]:
+  - @manypkg/get-packages@3.1.0
+
 ## 0.24.0
 
 ### Minor Changes

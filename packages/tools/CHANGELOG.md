@@ -1,5 +1,11 @@
 # @manypkg/tools
 
+## 2.1.0
+
+### Minor Changes
+
+- [#254](https://github.com/Thinkmill/manypkg/pull/254) [`2c06ac0`](https://github.com/Thinkmill/manypkg/commit/2c06ac09397b825dc3cae3c29a1f08bbd09a4ab1) Thanks [@cjkihl](https://github.com/cjkihl)! - Add Bun support
+
 ## 2.0.0
 
 ### Major Changes
