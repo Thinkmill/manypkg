@@ -2,4 +2,4 @@
 "@manypkg/cli": minor
 ---
 
-Respect line endings of package.json files on windows
+Keep detected line endings flavor of `package.json` files on Windows when updating those files
