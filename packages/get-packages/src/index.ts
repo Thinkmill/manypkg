@@ -51,7 +51,7 @@ export async function getPackages(
   if (!tool) throw new Error(`Could not find ${monorepoRoot.tool} tool`);
 
   const packages: Packages = await tool.getPackages(monorepoRoot.rootDir);
-  validatePackages(packages);
+  validatePackages(packages, options?.ignorePackagesWithMissingName);
   return packages;
 }
 
