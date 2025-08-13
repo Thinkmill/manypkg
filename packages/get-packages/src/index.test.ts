@@ -193,7 +193,41 @@ let runTests = (getPackages: GetPackages) => {
 
   it("should throw an error if a package.json is missing the name field", async () => {
     try {
-      const allPackages = await getPackagesSync(f.copy("no-name-field"));
+      const allPackages = await getPackages(f.copy("no-name-field"));
+      expect.fail("Expected error to be thrown");
+    } catch (err) {
+      expect(
+        !!err && typeof err === "object" && "message" in err && err.message
+      ).toBe(
+        'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
+      );
+    }
+  });
+
+  it("should not throw an error if a package.json is missing the name field when ignorePackagesWithMissingName is true", async () => {
+    const allPackages = await getPackages(f.copy("no-name-field"), {
+      ignorePackagesWithMissingName: true,
+    });
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
+    // Should still find packages even without name fields
+    expect(allPackages.packages.length).toEqual(2);
+    expect(allPackages.tool.type).toEqual("yarn");
+
+    // The packages should have undefined names since they're missing the name field
+    expect(allPackages.packages[0].packageJson.name).toBeUndefined();
+    expect(allPackages.packages[1].packageJson.name).toBeUndefined();
+  });
+
+  it("should still throw an error if a package.json is missing the name field when ignorePackagesWithMissingName is false", async () => {
+    try {
+      const allPackages = await getPackages(f.copy("no-name-field"), {
+        ignorePackagesWithMissingName: false,
+      });
+      expect.fail("Expected error to be thrown");
     } catch (err) {
       expect(
         !!err && typeof err === "object" && "message" in err && err.message
@@ -223,4 +257,51 @@ describe("getPackages", () => {
 
 describe("getPackagesSync", () => {
   runTests(getPackagesSync);
+
+  // Additional tests specific to sync version for the new ignorePackagesWithMissingName option
+  it("should throw an error if a package.json is missing the name field (sync)", () => {
+    try {
+      const allPackages = getPackagesSync(f.copy("no-name-field"));
+      expect.fail("Expected error to be thrown");
+    } catch (err) {
+      expect(
+        !!err && typeof err === "object" && "message" in err && err.message
+      ).toBe(
+        'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
+      );
+    }
+  });
+
+  it("should not throw an error if a package.json is missing the name field when ignorePackagesWithMissingName is true (sync)", () => {
+    const allPackages = getPackagesSync(f.copy("no-name-field"), {
+      ignorePackagesWithMissingName: true,
+    });
+
+    if (allPackages.packages === null) {
+      return expect(allPackages.packages).not.toBeNull();
+    }
+
+    // Should still find packages even without name fields
+    expect(allPackages.packages.length).toEqual(2);
+    expect(allPackages.tool.type).toEqual("yarn");
+
+    // The packages should have undefined names since they're missing the name field
+    expect(allPackages.packages[0].packageJson.name).toBeUndefined();
+    expect(allPackages.packages[1].packageJson.name).toBeUndefined();
+  });
+
+  it("should still throw an error if a package.json is missing the name field when ignorePackagesWithMissingName is false (sync)", () => {
+    try {
+      const allPackages = getPackagesSync(f.copy("no-name-field"), {
+        ignorePackagesWithMissingName: false,
+      });
+      expect.fail("Expected error to be thrown");
+    } catch (err) {
+      expect(
+        !!err && typeof err === "object" && "message" in err && err.message
+      ).toBe(
+        'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
+      );
+    }
+  });
 });
