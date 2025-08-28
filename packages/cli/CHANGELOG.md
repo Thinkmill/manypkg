@@ -1,5 +1,11 @@
 # @manypkg/cli
 
+## 0.25.1
+
+### Patch Changes
+
+- [#260](https://github.com/Thinkmill/manypkg/pull/260) [`5854938`](https://github.com/Thinkmill/manypkg/commit/585493847a530bd87540eb0207b337d8ea5d05c6) Thanks [@jasekiw](https://github.com/jasekiw)! - Keep detected line endings flavor of `package.json` files on Windows when updating those files
+
 ## 0.25.0
 
 ### Minor Changes
