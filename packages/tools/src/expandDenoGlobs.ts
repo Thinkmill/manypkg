@@ -3,7 +3,7 @@ import fs from "node:fs";
 import fsp from "node:fs/promises";
 import { glob, globSync } from "tinyglobby";
 
-import type { Package, PackageJSON } from "./Tool.ts";
+import type { Package, DenoJSON } from "./Tool.ts";
 import { readJsonc, readJsoncSync } from "./utils.ts";
 
 async function getDenoPackageFromDir(
@@ -39,13 +39,13 @@ async function getDenoPackageFromDir(
 
     if (!fileName) return undefined;
 
-    const packageJson = (await readJsonc(fullPath, fileName)) as PackageJSON;
+    const denoJson = (await readJsonc(fullPath, fileName)) as DenoJSON;
 
-    if (packageJson.name && packageJson.version) {
+    if (denoJson.name && denoJson.version) {
       return {
         dir: fullPath,
         relativeDir,
-        packageJson,
+        packageJson: denoJson,
       };
     }
     return undefined;
@@ -90,13 +90,13 @@ function getDenoPackageFromDirSync(
 
     if (!fileName) return undefined;
 
-    const packageJson = readJsoncSync(fullPath, fileName) as PackageJSON;
+    const denoJson = readJsoncSync(fullPath, fileName) as DenoJSON;
 
-    if (packageJson.name && packageJson.version) {
+    if (denoJson.name && denoJson.version) {
       return {
         dir: fullPath,
         relativeDir,
-        packageJson,
+        packageJson: denoJson,
       };
     }
     return undefined;
@@ -113,7 +113,7 @@ function getDenoPackageFromDirSync(
  * to the root directory, and returns a list of all matching relative directories that
  * contain a `deno.json` or `deno.jsonc` file.
  */
-export async function expandDenoPackageGlobs(
+export async function expandDenoGlobs(
   packageGlobs: string[],
   directory: string
 ): Promise<Package[]> {
@@ -137,7 +137,7 @@ export async function expandDenoPackageGlobs(
 /**
  * A synchronous version of {@link expandDenoPackagesGlobs}.
  */
-export function expandDenoPackageGlobsSync(
+export function expandDenoGlobsSync(
   packageGlobs: string[],
   directory: string
 ): Package[] {

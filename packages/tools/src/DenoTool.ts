@@ -1,19 +1,17 @@
 import path from "node:path";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
-import { F_OK } from "node:constants";
-import { parse } from "jsonc-parser";
 
 import {
   InvalidMonorepoError,
-  type PackageJSON,
+  type DenoJSON,
   type Packages,
   type Tool,
 } from "./Tool.ts";
 import {
-  expandDenoPackageGlobs,
-  expandDenoPackageGlobsSync,
-} from "./expandDenoPackageGlobs.ts";
+  expandDenoGlobs,
+  expandDenoGlobsSync,
+} from "./expandDenoGlobs.ts";
 
 import { readJsonc, readJsoncSync } from "./utils.ts";
 
@@ -22,7 +20,7 @@ async function isDenoMonorepoRoot(
   read: (
     dir: string,
     file: string
-  ) => Promise<DenoPackageJSON | { workspaces?: string[] }>
+  ) => Promise<DenoJSON | { workspace?: string[] }>
 ): Promise<boolean> {
   try {
     let fileName: string | undefined;
@@ -51,8 +49,8 @@ async function isDenoMonorepoRoot(
     if (!fileName) return false;
 
     const pkgJson = await read(directory, fileName);
-    if (pkgJson.workspaces) {
-      if (Array.isArray(pkgJson.workspaces)) {
+    if (pkgJson.workspace) {
+      if (Array.isArray(pkgJson.workspace)) {
         return true;
       }
     }
@@ -70,7 +68,7 @@ function isDenoMonorepoRootSync(
   read: (
     dir: string,
     file: string
-  ) => DenoPackageJSON | { workspaces?: string[] }
+  ) => DenoJSON | { workspace?: string[] }
 ): boolean {
   try {
     let fileName: string | undefined;
@@ -99,8 +97,8 @@ function isDenoMonorepoRootSync(
     if (!fileName) return false;
 
     const pkgJson = read(directory, fileName);
-    if (pkgJson.workspaces) {
-      if (Array.isArray(pkgJson.workspaces)) {
+    if (pkgJson.workspace) {
+      if (Array.isArray(pkgJson.workspace)) {
         return true;
       }
     }
@@ -156,12 +154,12 @@ export const DenoTool: Tool = {
           `Directory ${rootDir} is not a valid ${DenoTool.type} monorepo root`
         );
 
-      const pkgJson = (await readJsonc(rootDir, fileName)) as DenoPackageJSON;
-      const packageGlobs: string[] = pkgJson.workspaces!;
+      const pkgJson = (await readJsonc(rootDir, fileName)) as DenoJSON;
+      const packageGlobs: string[] = pkgJson.workspace!;
 
       return {
         tool: DenoTool,
-        packages: await expandDenoPackageGlobs(packageGlobs, rootDir),
+        packages: await expandDenoGlobs(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",
@@ -211,12 +209,12 @@ export const DenoTool: Tool = {
           `Directory ${rootDir} is not a valid ${DenoTool.type} monorepo root`
         );
 
-      const pkgJson = readJsoncSync(rootDir, fileName) as DenoPackageJSON;
-      const packageGlobs: string[] = pkgJson.workspaces!;
+      const pkgJson = readJsoncSync(rootDir, fileName) as DenoJSON;
+      const packageGlobs: string[] = pkgJson.workspace!;
 
       return {
         tool: DenoTool,
-        packages: expandDenoPackageGlobsSync(packageGlobs, rootDir),
+        packages: expandDenoGlobsSync(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",
