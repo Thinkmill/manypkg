@@ -14,3 +14,53 @@ export const readJsonc = async (directory: string, file: string) =>
 
 export const readJsoncSync = (directory: string, file: string) =>
   parse(fs.readFileSync(path.join(directory, file), "utf-8"));
+
+export async function findDenoConfig(
+  directory: string
+): Promise<string | undefined> {
+  try {
+    if ((await fsp.stat(path.join(directory, "deno.json"))).isFile()) {
+      return "deno.json";
+    }
+  } catch (err) {
+    if (err && (err as { code: string }).code !== "ENOENT") {
+      throw err;
+    }
+  }
+
+  try {
+    if ((await fsp.stat(path.join(directory, "deno.jsonc"))).isFile()) {
+      return "deno.jsonc";
+    }
+  } catch (err) {
+    if (err && (err as { code: string }).code !== "ENOENT") {
+      throw err;
+    }
+  }
+
+  return undefined;
+}
+
+export function findDenoConfigSync(directory: string): string | undefined {
+  try {
+    if (fs.statSync(path.join(directory, "deno.json")).isFile()) {
+      return "deno.json";
+    }
+  } catch (err) {
+    if (err && (err as { code: string }).code !== "ENOENT") {
+      throw err;
+    }
+  }
+
+  try {
+    if (fs.statSync(path.join(directory, "deno.jsonc")).isFile()) {
+      return "deno.jsonc";
+    }
+  } catch (err) {
+    if (err && (err as { code: string }).code !== "ENOENT") {
+      throw err;
+    }
+  }
+
+  return undefined;
+}

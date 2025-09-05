@@ -1,10 +1,13 @@
 import path from "node:path";
-import fs from "node:fs";
-import fsp from "node:fs/promises";
 import { glob, globSync } from "tinyglobby";
 
 import type { Package, DenoJSON } from "./Tool.ts";
-import { readJsonc, readJsoncSync } from "./utils.ts";
+import {
+  findDenoConfig,
+  findDenoConfigSync,
+  readJsonc,
+  readJsoncSync,
+} from "./utils.ts";
 
 async function getDenoPackageFromDir(
   packageDir: string,
@@ -14,30 +17,10 @@ async function getDenoPackageFromDir(
   const relativeDir = path.relative(rootDir, fullPath);
 
   try {
-    let fileName: string | undefined;
-    try {
-      if ((await fsp.stat(path.join(fullPath, "deno.json"))).isFile()) {
-        fileName = "deno.json";
-      }
-    } catch (err) {
-      if (err && (err as { code: string }).code !== "ENOENT") {
-        throw err;
-      }
-    }
-
+    const fileName = await findDenoConfig(fullPath);
     if (!fileName) {
-      try {
-        if ((await fsp.stat(path.join(fullPath, "deno.jsonc"))).isFile()) {
-          fileName = "deno.jsonc";
-        }
-      } catch (err) {
-        if (err && (err as { code: string }).code !== "ENOENT") {
-          throw err;
-        }
-      }
+      return undefined;
     }
-
-    if (!fileName) return undefined;
 
     const denoJson = (await readJsonc(fullPath, fileName)) as DenoJSON;
 
@@ -65,30 +48,10 @@ function getDenoPackageFromDirSync(
   const relativeDir = path.relative(rootDir, fullPath);
 
   try {
-    let fileName: string | undefined;
-    try {
-      if (fs.statSync(path.join(fullPath, "deno.json")).isFile()) {
-        fileName = "deno.json";
-      }
-    } catch (err) {
-      if (err && (err as { code: string }).code !== "ENOENT") {
-        throw err;
-      }
-    }
-
+    const fileName = findDenoConfigSync(fullPath);
     if (!fileName) {
-      try {
-        if (fs.statSync(path.join(fullPath, "deno.jsonc")).isFile()) {
-          fileName = "deno.jsonc";
-        }
-      } catch (err) {
-        if (err && (err as { code: string }).code !== "ENOENT") {
-          throw err;
-        }
-      }
+      return undefined;
     }
-
-    if (!fileName) return undefined;
 
     const denoJson = readJsoncSync(fullPath, fileName) as DenoJSON;
 
