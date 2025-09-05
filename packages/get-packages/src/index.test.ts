@@ -246,29 +246,14 @@ let runTests = (getPackages: GetPackages) => {
         return expect(allPackages.packages).not.toBeNull();
       }
 
-      expect(allPackages.packages[0].packageJson.name).toEqual(
-        "@scope/package-one"
+      expect(allPackages.packages.map((p) => p.packageJson.name).sort()).toEqual(
+        ["@scope/package-one", "@scope/package-three", "@scope/package-two"]
       );
-      expect(allPackages.packages).toHaveLength(1);
+      expect(allPackages.packages).toHaveLength(3);
       expect(allPackages.tool.type).toEqual("deno");
 
       expect(allPackages.rootPackage?.packageJson).toEqual({
         workspace: ["packages/*"],
-        nodeModulesDir: "auto",
-        tasks: {
-          check: "deno fmt --check . && deno lint . && deno check",
-          dev: "vite",
-          build: "vite build",
-          start: "deno serve -A _fresh/server.js",
-          update: "deno run -A -r jsr:@fresh/update .",
-          "check-deps": "deno run -A jsr:@check/deps --allow-unused",
-        },
-        lint: {
-          rules: {
-            tags: ["fresh", "recommended"],
-          },
-        },
-        exclude: ["**/_fresh/*"],
         imports: {
           "@/": "./",
           "class-variance-authority": "npm:class-variance-authority@^0.7.1",
@@ -289,6 +274,41 @@ let runTests = (getPackages: GetPackages) => {
           tailwindcss: "npm:tailwindcss@^4.1.12",
           "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.12",
         },
+      });
+
+      const packageOne = allPackages.packages.find(p => p.packageJson.name === '@scope/package-one')
+      expect(packageOne?.packageJson).toEqual({
+        name: "@scope/package-one",
+        version: "1.0.0",
+        exports: "./mod.ts",
+      })
+
+      const packageTwo = allPackages.packages.find(p => p.packageJson.name === '@scope/package-two')
+      expect(packageTwo?.packageJson).toEqual({
+        name: "@scope/package-two",
+        version: "1.0.0",
+        exports: "./mod.ts",
+        tasks: {
+          check: "deno fmt --check . && deno lint . && deno check",
+          dev: "vite",
+          build: "vite build",
+          start: "deno serve -A _fresh/server.js",
+          update: "deno run -A -r jsr:@fresh/update .",
+          "check-deps": "deno run -A jsr:@check/deps --allow-unused",
+        },
+        lint: {
+          rules: {
+            tags: ["fresh", "recommended"],
+          },
+        },
+      });
+
+      const packageThree = allPackages.packages.find(p => p.packageJson.name === '@scope/package-three')
+      expect(packageThree?.packageJson).toEqual({
+        name: "@scope/package-three",
+        version: "1.0.0",
+        exports: "./mod.ts",
+        exclude: ["**/_fresh/*"],
         compilerOptions: {
           lib: ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
           jsx: "precompile",

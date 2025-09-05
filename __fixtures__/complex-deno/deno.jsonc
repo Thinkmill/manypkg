@@ -2,27 +2,6 @@
   "workspace": [
     "packages/*"
   ],
-  "nodeModulesDir": "auto",
-  "tasks": {
-    "check": "deno fmt --check . && deno lint . && deno check",
-    "dev": "vite",
-    "build": "vite build",
-    "start": "deno serve -A _fresh/server.js",
-    "update": "deno run -A -r jsr:@fresh/update .",
-    "check-deps": "deno run -A jsr:@check/deps --allow-unused"
-  },
-  "lint": {
-    "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
-    }
-  },
-  // "broken:", "this should not be here",
-  "exclude": [
-    "**/_fresh/*"
-  ],
   "imports": {
     "@/": "./",
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
@@ -41,31 +20,5 @@
     "vite": "npm:vite@^7.1.4",
     "tailwindcss": "npm:tailwindcss@^4.1.12",
     "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.12"
-  },
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable",
-      "deno.ns"
-    ],
-    "jsx": "precompile",
-    "jsxImportSource": "preact",
-    "jsxPrecompileSkipElements": [
-      "a",
-      "img",
-      "source",
-      "body",
-      "html",
-      "head",
-      "title",
-      "meta",
-      "script",
-      "link",
-      "style",
-      "base",
-      "noscript",
-      "template"
-    ]
   }
 }

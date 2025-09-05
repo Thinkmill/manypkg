@@ -1,0 +1,35 @@
+{
+  "name": "@scope/package-three",
+  "version": "1.0.0",
+  "exports": "./mod.ts",
+  // "broken:", "this should not be here",
+  "exclude": [
+    "**/_fresh/*"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.asynciterable",
+      "dom.iterable",
+      "deno.ns"
+    ],
+    "jsx": "precompile",
+    "jsxImportSource": "preact",
+    "jsxPrecompileSkipElements": [
+      "a",
+      "img",
+      "source",
+      "body",
+      "html",
+      "head",
+      "title",
+      "meta",
+      "script",
+      "link",
+      "style",
+      "base",
+      "noscript",
+      "template"
+    ]
+  }
+}
