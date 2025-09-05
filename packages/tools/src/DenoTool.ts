@@ -11,9 +11,9 @@ import {
   type Tool,
 } from "./Tool.ts";
 import {
-  expandPackageGlobs,
-  expandPackageGlobsSync,
-} from "./expandPackageGlobs.ts";
+  expandDenoPackageGlobs,
+  expandDenoPackageGlobsSync,
+} from "./expandDenoPackageGlobs.ts";
 
 import { readJsonc, readJsoncSync } from "./utils.ts";
 
@@ -164,7 +164,7 @@ export const DenoTool: Tool = {
 
       return {
         tool: DenoTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
+        packages: await expandDenoPackageGlobs(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",
@@ -219,7 +219,7 @@ export const DenoTool: Tool = {
 
       return {
         tool: DenoTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
+        packages: expandDenoPackageGlobsSync(packageGlobs, rootDir),
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",

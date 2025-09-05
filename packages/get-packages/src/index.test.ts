@@ -227,7 +227,9 @@ let runTests = (getPackages: GetPackages) => {
         return expect(allPackages.packages).not.toBeNull();
       }
 
-      expect(allPackages.packages[0].packageJson.name).toEqual("package-one");
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "@scope/package-one"
+      );
       expect(allPackages.packages).toHaveLength(1);
       expect(allPackages.tool.type).toEqual("deno");
     }
