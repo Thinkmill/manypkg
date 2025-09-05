@@ -234,6 +234,85 @@ let runTests = (getPackages: GetPackages) => {
       expect(allPackages.tool.type).toEqual("deno");
     }
   });
+
+  it("should resolve workspaces for a complex deno project", async () => {
+    const dir = f.copy("complex-deno");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/package-one"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "@scope/package-one"
+      );
+      expect(allPackages.packages).toHaveLength(1);
+      expect(allPackages.tool.type).toEqual("deno");
+
+      expect(allPackages.rootPackage?.packageJson).toEqual({
+        workspace: ["packages/*"],
+        nodeModulesDir: "auto",
+        tasks: {
+          check: "deno fmt --check . && deno lint . && deno check",
+          dev: "vite",
+          build: "vite build",
+          start: "deno serve -A _fresh/server.js",
+          update: "deno run -A -r jsr:@fresh/update .",
+          "check-deps": "deno run -A jsr:@check/deps --allow-unused",
+        },
+        lint: {
+          rules: {
+            tags: ["fresh", "recommended"],
+          },
+        },
+        exclude: ["**/_fresh/*"],
+        imports: {
+          "@/": "./",
+          "class-variance-authority": "npm:class-variance-authority@^0.7.1",
+          clsx: "npm:clsx@^2.1.1",
+          cmdk: "https://esm.sh/cmdk@1.1.1?alias=react:preact/compat&external=preact,@radix-ui/react-dialog&target=es2022",
+          fresh: "jsr:@fresh/core@^2.0.0-beta.3",
+          "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^0.9.11",
+          "lucide-preact": "npm:lucide-preact@^0.539.0",
+          postcss: "npm:postcss@^8.5.6",
+          preact: "npm:preact@^10.27.1",
+          "@preact/signals": "npm:@preact/signals@^2.3.1",
+          "/*": "TODO: cleanup",
+          "@radix-ui/react-accordion":
+            "https://esm.sh/@radix-ui/react-accordion@1.2.12?alias=react:preact/compat&external=preact,@radix-ui/react-collapsible,@radix-ui/react-collection,@radix-ui/react-compose-refs,@radix-ui/react-context,@radix-ui/react-direction,@radix-ui/react-id,@radix-ui/react-primitive,@radix-ui/react-use-controllable-state&target=es2022",
+          "tailwind-merge": "npm:tailwind-merge@^3.3.1",
+          "tw-animate-css": "npm:tw-animate-css@^1.3.7",
+          vite: "npm:vite@^7.1.4",
+          tailwindcss: "npm:tailwindcss@^4.1.12",
+          "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.12",
+        },
+        compilerOptions: {
+          lib: ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
+          jsx: "precompile",
+          jsxImportSource: "preact",
+          jsxPrecompileSkipElements: [
+            "a",
+            "img",
+            "source",
+            "body",
+            "html",
+            "head",
+            "title",
+            "meta",
+            "script",
+            "link",
+            "style",
+            "base",
+            "noscript",
+            "template",
+          ],
+        },
+      });
+    }
+  });
 };
 
 describe("getPackages", () => {
