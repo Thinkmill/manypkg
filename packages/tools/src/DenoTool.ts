@@ -8,10 +8,7 @@ import {
   type Packages,
   type Tool,
 } from "./Tool.ts";
-import {
-  expandDenoGlobs,
-  expandDenoGlobsSync,
-} from "./expandDenoGlobs.ts";
+import { expandDenoGlobs, expandDenoGlobsSync } from "./expandDenoGlobs.ts";
 
 import { readJsonc, readJsoncSync } from "./utils.ts";
 
@@ -65,10 +62,7 @@ async function isDenoMonorepoRoot(
 
 function isDenoMonorepoRootSync(
   directory: string,
-  read: (
-    dir: string,
-    file: string
-  ) => DenoJSON | { workspace?: string[] }
+  read: (dir: string, file: string) => DenoJSON | { workspace?: string[] }
 ): boolean {
   try {
     let fileName: string | undefined;
