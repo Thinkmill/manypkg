@@ -246,9 +246,13 @@ let runTests = (getPackages: GetPackages) => {
         return expect(allPackages.packages).not.toBeNull();
       }
 
-      expect(allPackages.packages.map((p) => p.packageJson.name).sort()).toEqual(
-        ["@scope/package-one", "@scope/package-three", "@scope/package-two"]
-      );
+      expect(
+        allPackages.packages.map((p) => p.packageJson.name).sort()
+      ).toEqual([
+        "@scope/package-one",
+        "@scope/package-three",
+        "@scope/package-two",
+      ]);
       expect(allPackages.packages).toHaveLength(3);
       expect(allPackages.tool.type).toEqual("deno");
 
@@ -276,14 +280,18 @@ let runTests = (getPackages: GetPackages) => {
         },
       });
 
-      const packageOne = allPackages.packages.find(p => p.packageJson.name === '@scope/package-one')
+      const packageOne = allPackages.packages.find(
+        (p) => p.packageJson.name === "@scope/package-one"
+      );
       expect(packageOne?.packageJson).toEqual({
         name: "@scope/package-one",
         version: "1.0.0",
         exports: "./mod.ts",
-      })
+      });
 
-      const packageTwo = allPackages.packages.find(p => p.packageJson.name === '@scope/package-two')
+      const packageTwo = allPackages.packages.find(
+        (p) => p.packageJson.name === "@scope/package-two"
+      );
       expect(packageTwo?.packageJson).toEqual({
         name: "@scope/package-two",
         version: "1.0.0",
@@ -303,7 +311,9 @@ let runTests = (getPackages: GetPackages) => {
         },
       });
 
-      const packageThree = allPackages.packages.find(p => p.packageJson.name === '@scope/package-three')
+      const packageThree = allPackages.packages.find(
+        (p) => p.packageJson.name === "@scope/package-three"
+      );
       expect(packageThree?.packageJson).toEqual({
         name: "@scope/package-three",
         version: "1.0.0",
