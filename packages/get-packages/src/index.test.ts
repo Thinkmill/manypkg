@@ -215,6 +215,23 @@ let runTests = (getPackages: GetPackages) => {
     );
     expect(allPackages.tool.type).toEqual("yarn");
   });
+
+  it("should resolve workspaces for deno", async () => {
+    const dir = f.copy("basic-deno");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/package-one"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual("package-one");
+      expect(allPackages.packages).toHaveLength(1);
+      expect(allPackages.tool.type).toEqual("deno");
+    }
+  });
 };
 
 describe("getPackages", () => {

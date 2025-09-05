@@ -15,6 +15,7 @@
   "dependencies": {
     "jju": "^1.4.0",
     "js-yaml": "^4.1.0",
+    "jsonc-parser": "^3.2.0",
     "tinyglobby": "^0.2.13"
   },
   "devDependencies": {
