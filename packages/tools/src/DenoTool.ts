@@ -156,10 +156,7 @@ export const DenoTool: Tool = {
           `Directory ${rootDir} is not a valid ${DenoTool.type} monorepo root`
         );
 
-      const pkgJson = (await readJsonc(
-        rootDir,
-        fileName
-      )) as DenoPackageJSON;
+      const pkgJson = (await readJsonc(rootDir, fileName)) as DenoPackageJSON;
       const packageGlobs: string[] = pkgJson.workspaces!;
 
       return {

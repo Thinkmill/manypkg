@@ -151,8 +151,8 @@ export function expandDenoPackageGlobsSync(
     .map((p) => path.resolve(directory, p))
     .sort();
 
-  const discoveredPackages: Array<Package | undefined> = directories.map((dir) =>
-    getDenoPackageFromDirSync(dir, directory)
+  const discoveredPackages: Array<Package | undefined> = directories.map(
+    (dir) => getDenoPackageFromDirSync(dir, directory)
   );
 
   return discoveredPackages.filter((pkg) => pkg) as Package[];
