@@ -30,10 +30,7 @@ export let getFakeWS = (
   };
 };
 
-export let getWS = (): Map<
-  string,
-  Package & { packageJson: PackageJSON }
-> => {
+export let getWS = (): Map<string, Package & { packageJson: PackageJSON }> => {
   let pkg = new Map();
   pkg.set("pkg-1", getFakeWS());
   return pkg;

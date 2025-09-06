@@ -17,10 +17,7 @@ export default makeCheck<ErrorType>({
   validate: (workspace) => {
     if (isDenoPackage(workspace)) {
       const deps = workspace.packageJson.imports;
-      if (
-        deps &&
-        !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
-      ) {
+      if (deps && !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())) {
         return [
           {
             type: "UNSORTED_DEPENDENCIES",

@@ -79,7 +79,8 @@ export default makeCheck<ErrorType>({
         for (const alias in imports) {
           if (imports[alias].includes(depName)) {
             // This is still a bit of a hack, we assume jsr protocol
-            imports[alias] = `jsr:${depName}@${error.mostCommonDependencyRange}`;
+            imports[alias] =
+              `jsr:${depName}@${error.mostCommonDependencyRange}`;
             break;
           }
         }

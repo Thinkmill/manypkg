@@ -22,51 +22,51 @@ export default makeCheck<ErrorType>({
       let devDeps = workspace.packageJson.devDependencies || {};
       if (peerDeps) {
         for (let depName in peerDeps) {
-        if (!devDeps[depName]) {
-          let highestRanges = getMostCommonRangeMap(allWorkspaces);
-          let idealDevVersion = highestRanges.get(depName);
-          let isInternalDependency = allWorkspaces.has(depName);
-          if (isInternalDependency) {
-            idealDevVersion = "*";
-          } else if (idealDevVersion === undefined) {
-            idealDevVersion = peerDeps[depName];
-          }
+          if (!devDeps[depName]) {
+            let highestRanges = getMostCommonRangeMap(allWorkspaces);
+            let idealDevVersion = highestRanges.get(depName);
+            let isInternalDependency = allWorkspaces.has(depName);
+            if (isInternalDependency) {
+              idealDevVersion = "*";
+            } else if (idealDevVersion === undefined) {
+              idealDevVersion = peerDeps[depName];
+            }
 
-          errors.push({
-            type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
-            workspace,
-            peerVersion: peerDeps[depName],
-            dependencyName: depName,
-            devVersion: null,
-            idealDevVersion,
-          });
-        } else if (
-          semver.validRange(devDeps[depName]) &&
-          // TODO: we should probably error when a peer dep has an invalid range (in a seperate rule)
-          // (also would be good to do a bit more validation instead of just ignoring invalid ranges for normal dep types)
-          semver.validRange(peerDeps[depName]) &&
-          !upperBoundOfRangeAWithinBoundsOfB(
-            devDeps[depName],
-            peerDeps[depName]
-          )
-        ) {
-          let highestRanges = getMostCommonRangeMap(allWorkspaces);
-          let idealDevVersion = highestRanges.get(depName);
-          if (idealDevVersion === undefined) {
-            idealDevVersion = peerDeps[depName];
+            errors.push({
+              type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
+              workspace,
+              peerVersion: peerDeps[depName],
+              dependencyName: depName,
+              devVersion: null,
+              idealDevVersion,
+            });
+          } else if (
+            semver.validRange(devDeps[depName]) &&
+            // TODO: we should probably error when a peer dep has an invalid range (in a seperate rule)
+            // (also would be good to do a bit more validation instead of just ignoring invalid ranges for normal dep types)
+            semver.validRange(peerDeps[depName]) &&
+            !upperBoundOfRangeAWithinBoundsOfB(
+              devDeps[depName],
+              peerDeps[depName]
+            )
+          ) {
+            let highestRanges = getMostCommonRangeMap(allWorkspaces);
+            let idealDevVersion = highestRanges.get(depName);
+            if (idealDevVersion === undefined) {
+              idealDevVersion = peerDeps[depName];
+            }
+            errors.push({
+              type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
+              workspace,
+              dependencyName: depName,
+              peerVersion: peerDeps[depName],
+              devVersion: devDeps[depName],
+              idealDevVersion,
+            });
           }
-          errors.push({
-            type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP",
-            workspace,
-            dependencyName: depName,
-            peerVersion: peerDeps[depName],
-            devVersion: devDeps[depName],
-            idealDevVersion,
-          });
         }
       }
-    }
-    return errors;
+      return errors;
     }
     return [];
   },

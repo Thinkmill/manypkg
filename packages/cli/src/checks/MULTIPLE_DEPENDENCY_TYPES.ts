@@ -19,9 +19,10 @@ export default makeCheck<ErrorType>({
           dependencies.add(depName);
         }
       }
-      for (
-        let depType of ["devDependencies", "optionalDependencies"] as const
-      ) {
+      for (let depType of [
+        "devDependencies",
+        "optionalDependencies",
+      ] as const) {
         let deps = workspace.packageJson[depType];
         if (deps) {
           for (let depName in deps) {
