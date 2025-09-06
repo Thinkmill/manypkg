@@ -31,53 +31,16 @@ export type PackageJSON = {
 };
 
 /**
- * An in-memory representation of a deno.json[c] file.
- */
-export interface DenoJSON {
-  compilerOptions?: Record<string, unknown>;
-  lint?: {
-    include?: string[];
-    exclude?: string[];
-    rules?: {
-      tags?: string[];
-      include?: string[];
-      exclude?: string[];
-    };
-  };
-  fmt?: {
-    useTabs?: boolean;
-    lineWidth?: number;
-    indentWidth?: number;
-    semiColons?: boolean;
-    singleQuote?: boolean;
-    proseWrap?: string;
-    include?: string[];
-    exclude?: string[];
-  };
-  lock?: boolean | string;
-  nodeModulesDir?: "auto" | string;
-  unstable?: string[];
-  test?: {
-    include?: string[];
-    exclude?: string[];
-  };
-  tasks?: Record<string, string>;
-  imports?: Record<string, string>;
-  exclude?: string[];
-  workspace?: string[];
-  name: string;
-  version: string;
-}
-
-/**
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
+import type { DenoJSON } from "./DenoTool.ts";
+
 export interface Package {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON; // TODO: may also be DenoJSON
+  packageJson: PackageJSON | DenoJSON;
   dependencies?: Record<
     string,
     {
@@ -172,6 +135,18 @@ export type ToolType =
  * Each tool defines a common interface for detecting whether a directory is
  * a valid instance of this type of monorepo, how to retrieve the packages, etc.
  */
+export function isDenoPackage(
+  pkg: Package
+): pkg is Package & { packageJson: DenoJSON } {
+  return pkg.tool.type === "deno";
+}
+
+export function isNodePackage(
+  pkg: Package
+): pkg is Package & { packageJson: PackageJSON } {
+  return pkg.tool.type !== "deno";
+}
+
 export interface Tool {
   /**
    * A string identifier for this monorepo tool. Should be unique among monorepo tools

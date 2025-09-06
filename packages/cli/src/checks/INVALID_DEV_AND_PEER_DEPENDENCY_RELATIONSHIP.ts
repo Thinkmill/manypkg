@@ -1,4 +1,5 @@
 import { makeCheck, getMostCommonRangeMap } from "./utils.ts";
+import { isNodePackage } from "@manypkg/tools";
 import type { Package } from "@manypkg/get-packages";
 import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
 import semver from "semver";
@@ -15,11 +16,12 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace, allWorkspaces) => {
-    let errors: ErrorType[] = [];
-    let peerDeps = workspace.packageJson.peerDependencies;
-    let devDeps = workspace.packageJson.devDependencies || {};
-    if (peerDeps) {
-      for (let depName in peerDeps) {
+    if (isNodePackage(workspace)) {
+      let errors: ErrorType[] = [];
+      let peerDeps = workspace.packageJson.peerDependencies;
+      let devDeps = workspace.packageJson.devDependencies || {};
+      if (peerDeps) {
+        for (let depName in peerDeps) {
         if (!devDeps[depName]) {
           let highestRanges = getMostCommonRangeMap(allWorkspaces);
           let idealDevVersion = highestRanges.get(depName);
@@ -65,14 +67,18 @@ export default makeCheck<ErrorType>({
       }
     }
     return errors;
+    }
+    return [];
   },
   fix: (error) => {
-    if (!error.workspace.packageJson.devDependencies) {
-      error.workspace.packageJson.devDependencies = {};
+    if (isNodePackage(error.workspace)) {
+      if (!error.workspace.packageJson.devDependencies) {
+        error.workspace.packageJson.devDependencies = {};
+      }
+      error.workspace.packageJson.devDependencies[error.dependencyName] =
+        error.idealDevVersion;
+      return { requiresInstall: true };
     }
-    error.workspace.packageJson.devDependencies[error.dependencyName] =
-      error.idealDevVersion;
-    return { requiresInstall: true };
   },
   print: (error) => {
     if (error.devVersion === null) {

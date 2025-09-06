@@ -1,4 +1,5 @@
 import { makeCheck, sortObject } from "./utils.ts";
+import { isNodePackage } from "@manypkg/tools";
 import pc from "picocolors";
 import type { Package } from "@manypkg/get-packages";
 
@@ -10,18 +11,23 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "root",
   validate: (rootWorkspace) => {
-    if (rootWorkspace.packageJson.dependencies) {
+    if (
+      isNodePackage(rootWorkspace) &&
+      rootWorkspace.packageJson.dependencies
+    ) {
       return [{ type: "ROOT_HAS_PROD_DEPENDENCIES", workspace: rootWorkspace }];
     }
     return [];
   },
   fix: (error) => {
-    error.workspace.packageJson.devDependencies = sortObject({
-      ...error.workspace.packageJson.devDependencies,
-      ...error.workspace.packageJson.dependencies,
-    });
+    if (isNodePackage(error.workspace)) {
+      error.workspace.packageJson.devDependencies = sortObject({
+        ...error.workspace.packageJson.devDependencies,
+        ...error.workspace.packageJson.dependencies,
+      });
 
-    delete error.workspace.packageJson.dependencies;
+      delete error.workspace.packageJson.dependencies;
+    }
   },
   print: () => {
     return `the root package.json contains ${pc.yellow(
