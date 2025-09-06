@@ -1,7 +1,7 @@
 import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
-import type { DenoJSON } from "../../../tools/src/Tool.ts";
+import type { DenoJSON } from "@manypkg/tools";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",

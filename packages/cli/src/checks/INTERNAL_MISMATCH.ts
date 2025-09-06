@@ -6,7 +6,7 @@ import {
 import semver from "semver";
 import type { Package } from "@manypkg/get-packages";
 import type { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
-import type { DenoJSON } from "../../../tools/src/index.ts";
+import type { DenoJSON } from "@manypkg/tools";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";

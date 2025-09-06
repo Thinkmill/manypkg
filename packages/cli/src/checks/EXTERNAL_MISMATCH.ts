@@ -5,7 +5,7 @@ import {
 } from "./utils.ts";
 import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
-import type { DenoJSON } from "../../../tools/src/index.ts";
+import type { DenoJSON } from "@manypkg/tools";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";

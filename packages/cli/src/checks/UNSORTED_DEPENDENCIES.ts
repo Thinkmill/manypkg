@@ -1,4 +1,4 @@
-import type { DenoJSON } from "../../../tools/src/index.ts";
+import type { DenoJSON } from "@manypkg/tools";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
