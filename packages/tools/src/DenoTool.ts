@@ -3,6 +3,7 @@ import path from "node:path";
 import {
   InvalidMonorepoError,
   type DenoJSON,
+  type Package,
   type Packages,
   type Tool,
 } from "./Tool.ts";
@@ -14,6 +15,27 @@ import {
   readJsonc,
   readJsoncSync,
 } from "./utils.ts";
+
+const dependencyRegexp =
+  /^(?<protocol>jsr:|npm:|https:|http:)\/?(?<name>@?[^@\s]+)@?(?<version>[^\s/]+)?\/?/;
+
+function extractDependencies(json: DenoJSON): Package["dependencies"] {
+  const dependencies: Package["dependencies"] = {};
+  if (!json.imports) {
+    return dependencies;
+  }
+  for (const [alias, specifier] of Object.entries(json.imports)) {
+    const match = specifier.match(dependencyRegexp);
+    if (match?.groups) {
+      const { name, version } = match.groups;
+      dependencies[alias] = {
+        name,
+        version,
+      };
+    }
+  }
+  return dependencies;
+}
 
 export const DenoTool: Tool = {
   type: "deno",
@@ -63,14 +85,20 @@ export const DenoTool: Tool = {
 
       const pkgJson = (await readJsonc(rootDir, fileName)) as DenoJSON;
       const packageGlobs: string[] = pkgJson.workspace!;
+      const packages = await expandDenoGlobs(packageGlobs, rootDir);
+
+      for (const p of packages) {
+        p.dependencies = extractDependencies(p.packageJson);
+      }
 
       return {
         tool: DenoTool,
-        packages: await expandDenoGlobs(packageGlobs, rootDir),
+        packages,
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
+          dependencies: extractDependencies(pkgJson),
         },
         rootDir,
       };
@@ -97,14 +125,20 @@ export const DenoTool: Tool = {
 
       const pkgJson = readJsoncSync(rootDir, fileName) as DenoJSON;
       const packageGlobs: string[] = pkgJson.workspace!;
+      const packages = expandDenoGlobsSync(packageGlobs, rootDir);
+
+      for (const p of packages) {
+        p.dependencies = extractDependencies(p.packageJson);
+      }
 
       return {
         tool: DenoTool,
-        packages: expandDenoGlobsSync(packageGlobs, rootDir),
+        packages,
         rootPackage: {
           dir: rootDir,
           relativeDir: ".",
           packageJson: pkgJson,
+          dependencies: extractDependencies(pkgJson),
         },
         rootDir,
       };
