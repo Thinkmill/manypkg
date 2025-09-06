@@ -45,7 +45,7 @@ export interface DenoJSON {
 /**
  * An in-memory representation of a package.json file.
  */
-export interface PackageJSON {
+export type PackageJSON = DenoJSON & {
   name: string;
   version: string;
   dependencies?: {
@@ -67,9 +67,9 @@ export interface PackageJSON {
     registry?: string;
   };
   manypkg?: {
-    [key: string]: string;
+    [key:string]: string;
   };
-}
+};
 
 /**
  * An individual package json structure, along with the directory it lives in,
@@ -79,7 +79,7 @@ export interface Package {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON;
+  packageJson: PackageJSON | DenoJSON;
 
   /**
    * Absolute path to the directory containing this package.
