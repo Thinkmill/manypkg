@@ -37,7 +37,6 @@ function extractDependencies(json: DenoJSON): Package["dependencies"] {
   return dependencies;
 }
 
-
 export const DenoTool: Tool = {
   type: "deno",
 

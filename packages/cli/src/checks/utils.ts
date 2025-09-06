@@ -146,8 +146,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
               if (!semver.validRange(deps[depName])) {
                 continue;
               }
-              let dependencyRanges =
-                dependencyRangesMapping.get(depName) || {};
+              let dependencyRanges = dependencyRangesMapping.get(depName) || {};
               const specifierCount = dependencyRanges[depSpecifier] || 0;
               dependencyRanges[depSpecifier] = specifierCount + 1;
               dependencyRangesMapping.set(depName, dependencyRanges);

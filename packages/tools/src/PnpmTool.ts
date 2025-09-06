@@ -73,7 +73,11 @@ export const PnpmTool: Tool = {
       const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
-      const packages = await expandPackageGlobs(packageGlobs, rootDir, PnpmTool);
+      const packages = await expandPackageGlobs(
+        packageGlobs,
+        rootDir,
+        PnpmTool
+      );
       const rootPackage: Package = {
         dir: rootDir,
         relativeDir: ".",

@@ -77,7 +77,8 @@ export default makeCheck<ErrorType>({
           const rangeType = versionRangeToRangeType(
             error.dependencyRange.replace(/^jsr:/, "")
           );
-          imports[alias] = `jsr:${depName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
+          imports[alias] =
+            `jsr:${depName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
           break;
         }
       }

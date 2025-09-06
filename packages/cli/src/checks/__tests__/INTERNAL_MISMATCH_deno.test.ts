@@ -21,7 +21,9 @@ describe("deno internal mismatch", () => {
     expect(error.type).toBe("INTERNAL_MISMATCH");
     expect(error.dependencyRange).toBe("^2.0.0");
     expect(error.workspace.packageJson.name).toBe("@scope/package-one");
-    expect(error.dependencyWorkspace.packageJson.name).toBe("@scope/package-two");
+    expect(error.dependencyWorkspace.packageJson.name).toBe(
+      "@scope/package-two"
+    );
   });
 
   test("should fix the mismatched dependency", async () => {

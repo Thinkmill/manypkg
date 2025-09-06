@@ -11,9 +11,7 @@ describe("deno invalid package name", () => {
     const { packages, rootPackage } = await getPackages(a);
     const allWorkspaces = new Map(packages.map((p) => [p.packageJson.name, p]));
 
-    const pkgOne = packages.find(
-      (p) => p.packageJson.name === "package-one"
-    )!;
+    const pkgOne = packages.find((p) => p.packageJson.name === "package-one")!;
 
     let errors = check.validate(pkgOne, allWorkspaces, rootPackage, {});
     expect(errors).toHaveLength(1);

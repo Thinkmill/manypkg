@@ -81,7 +81,11 @@ export const YarnTool: Tool = {
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
 
-      const packages = await expandPackageGlobs(packageGlobs, rootDir, YarnTool);
+      const packages = await expandPackageGlobs(
+        packageGlobs,
+        rootDir,
+        YarnTool
+      );
       const rootPackage: Package = {
         dir: rootDir,
         relativeDir: ".",

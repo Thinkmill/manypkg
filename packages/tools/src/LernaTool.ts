@@ -58,7 +58,11 @@ export const LernaTool: Tool = {
       const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
-      const packages = await expandPackageGlobs(packageGlobs, rootDir, LernaTool);
+      const packages = await expandPackageGlobs(
+        packageGlobs,
+        rootDir,
+        LernaTool
+      );
       const rootPackage: Package = {
         dir: rootDir,
         relativeDir: ".",
