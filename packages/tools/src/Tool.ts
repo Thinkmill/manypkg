@@ -1,7 +1,34 @@
 /**
- * A package.json access type.
+ * An in-memory representation of a package.json file.
  */
-export type PackageAccessType = "public" | "restricted";
+
+type PackageAccessType = "public" | "restricted";
+
+// Small alias to make dependency-like maps obvious in the type
+type DependencyMap = Record<string, string>;
+
+type PublishConfig = {
+  access?: PackageAccessType;
+  directory?: string;
+  registry?: string;
+};
+
+export type PackageJSON = {
+  name: string;
+  version: string;
+
+  // dependency maps (optional)
+  dependencies?: DependencyMap;
+  peerDependencies?: DependencyMap;
+  devDependencies?: DependencyMap;
+  optionalDependencies?: DependencyMap;
+
+  private?: boolean;
+  publishConfig?: PublishConfig;
+
+  // any other named package map
+  manypkg?: DependencyMap;
+};
 
 /**
  * An in-memory representation of a deno.json[c] file.
@@ -43,35 +70,6 @@ export interface DenoJSON {
 }
 
 /**
- * An in-memory representation of a package.json file.
- */
-export type PackageJSON = DenoJSON & {
-  name: string;
-  version: string;
-  dependencies?: {
-    [key: string]: string;
-  };
-  peerDependencies?: {
-    [key: string]: string;
-  };
-  devDependencies?: {
-    [key: string]: string;
-  };
-  optionalDependencies?: {
-    [key: string]: string;
-  };
-  private?: boolean;
-  publishConfig?: {
-    access?: PackageAccessType;
-    directory?: string;
-    registry?: string;
-  };
-  manypkg?: {
-    [key:string]: string;
-  };
-};
-
-/**
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
@@ -79,7 +77,7 @@ export interface Package {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON | DenoJSON;
+  packageJson: PackageJSON; // TODO: may also be DenoJSON
   dependencies?: Record<
     string,
     {
