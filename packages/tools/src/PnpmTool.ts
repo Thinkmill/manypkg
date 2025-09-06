@@ -7,6 +7,7 @@ import {
   type Tool,
   type PackageJSON,
   type Packages,
+  type Package,
   InvalidMonorepoError,
 } from "./Tool.ts";
 import {

@@ -2,6 +2,7 @@ import { describe, test, expect } from "vitest";
 import fixturez from "fixturez";
 import check from "../EXTERNAL_MISMATCH.ts";
 import { getPackages } from "@manypkg/get-packages";
+import type { DenoJSON } from "../../../../tools/src/Tool.ts";
 
 const f = fixturez(__dirname);
 
@@ -41,7 +42,10 @@ describe("deno external mismatch", () => {
 
     check.fix!(error, {});
 
-    const imports = pkgTwo.packageJson.imports as Record<string, string>;
+    const imports = (pkgTwo.packageJson as DenoJSON).imports as Record<
+      string,
+      string
+    >;
     expect(imports["@oak/oak"]).toBe("jsr:@oak/oak@^14.2.0");
   });
 });

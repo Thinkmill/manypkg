@@ -5,6 +5,8 @@ import {
 } from "./utils.ts";
 import semver from "semver";
 import type { Package } from "@manypkg/get-packages";
+import type { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
+import type { DenoJSON } from "../../../tools/src/index.ts";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
@@ -68,10 +70,8 @@ export default makeCheck<ErrorType>({
   fix: (error) => {
     if (error.workspace.tool.type === "deno") {
       const depName = error.dependencyWorkspace.packageJson.name;
-      const imports = error.workspace.packageJson.imports as Record<
-        string,
-        string
-      >;
+      const imports = (error.workspace.packageJson as DenoJSON)
+        .imports as Record<string, string>;
       for (const alias in imports) {
         if (imports[alias].includes(depName)) {
           const rangeType = versionRangeToRangeType(

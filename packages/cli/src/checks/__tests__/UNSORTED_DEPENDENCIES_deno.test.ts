@@ -2,6 +2,7 @@ import { describe, test, expect } from "vitest";
 import fixturez from "fixturez";
 import check from "../UNSORTED_DEPENDENCIES.ts";
 import { getPackages } from "@manypkg/get-packages";
+import type { DenoJSON } from "../../../../tools/src/index.ts";
 
 const f = fixturez(__dirname);
 
@@ -37,7 +38,10 @@ describe("deno unsorted dependencies", () => {
 
     check.fix!(error, {});
 
-    const imports = pkgOne.packageJson.imports as Record<string, string>;
+    const imports = (pkgOne.packageJson as DenoJSON).imports as Record<
+      string,
+      string
+    >;
     expect(Object.keys(imports)).toEqual(["oak", "zod"]);
   });
 });

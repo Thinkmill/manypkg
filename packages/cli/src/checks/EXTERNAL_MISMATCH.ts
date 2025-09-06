@@ -5,6 +5,7 @@ import {
 } from "./utils.ts";
 import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
+import type { DenoJSON } from "../../../tools/src/index.ts";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
@@ -73,10 +74,8 @@ export default makeCheck<ErrorType>({
   fix: (error) => {
     if (error.workspace.tool.type === "deno") {
       const depName = error.dependencyName;
-      const imports = error.workspace.packageJson.imports as Record<
-        string,
-        string
-      >;
+      const imports = (error.workspace.packageJson as DenoJSON)
+        .imports as Record<string, string>;
       for (const alias in imports) {
         if (imports[alias].includes(depName)) {
           // This is still a bit of a hack, we assume jsr protocol

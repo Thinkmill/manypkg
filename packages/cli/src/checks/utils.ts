@@ -1,6 +1,7 @@
 import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
+import type { DenoJSON } from "../../../tools/src/Tool.ts";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -90,8 +91,10 @@ export function sortObject(prevObj: { [key: string]: string }) {
 
 export function sortDeps(pkg: Package) {
   if (pkg.tool.type === "deno") {
-    if (pkg.packageJson.imports) {
-      pkg.packageJson.imports = sortObject(pkg.packageJson.imports);
+    if ((pkg.packageJson as DenoJSON).imports) {
+      (pkg.packageJson as DenoJSON).imports = sortObject(
+        (pkg.packageJson as DenoJSON).imports || {}
+      );
     }
     return;
   }

@@ -1,3 +1,4 @@
+import type { DenoJSON } from "../../../tools/src/index.ts";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
@@ -15,8 +16,8 @@ export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace) => {
     if (workspace.tool.type === "deno") {
-      if (workspace.packageJson.imports) {
-        let deps = workspace.packageJson.imports;
+      if ((workspace.packageJson as DenoJSON).imports) {
+        let deps = (workspace.packageJson as DenoJSON).imports;
         if (
           deps &&
           !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
