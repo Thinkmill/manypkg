@@ -73,14 +73,18 @@ export const PnpmTool: Tool = {
       const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
+      const packages = await expandPackageGlobs(packageGlobs, rootDir, PnpmTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: PnpmTool,
+      };
+
       return {
         tool: PnpmTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -103,14 +107,18 @@ export const PnpmTool: Tool = {
       const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = manifest.packages!;
 
+      const packages = expandPackageGlobsSync(packageGlobs, rootDir, PnpmTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: PnpmTool,
+      };
+
       return {
         tool: PnpmTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir: rootDir,
       };
     } catch (err) {

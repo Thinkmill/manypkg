@@ -87,6 +87,11 @@ export interface Package {
   >;
 
   /**
+   * The tool that this package belongs to.
+   */
+  tool: Tool;
+
+  /**
    * Absolute path to the directory containing this package.
    */
   dir: string;
@@ -150,6 +155,16 @@ export interface MonorepoRoot {
  */
 export class InvalidMonorepoError extends Error {}
 
+export type ToolType =
+  | "deno"
+  | "yarn"
+  | "npm"
+  | "pnpm"
+  | "lerna"
+  | "bun"
+  | "root"
+  | "rush";
+
 /**
  * A monorepo tool is a specific implementation of monorepos, whether provided built-in
  * by a package manager or via some other wrapper.
@@ -162,7 +177,7 @@ export interface Tool {
    * A string identifier for this monorepo tool. Should be unique among monorepo tools
    * exported by manypkg.
    */
-  readonly type: string;
+  readonly type: ToolType;
 
   /**
    * Determine whether the specified directory is a valid root for this monorepo tool.

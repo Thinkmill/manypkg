@@ -1,0 +1,7 @@
+{
+  "name": "@scope/package-two",
+  "version": "1.0.0",
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^13.0.0"
+  }
+}

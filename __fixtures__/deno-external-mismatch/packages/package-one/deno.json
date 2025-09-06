@@ -1,5 +1,7 @@
 {
   "name": "@scope/package-one",
   "version": "1.0.0",
-  "exports": "./mod.ts"
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^14.2.0"
+  }
 }

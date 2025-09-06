@@ -10,6 +10,7 @@ export let getRootWS = (): Package => {
       version: "0.0.1",
       private: true,
     },
+    tool: { type: "yarn" } as any,
   };
 };
 
@@ -24,6 +25,7 @@ export let getFakeWS = (
       name,
       version,
     },
+    tool: { type: "yarn" } as any,
   };
 };
 

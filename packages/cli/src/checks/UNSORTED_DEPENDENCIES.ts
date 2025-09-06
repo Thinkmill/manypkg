@@ -14,15 +14,35 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace) => {
-    for (let depType of DEPENDENCY_TYPES) {
-      let deps = workspace.packageJson[depType];
-      if (deps && !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())) {
-        return [
-          {
-            type: "UNSORTED_DEPENDENCIES",
-            workspace,
-          },
-        ];
+    if (workspace.tool.type === "deno") {
+      if (workspace.packageJson.imports) {
+        let deps = workspace.packageJson.imports;
+        if (
+          deps &&
+          !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
+        ) {
+          return [
+            {
+              type: "UNSORTED_DEPENDENCIES",
+              workspace,
+            },
+          ];
+        }
+      }
+    } else {
+      for (let depType of DEPENDENCY_TYPES) {
+        let deps = workspace.packageJson[depType];
+        if (
+          deps &&
+          !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
+        ) {
+          return [
+            {
+              type: "UNSORTED_DEPENDENCIES",
+              workspace,
+            },
+          ];
+        }
       }
     }
     return [];

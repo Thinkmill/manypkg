@@ -70,14 +70,18 @@ export const NpmTool: Tool = {
       )) as NpmPackageJSON;
       const packageGlobs: string[] = pkgJson.workspaces!;
 
+      const packages = await expandPackageGlobs(packageGlobs, rootDir, NpmTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: NpmTool,
+      };
+
       return {
         tool: NpmTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -97,14 +101,18 @@ export const NpmTool: Tool = {
       const pkgJson = readJsonSync(rootDir, "package.json") as NpmPackageJSON;
       const packageGlobs: string[] = pkgJson.workspaces!;
 
+      const packages = expandPackageGlobsSync(packageGlobs, rootDir, NpmTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: NpmTool,
+      };
+
       return {
         tool: NpmTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {

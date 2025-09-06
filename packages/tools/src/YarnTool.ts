@@ -81,14 +81,18 @@ export const YarnTool: Tool = {
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
 
+      const packages = await expandPackageGlobs(packageGlobs, rootDir, YarnTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: YarnTool,
+      };
+
       return {
         tool: YarnTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -110,14 +114,18 @@ export const YarnTool: Tool = {
         ? pkgJson.workspaces
         : pkgJson.workspaces!.packages;
 
+      const packages = expandPackageGlobsSync(packageGlobs, rootDir, YarnTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: YarnTool,
+      };
+
       return {
         tool: YarnTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {

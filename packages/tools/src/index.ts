@@ -1,5 +1,4 @@
 export * from "./Tool.ts";
-export * from "./utils.ts";
 export { BunTool } from "./BunTool.ts";
 export { DenoTool } from "./DenoTool.ts";
 export { LernaTool } from "./LernaTool.ts";
