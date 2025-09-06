@@ -1,5 +1,8 @@
 {
   "name": "@scope/package-one",
   "version": "1.0.0",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "tasks": {
+    "hello": "echo hello"
+  }
 }

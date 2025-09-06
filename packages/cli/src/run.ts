@@ -2,24 +2,7 @@ import { getPackages, type Package } from "@manypkg/get-packages";
 import { exec } from "tinyexec";
 import * as logger from "./logger.ts";
 import { ExitError } from "./errors.ts";
-
-function getRunCmd(tool: string) {
-  switch (tool) {
-    case "deno":
-      return "deno";
-    default:
-      return "yarn";
-  }
-}
-
-function getRunArgs(tool: string, args: string[]) {
-  switch (tool) {
-    case "deno":
-      return ["task", ...args];
-    default:
-      return args;
-  }
-}
+import { getRunCmd, getRunArgs } from "./utils.ts";
 
 export async function runCmd(args: string[], cwd: string) {
   let { packages, tool } = await getPackages(cwd);

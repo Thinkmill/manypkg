@@ -4,6 +4,8 @@ import stripAnsi from "strip-ansi";
 import { exec } from "tinyexec";
 import fs from "node:fs";
 import path from "node:path";
+import { getPackages } from "@manypkg/get-packages";
+import { writePackage } from "./utils.ts";
 
 const f = fixturez(__dirname);
 
@@ -43,6 +45,19 @@ describe("Run command", () => {
       );
     }
   );
+  it('should execute task in deno project', async () => {
+    const { exitCode, stdout, stderr } = await executeBin(
+      f.find("basic-deno"),
+      "run",
+      "@scope/package-one",
+      "hello"
+    );
+    expect(exitCode).toBe(0);
+    expect(stripAnsi(stdout.toString().trim())).toBe("hello");
+    expect(stripAnsi(stripNodeWarnings(stderr.toString()))).toContain(
+      "Task hello echo hello"
+    );
+  });
 });
 
 describe("Fix command", () => {
@@ -65,6 +80,19 @@ describe("Fix command", () => {
       expect(detectLineEndings(fixedPackageFile)).toBe(sourceLineEnding);
     }
   );
+});
+
+describe("writePackage", () => {
+  it("should write to deno.json", async () => {
+    const temp = f.copy("basic-deno");
+    const { packages } = await getPackages(temp);
+    const pkg = packages.find(p => p.packageJson.name === "@scope/package-one")!;
+    pkg.packageJson.version = "2.0.0";
+    await writePackage(pkg);
+    const denoJson = JSON.parse(fs.readFileSync(path.join(pkg.dir, "deno.json"), "utf-8"));
+    expect(denoJson.version).toBe("2.0.0");
+    f.cleanup();
+  });
 });
 
 type LineEndings = "crlf" | "lf";
