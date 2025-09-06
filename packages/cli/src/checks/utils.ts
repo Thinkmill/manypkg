@@ -1,6 +1,7 @@
 import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
+import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -89,10 +90,18 @@ export function sortObject(prevObj: { [key: string]: string }) {
 }
 
 export function sortDeps(pkg: Package) {
-  for (let depType of DEPENDENCY_TYPES) {
-    let prevDeps = pkg.packageJson[depType];
-    if (prevDeps) {
-      pkg.packageJson[depType] = sortObject(prevDeps);
+  if (isDenoPackage(pkg)) {
+    if (pkg.packageJson.imports) {
+      pkg.packageJson.imports = sortObject(pkg.packageJson.imports || {});
+    }
+    return;
+  }
+  if (isNodePackage(pkg)) {
+    for (let depType of DEPENDENCY_TYPES) {
+      let prevDeps = pkg.packageJson[depType];
+      if (prevDeps) {
+        pkg.packageJson[depType] = sortObject(prevDeps);
+      }
     }
   }
 }
@@ -115,19 +124,36 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   let dependencyRangesMapping = new Map<string, { [key: string]: number }>();
 
   for (let [pkgName, pkg] of allPackages) {
-    for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = pkg.packageJson[depType];
-      if (deps) {
-        for (let depName in deps) {
-          const depSpecifier = deps[depName];
-          if (!allPackages.has(depName)) {
-            if (!semver.validRange(deps[depName])) {
+    if (isDenoPackage(pkg)) {
+      if (pkg.dependencies) {
+        for (let depName in pkg.dependencies) {
+          const dep = pkg.dependencies[depName];
+          if (!allPackages.has(dep.name)) {
+            if (!semver.validRange(dep.version)) {
               continue;
             }
-            let dependencyRanges = dependencyRangesMapping.get(depName) || {};
-            const specifierCount = dependencyRanges[depSpecifier] || 0;
-            dependencyRanges[depSpecifier] = specifierCount + 1;
-            dependencyRangesMapping.set(depName, dependencyRanges);
+            let dependencyRanges = dependencyRangesMapping.get(dep.name) || {};
+            const specifierCount = dependencyRanges[dep.version] || 0;
+            dependencyRanges[dep.version] = specifierCount + 1;
+            dependencyRangesMapping.set(dep.name, dependencyRanges);
+          }
+        }
+      }
+    } else if (isNodePackage(pkg)) {
+      for (let depType of NORMAL_DEPENDENCY_TYPES) {
+        let deps = pkg.packageJson[depType];
+        if (deps) {
+          for (let depName in deps) {
+            const depSpecifier = deps[depName];
+            if (!allPackages.has(depName)) {
+              if (!semver.validRange(deps[depName])) {
+                continue;
+              }
+              let dependencyRanges = dependencyRangesMapping.get(depName) || {};
+              const specifierCount = dependencyRanges[depSpecifier] || 0;
+              dependencyRanges[depSpecifier] = specifierCount + 1;
+              dependencyRangesMapping.set(depName, dependencyRanges);
+            }
           }
         }
       }

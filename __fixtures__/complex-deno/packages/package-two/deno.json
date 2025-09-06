@@ -1,0 +1,21 @@
+{
+  "name": "@scope/package-two",
+  "version": "1.0.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "check": "deno fmt --check . && deno lint . && deno check",
+    "dev": "vite",
+    "build": "vite build",
+    "start": "deno serve -A _fresh/server.js",
+    "update": "deno run -A -r jsr:@fresh/update .",
+    "check-deps": "deno run -A jsr:@check/deps --allow-unused"
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "fresh",
+        "recommended"
+      ]
+    }
+  }
+}

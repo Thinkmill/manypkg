@@ -1,4 +1,5 @@
 import { getPackages } from "@manypkg/get-packages";
+import { isNodePackage } from "@manypkg/tools";
 import semver from "semver";
 import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils.ts";
 import pLimit from "p-limit";
@@ -15,26 +16,29 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
 
   let packagesToUpdate = new Set<string>();
 
-  let filteredPackages = packages.filter(({ packageJson }) => {
-    let requiresUpdate = false;
+  let filteredPackages = packages.filter((pkg) => {
+    if (isNodePackage(pkg)) {
+      let requiresUpdate = false;
 
-    DEPENDENCY_TYPES.forEach((t) => {
-      let deps = packageJson[t];
-      if (!deps) return;
+      DEPENDENCY_TYPES.forEach((t) => {
+        let deps = pkg.packageJson[t];
+        if (!deps) return;
 
-      let packageNames = Object.keys(deps);
-      packageNames.forEach((pkgName) => {
-        if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
-          requiresUpdate = true;
-          packagesToUpdate.add(pkgName);
-        }
+        let packageNames = Object.keys(deps);
+        packageNames.forEach((pkgName) => {
+          if ((isScope && pkgName.startsWith(`${name}/`)) || pkgName === name) {
+            requiresUpdate = true;
+            packagesToUpdate.add(pkgName);
+          }
+        });
       });
-    });
 
-    return requiresUpdate;
+      return requiresUpdate;
+    }
+    return false;
   });
 
-  if (rootPackage) {
+  if (rootPackage && isNodePackage(rootPackage)) {
     let rootRequiresUpdate = false;
     DEPENDENCY_TYPES.forEach((t) => {
       let deps = rootPackage!.packageJson[t];
@@ -69,24 +73,26 @@ export async function upgradeDependency([name, tag = "latest"]: string[]) {
     })
   );
 
-  filteredPackages.forEach(({ packageJson }) => {
-    DEPENDENCY_TYPES.forEach((t) => {
-      let deps = packageJson[t];
+  filteredPackages.forEach((pkg) => {
+    if (isNodePackage(pkg)) {
+      DEPENDENCY_TYPES.forEach((t) => {
+        let deps = pkg.packageJson[t];
 
-      if (deps) {
-        newVersions.forEach(({ pkgName, version }) => {
-          if (deps![pkgName] && version) {
-            if (!newVersion) {
-              deps![pkgName] = `${versionRangeToRangeType(
-                deps![pkgName]
-              )}${version}`;
-            } else {
-              deps![pkgName] = version;
+        if (deps) {
+          newVersions.forEach(({ pkgName, version }) => {
+            if (deps![pkgName] && version) {
+              if (!newVersion) {
+                deps![pkgName] = `${versionRangeToRangeType(
+                  deps![pkgName]
+                )}${version}`;
+              } else {
+                deps![pkgName] = version;
+              }
             }
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    }
   });
 
   await Promise.all([...filteredPackages].map(writePackage));

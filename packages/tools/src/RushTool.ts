@@ -71,6 +71,7 @@ export const RushTool: Tool = {
             dir,
             relativeDir: path.relative(directory, dir),
             packageJson: await readJson(dir, "package.json"),
+            tool: RushTool,
           };
         })
       );
@@ -113,6 +114,7 @@ export const RushTool: Tool = {
           dir,
           relativeDir: path.relative(directory, dir),
           packageJson,
+          tool: RushTool,
         };
       });
 

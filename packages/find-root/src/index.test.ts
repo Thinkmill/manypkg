@@ -5,6 +5,7 @@ import { findRoot, findRootSync } from "./index.ts";
 
 import {
   BunTool,
+  DenoTool,
   LernaTool,
   NpmTool,
   PnpmTool,
@@ -71,6 +72,17 @@ const runTests = (findRoot: FindRoot) => {
     );
     expect(monorepoRoot).toEqual({
       tool: PnpmTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of a deno monorepo", async () => {
+    let tmpPath = f.copy("basic-deno");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: DenoTool.type,
       rootDir: tmpPath,
     });
   });

@@ -4,6 +4,7 @@ import {
   type Tool,
   type PackageJSON,
   type Packages,
+  type Package,
   InvalidMonorepoError,
 } from "./Tool.ts";
 import {
@@ -58,14 +59,22 @@ export const LernaTool: Tool = {
       const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
+      const packages = await expandPackageGlobs(
+        packageGlobs,
+        rootDir,
+        LernaTool
+      );
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: LernaTool,
+      };
+
       return {
         tool: LernaTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -86,14 +95,18 @@ export const LernaTool: Tool = {
       const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
+      const packages = expandPackageGlobsSync(packageGlobs, rootDir, LernaTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: LernaTool,
+      };
+
       return {
         tool: LernaTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {

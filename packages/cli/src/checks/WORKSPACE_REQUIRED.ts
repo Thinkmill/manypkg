@@ -1,4 +1,5 @@
 import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils.ts";
+import { isNodePackage } from "@manypkg/tools";
 import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
@@ -11,32 +12,37 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspaces, root, opts) => {
     if (opts.workspaceProtocol !== "require") return [];
-    let errors: ErrorType[] = [];
-    for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = workspace.packageJson[depType];
-      if (deps) {
-        for (let depName in deps) {
-          if (
-            allWorkspaces.has(depName) &&
-            !deps[depName].startsWith("workspace:")
-          ) {
-            errors.push({
-              type: "WORKSPACE_REQUIRED",
-              workspace,
-              depName,
-              depType,
-            });
+    if (isNodePackage(workspace)) {
+      let errors: ErrorType[] = [];
+      for (let depType of NORMAL_DEPENDENCY_TYPES) {
+        let deps = workspace.packageJson[depType];
+        if (deps) {
+          for (let depName in deps) {
+            if (
+              allWorkspaces.has(depName) &&
+              !deps[depName].startsWith("workspace:")
+            ) {
+              errors.push({
+                type: "WORKSPACE_REQUIRED",
+                workspace,
+                depName,
+                depType,
+              });
+            }
           }
         }
       }
-    }
 
-    return errors;
+      return errors;
+    }
+    return [];
   },
   fix: (error) => {
-    let deps = error.workspace.packageJson[error.depType];
-    if (deps && deps[error.depName]) {
-      deps[error.depName] = "workspace:^";
+    if (isNodePackage(error.workspace)) {
+      let deps = error.workspace.packageJson[error.depType];
+      if (deps && deps[error.depName]) {
+        deps[error.depName] = "workspace:^";
+      }
     }
     return { requiresInstall: true };
   },

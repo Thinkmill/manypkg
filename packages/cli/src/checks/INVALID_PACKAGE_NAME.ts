@@ -8,6 +8,8 @@ type ErrorType = {
   errors: string[];
 };
 
+const JSR_PACKAGE_NAME_REGEX = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
+
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace) => {
@@ -20,19 +22,33 @@ export default makeCheck<ErrorType>({
         },
       ];
     }
-    let validationErrors = validateNpmPackageName(workspace.packageJson.name);
-    let errors = [
-      ...(validationErrors.errors || []),
-      ...(validationErrors.warnings || []),
-    ];
-    if (errors.length) {
-      return [
-        {
-          type: "INVALID_PACKAGE_NAME",
-          workspace,
-          errors,
-        },
+    if (workspace.tool.type === "deno") {
+      if (!JSR_PACKAGE_NAME_REGEX.test(workspace.packageJson.name)) {
+        return [
+          {
+            type: "INVALID_PACKAGE_NAME",
+            workspace,
+            errors: [
+              `name must be a valid JSR package name in the format @scope/name`,
+            ],
+          },
+        ];
+      }
+    } else {
+      let validationErrors = validateNpmPackageName(workspace.packageJson.name);
+      let errors = [
+        ...(validationErrors.errors || []),
+        ...(validationErrors.warnings || []),
       ];
+      if (errors.length) {
+        return [
+          {
+            type: "INVALID_PACKAGE_NAME",
+            workspace,
+            errors,
+          },
+        ];
+      }
     }
     return [];
   },

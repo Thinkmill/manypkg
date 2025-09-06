@@ -1,4 +1,5 @@
 import { getPackages } from "@manypkg/get-packages";
+import { isNodePackage } from "@manypkg/tools";
 import type { PackageJSON } from "@changesets/types";
 import { exec } from "tinyexec";
 import pLimit from "p-limit";
@@ -52,6 +53,7 @@ export async function npmTagAll([tag, _, otp]: string[]) {
   let { packages } = await getPackages(process.cwd());
   await Promise.all(
     packages
+      .filter(isNodePackage)
       .filter(({ packageJson }) => packageJson.private !== true)
       .map(({ packageJson }) =>
         npmLimit(() => tagApackage(packageJson, tag, otp))

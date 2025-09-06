@@ -1,46 +1,58 @@
 /**
- * A package.json access type.
- */
-export type PackageAccessType = "public" | "restricted";
-
-/**
  * An in-memory representation of a package.json file.
  */
-export interface PackageJSON {
+
+type PackageAccessType = "public" | "restricted";
+
+// Small alias to make dependency-like maps obvious in the type
+type DependencyMap = Record<string, string>;
+
+type PublishConfig = {
+  access?: PackageAccessType;
+  directory?: string;
+  registry?: string;
+};
+
+export type PackageJSON = {
   name: string;
   version: string;
-  dependencies?: {
-    [key: string]: string;
-  };
-  peerDependencies?: {
-    [key: string]: string;
-  };
-  devDependencies?: {
-    [key: string]: string;
-  };
-  optionalDependencies?: {
-    [key: string]: string;
-  };
+
+  // dependency maps (optional)
+  dependencies?: DependencyMap;
+  peerDependencies?: DependencyMap;
+  devDependencies?: DependencyMap;
+  optionalDependencies?: DependencyMap;
+
   private?: boolean;
-  publishConfig?: {
-    access?: PackageAccessType;
-    directory?: string;
-    registry?: string;
-  };
-  manypkg?: {
-    [key: string]: string;
-  };
-}
+  publishConfig?: PublishConfig;
+
+  // any other named package map
+  manypkg?: DependencyMap;
+};
 
 /**
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
+import type { DenoJSON } from "./DenoTool.ts";
+
 export interface Package {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON;
+  packageJson: PackageJSON | DenoJSON;
+  dependencies?: Record<
+    string,
+    {
+      name: string;
+      version: string;
+    }
+  >;
+
+  /**
+   * The tool that this package belongs to.
+   */
+  tool: Tool;
 
   /**
    * Absolute path to the directory containing this package.
@@ -106,6 +118,16 @@ export interface MonorepoRoot {
  */
 export class InvalidMonorepoError extends Error {}
 
+export type ToolType =
+  | "deno"
+  | "yarn"
+  | "npm"
+  | "pnpm"
+  | "lerna"
+  | "bun"
+  | "root"
+  | "rush";
+
 /**
  * A monorepo tool is a specific implementation of monorepos, whether provided built-in
  * by a package manager or via some other wrapper.
@@ -113,12 +135,24 @@ export class InvalidMonorepoError extends Error {}
  * Each tool defines a common interface for detecting whether a directory is
  * a valid instance of this type of monorepo, how to retrieve the packages, etc.
  */
+export function isDenoPackage(
+  pkg: Package
+): pkg is Package & { packageJson: DenoJSON } {
+  return pkg.tool.type === "deno";
+}
+
+export function isNodePackage(
+  pkg: Package
+): pkg is Package & { packageJson: PackageJSON } {
+  return pkg.tool.type !== "deno";
+}
+
 export interface Tool {
   /**
    * A string identifier for this monorepo tool. Should be unique among monorepo tools
    * exported by manypkg.
    */
-  readonly type: string;
+  readonly type: ToolType;
 
   /**
    * Determine whether the specified directory is a valid root for this monorepo tool.

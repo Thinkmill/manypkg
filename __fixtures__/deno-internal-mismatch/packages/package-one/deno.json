@@ -1,0 +1,7 @@
+{
+  "name": "@scope/package-one",
+  "version": "1.0.0",
+  "imports": {
+    "@scope/package-two": "jsr:@scope/package-two@^2.0.0"
+  }
+}
