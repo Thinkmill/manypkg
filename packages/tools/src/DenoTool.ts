@@ -37,6 +37,7 @@ function extractDependencies(json: DenoJSON): Package["dependencies"] {
   return dependencies;
 }
 
+
 export const DenoTool: Tool = {
   type: "deno",
 
@@ -85,21 +86,20 @@ export const DenoTool: Tool = {
 
       const pkgJson = (await readJsonc(rootDir, fileName)) as DenoJSON;
       const packageGlobs: string[] = pkgJson.workspace!;
-      const packages = await expandDenoGlobs(packageGlobs, rootDir);
+      const packages = await expandDenoGlobs(packageGlobs, rootDir, DenoTool);
 
-      for (const p of packages) {
-        p.dependencies = extractDependencies(p.packageJson);
-      }
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: DenoTool,
+      };
+      rootPackage.dependencies = extractDependencies(rootPackage.packageJson);
 
       return {
         tool: DenoTool,
         packages,
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-          dependencies: extractDependencies(pkgJson),
-        },
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -125,21 +125,20 @@ export const DenoTool: Tool = {
 
       const pkgJson = readJsoncSync(rootDir, fileName) as DenoJSON;
       const packageGlobs: string[] = pkgJson.workspace!;
-      const packages = expandDenoGlobsSync(packageGlobs, rootDir);
+      const packages = expandDenoGlobsSync(packageGlobs, rootDir, DenoTool);
 
-      for (const p of packages) {
-        p.dependencies = extractDependencies(p.packageJson);
-      }
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: DenoTool,
+      };
+      rootPackage.dependencies = extractDependencies(rootPackage.packageJson);
 
       return {
         tool: DenoTool,
         packages,
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-          dependencies: extractDependencies(pkgJson),
-        },
+        rootPackage,
         rootDir,
       };
     } catch (err) {

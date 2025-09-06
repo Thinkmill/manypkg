@@ -2,7 +2,7 @@ import path from "node:path";
 import fsp from "node:fs/promises";
 import { glob, globSync } from "tinyglobby";
 
-import type { Package, PackageJSON } from "./Tool.ts";
+import type { Package, PackageJSON, Tool } from "./Tool.ts";
 import { readJsonSync } from "./utils.ts";
 
 /**
@@ -12,7 +12,8 @@ import { readJsonSync } from "./utils.ts";
  */
 export async function expandPackageGlobs(
   packageGlobs: string[],
-  directory: string
+  directory: string,
+  tool: Tool
 ): Promise<Package[]> {
   const relativeDirectories: string[] = await glob(packageGlobs, {
     cwd: directory,
@@ -40,6 +41,7 @@ export async function expandPackageGlobs(
               dir: path.resolve(dir),
               relativeDir: path.relative(directory, dir),
               packageJson: JSON.parse(result),
+              tool,
             };
           }
         })
@@ -54,7 +56,8 @@ export async function expandPackageGlobs(
  */
 export function expandPackageGlobsSync(
   packageGlobs: string[],
-  directory: string
+  directory: string,
+  tool: Tool
 ): Package[] {
   const relativeDirectories: string[] = globSync(packageGlobs, {
     cwd: directory,
@@ -74,6 +77,7 @@ export function expandPackageGlobsSync(
           dir: path.resolve(dir),
           relativeDir: path.relative(directory, dir),
           packageJson,
+          tool,
         };
       } catch (err) {
         if (err && (err as { code: string }).code === "ENOENT") {

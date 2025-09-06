@@ -31,6 +31,7 @@ export const RootTool: Tool = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
+        tool: RootTool,
       };
 
       return {
@@ -58,6 +59,7 @@ export const RootTool: Tool = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
+        tool: RootTool,
       };
 
       return {

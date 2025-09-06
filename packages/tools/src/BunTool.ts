@@ -99,14 +99,18 @@ export const BunTool: Tool = {
       )) as BunPackageJSON;
       const packageGlobs: string[] = pkgJson.workspaces || [];
 
+      const packages = await expandPackageGlobs(packageGlobs, rootDir, BunTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: BunTool,
+      };
+
       return {
         tool: BunTool,
-        packages: await expandPackageGlobs(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {
@@ -126,14 +130,18 @@ export const BunTool: Tool = {
       const pkgJson = readJsonSync(rootDir, "package.json") as BunPackageJSON;
       const packageGlobs: string[] = pkgJson.workspaces || [];
 
+      const packages = expandPackageGlobsSync(packageGlobs, rootDir, BunTool);
+      const rootPackage: Package = {
+        dir: rootDir,
+        relativeDir: ".",
+        packageJson: pkgJson,
+        tool: BunTool,
+      };
+
       return {
         tool: BunTool,
-        packages: expandPackageGlobsSync(packageGlobs, rootDir),
-        rootPackage: {
-          dir: rootDir,
-          relativeDir: ".",
-          packageJson: pkgJson,
-        },
+        packages,
+        rootPackage,
         rootDir,
       };
     } catch (err) {

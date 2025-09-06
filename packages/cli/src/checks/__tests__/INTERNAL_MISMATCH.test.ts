@@ -79,6 +79,9 @@ describe("internal mismatch", () => {
               "version": "1.0.0",
             },
             "relativeDir": "packages/pkg-1",
+            "tool": {
+              "type": "yarn",
+            },
           },
           "type": "INTERNAL_MISMATCH",
           "workspace": {
@@ -91,6 +94,9 @@ describe("internal mismatch", () => {
               "version": "1.0.0",
             },
             "relativeDir": "packages/depends-on-one",
+            "tool": {
+              "type": "yarn",
+            },
           },
         },
       ]

@@ -37,6 +37,9 @@ it("should error if the ranges are valid and they are not equal", () => {
             "version": "1.0.0",
           },
           "relativeDir": "packages/pkg-1",
+          "tool": {
+            "type": "yarn",
+          },
         },
       },
     ]
@@ -87,6 +90,9 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "version": "1.0.0",
           },
           "relativeDir": "packages/pkg-2",
+          "tool": {
+            "type": "yarn",
+          },
         },
       },
     ]
@@ -135,6 +141,9 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "version": "1.0.0",
           },
           "relativeDir": "packages/pkg-1",
+          "tool": {
+            "type": "yarn",
+          },
         },
       },
     ]
@@ -185,6 +194,9 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "version": "1.0.0",
           },
           "relativeDir": "packages/pkg-1",
+          "tool": {
+            "type": "yarn",
+          },
         },
       },
     ]
@@ -209,6 +221,9 @@ it("should error and return the correct mostCommonDependencyRange when the range
             "version": "1.0.0",
           },
           "relativeDir": "packages/pkg-2",
+          "tool": {
+            "type": "yarn",
+          },
         },
       },
     ]

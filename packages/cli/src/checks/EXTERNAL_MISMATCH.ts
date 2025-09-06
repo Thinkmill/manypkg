@@ -18,25 +18,52 @@ export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspace) => {
     let errors: ErrorType[] = [];
     let mostCommonRangeMap = getMostCommonRangeMap(allWorkspace);
-    for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = workspace.packageJson[depType];
 
-      if (deps) {
-        for (let depName in deps) {
-          let range = deps[depName];
-          let mostCommonRange = mostCommonRangeMap.get(depName);
+    if (workspace.tool.type === "deno") {
+      console.log("mostCommonRangeMap", mostCommonRangeMap);
+      if (workspace.dependencies) {
+        for (let depName in workspace.dependencies) {
+          let dep = workspace.dependencies[depName];
+          let mostCommonRange = mostCommonRangeMap.get(dep.name);
+          console.log("dep.name", dep.name);
+          console.log("dep.version", dep.version);
+          console.log("mostCommonRange", mostCommonRange);
           if (
             mostCommonRange !== undefined &&
-            mostCommonRange !== range &&
-            validRange(range)
+            mostCommonRange !== dep.version &&
+            validRange(dep.version)
           ) {
             errors.push({
               type: "EXTERNAL_MISMATCH",
               workspace,
-              dependencyName: depName,
-              dependencyRange: range,
+              dependencyName: dep.name,
+              dependencyRange: dep.version,
               mostCommonDependencyRange: mostCommonRange,
             });
+          }
+        }
+      }
+    } else {
+      for (let depType of NORMAL_DEPENDENCY_TYPES) {
+        let deps = workspace.packageJson[depType];
+
+        if (deps) {
+          for (let depName in deps) {
+            let range = deps[depName];
+            let mostCommonRange = mostCommonRangeMap.get(depName);
+            if (
+              mostCommonRange !== undefined &&
+              mostCommonRange !== range &&
+              validRange(range)
+            ) {
+              errors.push({
+                type: "EXTERNAL_MISMATCH",
+                workspace,
+                dependencyName: depName,
+                dependencyRange: range,
+                mostCommonDependencyRange: mostCommonRange,
+              });
+            }
           }
         }
       }
@@ -44,10 +71,27 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: (error) => {
-    for (let depType of NORMAL_DEPENDENCY_TYPES) {
-      let deps = error.workspace.packageJson[depType];
-      if (deps && deps[error.dependencyName]) {
-        deps[error.dependencyName] = error.mostCommonDependencyRange;
+    if (error.workspace.tool.type === "deno") {
+      const depName = error.dependencyName;
+      const imports = error.workspace.packageJson.imports as Record<
+        string,
+        string
+      >;
+      for (const alias in imports) {
+        if (imports[alias].includes(depName)) {
+          // This is still a bit of a hack, we assume jsr protocol
+          imports[
+            alias
+          ] = `jsr:${depName}@${error.mostCommonDependencyRange}`;
+          break;
+        }
+      }
+    } else {
+      for (let depType of NORMAL_DEPENDENCY_TYPES) {
+        let deps = error.workspace.packageJson[depType];
+        if (deps && deps[error.dependencyName]) {
+          deps[error.dependencyName] = error.mostCommonDependencyRange;
+        }
       }
     }
     return { requiresInstall: true };
