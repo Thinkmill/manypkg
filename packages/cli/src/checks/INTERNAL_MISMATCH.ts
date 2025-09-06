@@ -6,7 +6,7 @@ import {
 import semver from "semver";
 import type { Package } from "@manypkg/get-packages";
 import type { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
-import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
@@ -39,7 +39,7 @@ export default makeCheck<ErrorType>({
           }
         }
       }
-    } else {
+    } else if (isNodePackage(workspace)) {
       for (let depType of NORMAL_DEPENDENCY_TYPES) {
         let deps = workspace.packageJson[depType];
         if (deps) {
@@ -83,7 +83,7 @@ export default makeCheck<ErrorType>({
           }
         }
       }
-    } else {
+    } else if (isNodePackage(error.workspace)) {
       for (let depType of NORMAL_DEPENDENCY_TYPES) {
         let deps = error.workspace.packageJson[depType];
         if (deps && deps[error.dependencyWorkspace.packageJson.name]) {

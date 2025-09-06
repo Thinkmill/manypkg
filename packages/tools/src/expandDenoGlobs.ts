@@ -1,7 +1,8 @@
 import path from "node:path";
 import { glob, globSync } from "tinyglobby";
 
-import type { Package, DenoJSON, Tool } from "./Tool.ts";
+import type { Package, Tool } from "./Tool.ts";
+import type { DenoJSON } from "./DenoTool.ts";
 
 const dependencyRegexp =
   /^(?<protocol>jsr:|npm:|https:|http:)\/?(?<name>@?[^@\s]+)@?(?<version>[^\s/]+)?\/?/;

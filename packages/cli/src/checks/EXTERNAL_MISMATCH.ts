@@ -5,7 +5,7 @@ import {
 } from "./utils.ts";
 import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
-import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
@@ -44,7 +44,7 @@ export default makeCheck<ErrorType>({
           }
         }
       }
-    } else {
+    } else if (isNodePackage(workspace)) {
       for (let depType of NORMAL_DEPENDENCY_TYPES) {
         let deps = workspace.packageJson[depType];
 
@@ -84,7 +84,7 @@ export default makeCheck<ErrorType>({
           }
         }
       }
-    } else {
+    } else if (isNodePackage(error.workspace)) {
       for (let depType of NORMAL_DEPENDENCY_TYPES) {
         let deps = error.workspace.packageJson[depType];
         if (deps && deps[error.dependencyName]) {

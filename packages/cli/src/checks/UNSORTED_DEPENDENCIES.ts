@@ -1,4 +1,4 @@
-import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
@@ -28,7 +28,7 @@ export default makeCheck<ErrorType>({
           },
         ];
       }
-    } else {
+    } else if (isNodePackage(workspace)) {
       for (let depType of DEPENDENCY_TYPES) {
         let deps = workspace.packageJson[depType];
         if (

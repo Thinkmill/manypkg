@@ -75,12 +75,6 @@ function extractDependencies(json: DenoJSON): Package["dependencies"] {
   return dependencies;
 }
 
-export function isDenoPackage(
-  pkg: Package
-): pkg is Package & { packageJson: DenoJSON } {
-  return pkg.tool.type === "deno";
-}
-
 export const DenoTool: Tool = {
   type: "deno",
 

@@ -135,6 +135,18 @@ export type ToolType =
  * Each tool defines a common interface for detecting whether a directory is
  * a valid instance of this type of monorepo, how to retrieve the packages, etc.
  */
+export function isDenoPackage(
+  pkg: Package
+): pkg is Package & { packageJson: DenoJSON } {
+  return pkg.tool.type === "deno";
+}
+
+export function isNodePackage(
+  pkg: Package
+): pkg is Package & { packageJson: PackageJSON } {
+  return pkg.tool.type !== "deno";
+}
+
 export interface Tool {
   /**
    * A string identifier for this monorepo tool. Should be unique among monorepo tools
