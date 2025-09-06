@@ -80,6 +80,13 @@ export interface Package {
    * The pre-loaded package json structure.
    */
   packageJson: PackageJSON | DenoJSON;
+  dependencies?: Record<
+    string,
+    {
+      name: string;
+      version: string;
+    }
+  >;
 
   /**
    * Absolute path to the directory containing this package.

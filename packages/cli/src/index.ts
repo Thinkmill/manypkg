@@ -92,16 +92,12 @@ let runChecks = (
 let execLimit = pLimit(4);
 
 async function execCmd(args: string[]) {
-  let { packages, tool } = await getPackages(process.cwd());
+  let { packages } = await getPackages(process.cwd());
   let highestExitCode = 0;
-
-  const cmd = tool.type === "deno" ? "deno" : args[0];
-  const cmdArgs = tool.type === "deno" ? args : args.slice(1);
-
   await Promise.all(
     packages.map((pkg) => {
       return execLimit(async () => {
-        const { exitCode } = await exec(cmd, cmdArgs, {
+        const { exitCode } = await exec(args[0], args.slice(1), {
           nodeOptions: {
             cwd: pkg.dir,
             stdio: "inherit",

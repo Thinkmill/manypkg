@@ -16,16 +16,23 @@ import {
   readJsoncSync,
 } from "./utils.ts";
 
+const dependencyRegexp =
+  /^(?<protocol>jsr:|npm:|https:|http:)\/?(?<name>@?[^@\s]+)@?(?<version>[^\s/]+)?\/?/;
+
 function extractDependencies(json: DenoJSON): Package["dependencies"] {
   const dependencies: Package["dependencies"] = {};
   if (!json.imports) {
     return dependencies;
   }
-  for (const [name, version] of Object.entries(json.imports)) {
-    dependencies[name] = {
-      name,
-      version,
-    };
+  for (const [alias, specifier] of Object.entries(json.imports)) {
+    const match = specifier.match(dependencyRegexp);
+    if (match?.groups) {
+      const { name, version } = match.groups;
+      dependencies[alias] = {
+        name,
+        version,
+      };
+    }
   }
   return dependencies;
 }
