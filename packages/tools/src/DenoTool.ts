@@ -1,8 +1,46 @@
 import path from "node:path";
 
+/**
+ * An in-memory representation of a deno.json[c] file.
+ */
+export interface DenoJSON {
+  compilerOptions?: Record<string, unknown>;
+  lint?: {
+    include?: string[];
+    exclude?: string[];
+    rules?: {
+      tags?: string[];
+      include?: string[];
+      exclude?: string[];
+    };
+  };
+  fmt?: {
+    useTabs?: boolean;
+    lineWidth?: number;
+    indentWidth?: number;
+    semiColons?: boolean;
+    singleQuote?: boolean;
+    proseWrap?: string;
+    include?: string[];
+    exclude?: string[];
+  };
+  lock?: boolean | string;
+  nodeModulesDir?: "auto" | string;
+  unstable?: string[];
+  test?: {
+    include?: string[];
+    exclude?: string[];
+  };
+  tasks?: Record<string, string>;
+  imports?: Record<string, string>;
+  exclude?: string[];
+  workspace?: string[];
+  name: string;
+  version: string;
+}
+
 import {
   InvalidMonorepoError,
-  type DenoJSON,
   type Package,
   type Packages,
   type Tool,
