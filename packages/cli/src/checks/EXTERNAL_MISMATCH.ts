@@ -5,7 +5,7 @@ import {
 } from "./utils.ts";
 import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
-import type { DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
@@ -20,7 +20,7 @@ export default makeCheck<ErrorType>({
     let errors: ErrorType[] = [];
     let mostCommonRangeMap = getMostCommonRangeMap(allWorkspace);
 
-    if (workspace.tool.type === "deno") {
+    if (isDenoPackage(workspace)) {
       console.log("mostCommonRangeMap", mostCommonRangeMap);
       if (workspace.dependencies) {
         for (let depName in workspace.dependencies) {
@@ -72,15 +72,16 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: (error) => {
-    if (error.workspace.tool.type === "deno") {
+    if (isDenoPackage(error.workspace)) {
       const depName = error.dependencyName;
-      const imports = (error.workspace.packageJson as DenoJSON)
-        .imports as Record<string, string>;
-      for (const alias in imports) {
-        if (imports[alias].includes(depName)) {
-          // This is still a bit of a hack, we assume jsr protocol
-          imports[alias] = `jsr:${depName}@${error.mostCommonDependencyRange}`;
-          break;
+      const imports = error.workspace.packageJson.imports;
+      if (imports) {
+        for (const alias in imports) {
+          if (imports[alias].includes(depName)) {
+            // This is still a bit of a hack, we assume jsr protocol
+            imports[alias] = `jsr:${depName}@${error.mostCommonDependencyRange}`;
+            break;
+          }
         }
       }
     } else {

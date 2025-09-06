@@ -1,7 +1,7 @@
 import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
-import type { DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",
@@ -90,11 +90,9 @@ export function sortObject(prevObj: { [key: string]: string }) {
 }
 
 export function sortDeps(pkg: Package) {
-  if (pkg.tool.type === "deno") {
-    if ((pkg.packageJson as DenoJSON).imports) {
-      (pkg.packageJson as DenoJSON).imports = sortObject(
-        (pkg.packageJson as DenoJSON).imports || {}
-      );
+  if (isDenoPackage(pkg)) {
+    if (pkg.packageJson.imports) {
+      pkg.packageJson.imports = sortObject(pkg.packageJson.imports || {});
     }
     return;
   }
@@ -124,7 +122,7 @@ export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
   let dependencyRangesMapping = new Map<string, { [key: string]: number }>();
 
   for (let [pkgName, pkg] of allPackages) {
-    if (pkg.tool.type === "deno") {
+    if (isDenoPackage(pkg)) {
       if (pkg.dependencies) {
         for (let depName in pkg.dependencies) {
           const dep = pkg.dependencies[depName];

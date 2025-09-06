@@ -1,4 +1,4 @@
-import type { DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
@@ -15,20 +15,18 @@ type ErrorType = {
 export default makeCheck<ErrorType>({
   type: "all",
   validate: (workspace) => {
-    if (workspace.tool.type === "deno") {
-      if ((workspace.packageJson as DenoJSON).imports) {
-        let deps = (workspace.packageJson as DenoJSON).imports;
-        if (
-          deps &&
-          !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
-        ) {
-          return [
-            {
-              type: "UNSORTED_DEPENDENCIES",
-              workspace,
-            },
-          ];
-        }
+    if (isDenoPackage(workspace)) {
+      const deps = workspace.packageJson.imports;
+      if (
+        deps &&
+        !isArrayEqual(Object.keys(deps), Object.keys(deps).sort())
+      ) {
+        return [
+          {
+            type: "UNSORTED_DEPENDENCIES",
+            workspace,
+          },
+        ];
       }
     } else {
       for (let depType of DEPENDENCY_TYPES) {

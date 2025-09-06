@@ -34,11 +34,13 @@ export type PackageJSON = {
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
+import type { DenoJSON } from "./DenoTool.ts";
+
 export interface Package {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON; // TODO: may also be DenoJSON
+  packageJson: PackageJSON | DenoJSON;
   dependencies?: Record<
     string,
     {

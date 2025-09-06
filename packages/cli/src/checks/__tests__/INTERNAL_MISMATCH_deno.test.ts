@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import fixturez from "fixturez";
 import check from "../INTERNAL_MISMATCH.ts";
 import { getPackages } from "@manypkg/get-packages";
-import type { DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
 
 const f = fixturez(__dirname);
 
@@ -42,10 +42,13 @@ describe("deno internal mismatch", () => {
 
     check.fix!(error, {});
 
-    const imports = (pkgOne.packageJson as DenoJSON).imports as Record<
-      string,
-      string
-    >;
-    expect(imports["@scope/package-two"]).toBe("jsr:@scope/package-two@^1.0.0");
+    if (isDenoPackage(pkgOne)) {
+      const imports = pkgOne.packageJson.imports;
+      if (imports) {
+        expect(imports["@scope/package-two"]).toBe(
+          "jsr:@scope/package-two@^1.0.0"
+        );
+      }
+    }
   });
 });

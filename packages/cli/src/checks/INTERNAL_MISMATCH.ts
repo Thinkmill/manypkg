@@ -6,7 +6,7 @@ import {
 import semver from "semver";
 import type { Package } from "@manypkg/get-packages";
 import type { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
-import type { DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
@@ -18,7 +18,7 @@ export type ErrorType = {
 export default makeCheck<ErrorType>({
   validate: (workspace, allWorkspaces) => {
     let errors: ErrorType[] = [];
-    if (workspace.tool.type === "deno") {
+    if (isDenoPackage(workspace)) {
       if (workspace.dependencies) {
         for (let depAlias in workspace.dependencies) {
           const dep = workspace.dependencies[depAlias];
@@ -68,18 +68,19 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: (error) => {
-    if (error.workspace.tool.type === "deno") {
+    if (isDenoPackage(error.workspace)) {
       const depName = error.dependencyWorkspace.packageJson.name;
-      const imports = (error.workspace.packageJson as DenoJSON)
-        .imports as Record<string, string>;
-      for (const alias in imports) {
-        if (imports[alias].includes(depName)) {
-          const rangeType = versionRangeToRangeType(
-            error.dependencyRange.replace(/^jsr:/, "")
-          );
-          imports[alias] =
-            `jsr:${depName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
-          break;
+      const imports = error.workspace.packageJson.imports;
+      if (imports) {
+        for (const alias in imports) {
+          if (imports[alias].includes(depName)) {
+            const rangeType = versionRangeToRangeType(
+              error.dependencyRange.replace(/^jsr:/, "")
+            );
+            imports[alias] =
+              `jsr:${depName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
+            break;
+          }
         }
       }
     } else {
