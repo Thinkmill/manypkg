@@ -1,0 +1,6 @@
+// Package one config.
+{
+  "name": "@scope/package-one",
+  "version": "1.0.0"
+  // No dependencies here.
+}

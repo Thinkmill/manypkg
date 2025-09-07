@@ -18,6 +18,7 @@
   "dependencies": {
     "@manypkg/get-packages": "^3.1.0",
     "detect-indent": "^7.0.1",
+    "jsonc-parser": "^3.3.1",
     "normalize-path": "^3.0.0",
     "p-limit": "^6.2.0",
     "package-json": "^10.0.1",
