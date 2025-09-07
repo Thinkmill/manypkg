@@ -34,6 +34,8 @@ describe("deno fix e2e", () => {
     expect(fixedJson.imports["@oak/oak"]).toBe("jsr:@oak/oak@^14.2.0");
 
     // Also check that comments are gone, since that's the current implementation
-    expect(fixedFileContent).not.toContain("// This should be fixed to ^14.2.0");
+    expect(fixedFileContent).not.toContain(
+      "// This should be fixed to ^14.2.0"
+    );
   }, 30000);
 });

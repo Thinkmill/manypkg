@@ -83,9 +83,8 @@ export default makeCheck<ErrorType>({
           const { protocol, name } = match.groups;
           const cleanName = name.endsWith("@") ? name.slice(0, -1) : name;
           const rangeType = versionRangeToRangeType(error.dependencyRange);
-          imports[
-            error.dependencyAlias
-          ] = `${protocol}${cleanName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
+          imports[error.dependencyAlias] =
+            `${protocol}${cleanName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
         }
       }
     } else if (isNodePackage(error.workspace)) {

@@ -83,9 +83,8 @@ export default makeCheck<ErrorType>({
           const { protocol, name } = match.groups;
           // The name can sometimes include the @ symbol, which we want to keep, but not if it's a trailing one from the version separator
           const cleanName = name.endsWith("@") ? name.slice(0, -1) : name;
-          imports[
-            error.dependencyAlias
-          ] = `${protocol}${cleanName}@${error.mostCommonDependencyRange}`;
+          imports[error.dependencyAlias] =
+            `${protocol}${cleanName}@${error.mostCommonDependencyRange}`;
         }
       }
     } else if (isNodePackage(error.workspace)) {
