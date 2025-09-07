@@ -1,16 +1,17 @@
 import { makeCheck } from "./utils.ts";
 import { isNodePackage } from "@manypkg/tools";
 import type { Package } from "@manypkg/get-packages";
+import type { PackageJSON } from "@manypkg/tools";
 
 type ErrorType = {
   type: "MULTIPLE_DEPENDENCY_TYPES";
-  workspace: Package;
+  workspace: Package<PackageJSON>;
   dependencyType: "devDependencies" | "optionalDependencies";
   dependencyName: string;
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspaces) => {
+  validate: (workspace, _allWorkspaces) => {
     if (isNodePackage(workspace)) {
       let dependencies = new Set<string>();
       let errors: ErrorType[] = [];

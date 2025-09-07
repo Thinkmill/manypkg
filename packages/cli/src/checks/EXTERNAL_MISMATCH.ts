@@ -12,7 +12,7 @@ const dependencyRegexp =
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
-  workspace: Package;
+  workspace: Package<any>;
   dependencyName: string;
   dependencyRange: string;
   mostCommonDependencyRange: string;

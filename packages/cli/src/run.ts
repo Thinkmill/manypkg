@@ -24,7 +24,7 @@ function getRunArgs(tool: string, args: string[]) {
 export async function runCmd(args: string[], cwd: string) {
   let { packages, tool } = await getPackages(cwd);
 
-  let pkg: Package | undefined;
+  let pkg: Package<any> | undefined;
 
   const exactMatchingPackage = packages.find((pkg) => {
     return pkg.packageJson.name === args[0] || pkg.relativeDir === args[0];

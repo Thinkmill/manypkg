@@ -2,7 +2,7 @@ import type { Package } from "@manypkg/get-packages";
 import type { PackageJSON } from "@manypkg/tools";
 import crypto from "node:crypto";
 
-export let getRootWS = (): Package & { packageJson: PackageJSON } => {
+export let getRootWS = (): Package<PackageJSON> => {
   return {
     dir: `fake/monorepo`,
     relativeDir: ".",
@@ -18,7 +18,7 @@ export let getRootWS = (): Package & { packageJson: PackageJSON } => {
 export let getFakeWS = (
   name: string = "pkg-1",
   version: string = "1.0.0"
-): Package & { packageJson: PackageJSON } => {
+): Package<PackageJSON> => {
   return {
     dir: `fake/monorepo/packages/${name}`,
     relativeDir: `packages/${name}`,
@@ -30,7 +30,7 @@ export let getFakeWS = (
   };
 };
 
-export let getWS = (): Map<string, Package & { packageJson: PackageJSON }> => {
+export let getWS = (): Map<string, Package<PackageJSON>> => {
   let pkg = new Map();
   pkg.set("pkg-1", getFakeWS());
   return pkg;

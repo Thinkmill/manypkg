@@ -1,12 +1,13 @@
 import { makeCheck, getMostCommonRangeMap } from "./utils.ts";
 import { isNodePackage } from "@manypkg/tools";
 import type { Package } from "@manypkg/get-packages";
+import type { PackageJSON } from "@manypkg/tools";
 import { upperBoundOfRangeAWithinBoundsOfB } from "sembear";
 import semver from "semver";
 
 type ErrorType = {
   type: "INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP";
-  workspace: Package;
+  workspace: Package<PackageJSON>;
   peerVersion: string;
   dependencyName: string;
   devVersion: string | null;

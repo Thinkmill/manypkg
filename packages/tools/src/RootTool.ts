@@ -27,7 +27,7 @@ export const RootTool: Tool = {
 
     try {
       const pkgJson = (await readJson(rootDir, "package.json")) as PackageJSON;
-      const pkg: Package = {
+      const pkg: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -55,7 +55,7 @@ export const RootTool: Tool = {
 
     try {
       const pkgJson = readJsonSync(rootDir, "package.json") as PackageJSON;
-      const pkg: Package = {
+      const pkg: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

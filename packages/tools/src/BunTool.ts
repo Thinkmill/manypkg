@@ -101,7 +101,7 @@ export const BunTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspaces || [];
 
       const packages = await expandPackageGlobs(packageGlobs, rootDir, BunTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<BunPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -132,7 +132,7 @@ export const BunTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspaces || [];
 
       const packages = expandPackageGlobsSync(packageGlobs, rootDir, BunTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<BunPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

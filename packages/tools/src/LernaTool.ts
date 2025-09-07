@@ -64,7 +64,7 @@ export const LernaTool: Tool = {
         rootDir,
         LernaTool
       );
-      const rootPackage: Package = {
+      const rootPackage: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -96,7 +96,7 @@ export const LernaTool: Tool = {
       const packageGlobs: string[] = lernaJson.packages || ["packages/*"];
 
       const packages = expandPackageGlobsSync(packageGlobs, rootDir, LernaTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

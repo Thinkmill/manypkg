@@ -8,9 +8,8 @@ import {
   isNodePackage,
   findDenoConfigSync,
 } from "@manypkg/tools";
-import * as jsonc from "jsonc-parser";
 
-export async function writePackage(pkg: Package) {
+export async function writePackage(pkg: Package<any>) {
   if (isDenoPackage(pkg)) {
     const fileName = findDenoConfigSync(pkg.dir);
     if (!fileName) {

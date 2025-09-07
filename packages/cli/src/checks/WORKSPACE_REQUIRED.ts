@@ -1,16 +1,17 @@
 import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils.ts";
 import { isNodePackage } from "@manypkg/tools";
 import type { Package } from "@manypkg/get-packages";
+import type { PackageJSON } from "@manypkg/tools";
 
 type ErrorType = {
   type: "WORKSPACE_REQUIRED";
-  workspace: Package;
+  workspace: Package<PackageJSON>;
   depType: (typeof NORMAL_DEPENDENCY_TYPES)[number];
   depName: string;
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspaces, root, opts) => {
+  validate: (workspace, allWorkspaces, _root, opts) => {
     if (opts.workspaceProtocol !== "require") return [];
     if (isNodePackage(workspace)) {
       let errors: ErrorType[] = [];

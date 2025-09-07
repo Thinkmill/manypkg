@@ -12,8 +12,8 @@ const dependencyRegexp =
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
-  workspace: Package;
-  dependencyWorkspace: Package;
+  workspace: Package<any>;
+  dependencyWorkspace: Package<any>;
   dependencyRange: string;
   dependencyAlias?: string;
 };

@@ -57,8 +57,10 @@ import {
 const dependencyRegexp =
   /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
-function extractDependencies(json: DenoJSON): Package["dependencies"] {
-  const dependencies: Package["dependencies"] = {};
+function extractDependencies(
+  json: DenoJSON
+): Package<DenoJSON>["dependencies"] {
+  const dependencies: Package<DenoJSON>["dependencies"] = {};
   if (!json.imports) {
     return dependencies;
   }
@@ -125,13 +127,13 @@ export const DenoTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspace!;
       const packages = await expandDenoGlobs(packageGlobs, rootDir, DenoTool);
 
-      const rootPackage: Package = {
+      const rootPackage: Package<DenoJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
         tool: DenoTool,
+        dependencies: extractDependencies(pkgJson),
       };
-      rootPackage.dependencies = extractDependencies(rootPackage.packageJson);
 
       return {
         tool: DenoTool,
@@ -164,13 +166,13 @@ export const DenoTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspace!;
       const packages = expandDenoGlobsSync(packageGlobs, rootDir, DenoTool);
 
-      const rootPackage: Package = {
+      const rootPackage: Package<DenoJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
         tool: DenoTool,
+        dependencies: extractDependencies(pkgJson),
       };
-      rootPackage.dependencies = extractDependencies(rootPackage.packageJson);
 
       return {
         tool: DenoTool,

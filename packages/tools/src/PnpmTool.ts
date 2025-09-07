@@ -79,7 +79,7 @@ export const PnpmTool: Tool = {
         rootDir,
         PnpmTool
       );
-      const rootPackage: Package = {
+      const rootPackage: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -113,7 +113,7 @@ export const PnpmTool: Tool = {
       const packageGlobs: string[] = manifest.packages!;
 
       const packages = expandPackageGlobsSync(packageGlobs, rootDir, PnpmTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<PackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

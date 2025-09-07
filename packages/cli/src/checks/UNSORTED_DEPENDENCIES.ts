@@ -1,4 +1,4 @@
-import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage } from "@manypkg/tools";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
@@ -9,7 +9,7 @@ import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";
-  workspace: Package;
+  workspace: Package<any>;
 };
 
 export default makeCheck<ErrorType>({
