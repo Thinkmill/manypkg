@@ -1,0 +1,10 @@
+// This is the root config file.
+{
+  "workspace": [
+    "packages/*"
+  ],
+  "imports": {
+    // We should use a consistent version of oak.
+    "@oak/oak": "jsr:@oak/oak@^14.2.0"
+  }
+}

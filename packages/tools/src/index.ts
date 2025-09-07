@@ -9,3 +9,4 @@ export { RushTool } from "./RushTool.ts";
 export { YarnTool } from "./YarnTool.ts";
 export { type DenoJSON } from "./DenoTool.ts";
 export { isDenoPackage, isNodePackage } from "./Tool.ts";
+export { findDenoConfigSync } from "./utils.ts";

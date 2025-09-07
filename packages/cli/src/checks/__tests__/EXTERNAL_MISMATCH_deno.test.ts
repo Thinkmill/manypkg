@@ -24,6 +24,7 @@ describe("deno external mismatch", () => {
       dependencyRange: "^13.0.0",
       mostCommonDependencyRange: "^14.2.0",
       workspace: pkgTwo,
+      dependencyAlias: "@oak/oak",
     });
   });
 

@@ -1,0 +1,8 @@
+{
+  "name": "@scope/root",
+  "version": "1.0.0",
+  "workspace": [],
+  "imports": {
+    "cmdk": "https://esm.sh/cmdk@1.1.1?alias=react:preact/compat&external=preact"
+  }
+}

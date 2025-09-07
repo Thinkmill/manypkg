@@ -5,7 +5,7 @@ import type { Package, Tool } from "./Tool.ts";
 import type { DenoJSON } from "./DenoTool.ts";
 
 const dependencyRegexp =
-  /^(?<protocol>jsr:|npm:|https:|http:)\/?(?<name>@?[^@\s]+)@?(?<version>[^\s/]+)?\/?/;
+  /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
 function extractDependencies(json: DenoJSON): Package["dependencies"] {
   const dependencies: Package["dependencies"] = {};

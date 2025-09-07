@@ -343,6 +343,17 @@ let runTests = (getPackages: GetPackages) => {
       });
     }
   });
+
+  it("should correctly parse dependencies with complex URLs", async () => {
+    const dir = f.copy("deno-complex-url");
+    const { rootPackage } = await getPackages(dir);
+    expect(rootPackage).toBeDefined();
+    expect(rootPackage!.dependencies).toBeDefined();
+    expect(rootPackage!.dependencies!["cmdk"]).toEqual({
+      name: "esm.sh/cmdk",
+      version: "1.1.1",
+    });
+  });
 };
 
 describe("getPackages", () => {

@@ -1,0 +1,9 @@
+// Package two has a mismatched dependency.
+{
+  "name": "@scope/package-two",
+  "version": "1.0.0",
+  "imports": {
+    // This should be fixed to ^14.2.0
+    "@oak/oak": "jsr:@oak/oak@^13.0.0"
+  }
+}

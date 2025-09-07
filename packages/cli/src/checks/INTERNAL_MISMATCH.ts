@@ -5,14 +5,17 @@ import {
 } from "./utils.ts";
 import semver from "semver";
 import type { Package } from "@manypkg/get-packages";
-import type { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
-import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage } from "@manypkg/tools";
+
+const dependencyRegexp =
+  /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
 export type ErrorType = {
   type: "INTERNAL_MISMATCH";
   workspace: Package;
   dependencyWorkspace: Package;
   dependencyRange: string;
+  dependencyAlias?: string;
 };
 
 export default makeCheck<ErrorType>({
@@ -25,9 +28,10 @@ export default makeCheck<ErrorType>({
           let dependencyWorkspace = allWorkspaces.get(dep.name);
           if (
             dependencyWorkspace !== undefined &&
+            dep.version &&
             !semver.satisfies(
               dependencyWorkspace.packageJson.version,
-              dep.version.replace(/^jsr:/, "")
+              dep.version
             )
           ) {
             errors.push({
@@ -35,6 +39,7 @@ export default makeCheck<ErrorType>({
               workspace,
               dependencyWorkspace,
               dependencyRange: dep.version,
+              dependencyAlias: depAlias,
             });
           }
         }
@@ -68,19 +73,18 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: (error) => {
-    if (isDenoPackage(error.workspace)) {
-      const depName = error.dependencyWorkspace.packageJson.name;
+    if (isDenoPackage(error.workspace) && error.dependencyAlias) {
       const imports = error.workspace.packageJson.imports;
-      if (imports) {
-        for (const alias in imports) {
-          if (imports[alias].includes(depName)) {
-            const rangeType = versionRangeToRangeType(
-              error.dependencyRange.replace(/^jsr:/, "")
-            );
-            imports[alias] =
-              `jsr:${depName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
-            break;
-          }
+      if (imports && imports[error.dependencyAlias]) {
+        const originalSpecifier = imports[error.dependencyAlias];
+        const match = originalSpecifier.match(dependencyRegexp);
+
+        if (match && match.groups) {
+          const { protocol, name } = match.groups;
+          const cleanName = name.endsWith("@") ? name.slice(0, -1) : name;
+          const rangeType = versionRangeToRangeType(error.dependencyRange);
+          imports[error.dependencyAlias] =
+            `${protocol}${cleanName}@${rangeType}${error.dependencyWorkspace.packageJson.version}`;
         }
       }
     } else if (isNodePackage(error.workspace)) {

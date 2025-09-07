@@ -55,7 +55,7 @@ import {
 } from "./utils.ts";
 
 const dependencyRegexp =
-  /^(?<protocol>jsr:|npm:|https:|http:)\/?(?<name>@?[^@\s]+)@?(?<version>[^\s/]+)?\/?/;
+  /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
 function extractDependencies(json: DenoJSON): Package["dependencies"] {
   const dependencies: Package["dependencies"] = {};

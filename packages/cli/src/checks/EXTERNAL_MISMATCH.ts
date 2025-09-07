@@ -5,7 +5,10 @@ import {
 } from "./utils.ts";
 import type { Package } from "@manypkg/get-packages";
 import { validRange } from "semver";
-import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage } from "@manypkg/tools";
+
+const dependencyRegexp =
+  /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
 type ErrorType = {
   type: "EXTERNAL_MISMATCH";
@@ -13,6 +16,7 @@ type ErrorType = {
   dependencyName: string;
   dependencyRange: string;
   mostCommonDependencyRange: string;
+  dependencyAlias?: string;
 };
 
 export default makeCheck<ErrorType>({
@@ -21,16 +25,13 @@ export default makeCheck<ErrorType>({
     let mostCommonRangeMap = getMostCommonRangeMap(allWorkspace);
 
     if (isDenoPackage(workspace)) {
-      console.log("mostCommonRangeMap", mostCommonRangeMap);
       if (workspace.dependencies) {
-        for (let depName in workspace.dependencies) {
-          let dep = workspace.dependencies[depName];
+        for (let depAlias in workspace.dependencies) {
+          let dep = workspace.dependencies[depAlias];
           let mostCommonRange = mostCommonRangeMap.get(dep.name);
-          console.log("dep.name", dep.name);
-          console.log("dep.version", dep.version);
-          console.log("mostCommonRange", mostCommonRange);
           if (
             mostCommonRange !== undefined &&
+            dep.version &&
             mostCommonRange !== dep.version &&
             validRange(dep.version)
           ) {
@@ -40,6 +41,7 @@ export default makeCheck<ErrorType>({
               dependencyName: dep.name,
               dependencyRange: dep.version,
               mostCommonDependencyRange: mostCommonRange,
+              dependencyAlias: depAlias,
             });
           }
         }
@@ -72,17 +74,17 @@ export default makeCheck<ErrorType>({
     return errors;
   },
   fix: (error) => {
-    if (isDenoPackage(error.workspace)) {
-      const depName = error.dependencyName;
+    if (isDenoPackage(error.workspace) && error.dependencyAlias) {
       const imports = error.workspace.packageJson.imports;
-      if (imports) {
-        for (const alias in imports) {
-          if (imports[alias].includes(depName)) {
-            // This is still a bit of a hack, we assume jsr protocol
-            imports[alias] =
-              `jsr:${depName}@${error.mostCommonDependencyRange}`;
-            break;
-          }
+      if (imports && imports[error.dependencyAlias]) {
+        const originalSpecifier = imports[error.dependencyAlias];
+        const match = originalSpecifier.match(dependencyRegexp);
+        if (match && match.groups) {
+          const { protocol, name } = match.groups;
+          // The name can sometimes include the @ symbol, which we want to keep, but not if it's a trailing one from the version separator
+          const cleanName = name.endsWith("@") ? name.slice(0, -1) : name;
+          imports[error.dependencyAlias] =
+            `${protocol}${cleanName}@${error.mostCommonDependencyRange}`;
         }
       }
     } else if (isNodePackage(error.workspace)) {
@@ -93,6 +95,8 @@ export default makeCheck<ErrorType>({
         }
       }
     }
+    // Deno doesn't have an install step, but this signals that a change was made.
+    // The install function itself is now a no-op for Deno.
     return { requiresInstall: true };
   },
   print: (error) =>
