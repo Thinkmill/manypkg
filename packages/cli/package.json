@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@changesets/types": "^6.1.0",
-    "@manypkg/tools": "2.1.0",
     "@types/validate-npm-package-name": "^4.0.2",
     "fixturez": "^1.1.0",
     "strip-ansi": "^7.1.0",

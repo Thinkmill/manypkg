@@ -7,7 +7,7 @@ import {
   isDenoPackage,
   isNodePackage,
   findDenoConfigSync,
-} from "@manypkg/tools";
+} from "@manypkg/get-packages";
 
 export async function writePackage(pkg: Package<any>) {
   if (isDenoPackage(pkg)) {

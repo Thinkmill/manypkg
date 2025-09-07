@@ -7,7 +7,11 @@ import {
 } from "@manypkg/find-root";
 import type { Packages, MonorepoRoot } from "@manypkg/tools";
 
-export { isNodePackage, isDenoPackage } from "@manypkg/tools";
+export {
+  isNodePackage,
+  isDenoPackage,
+  findDenoConfigSync,
+} from "@manypkg/tools";
 export type {
   Tool,
   Package,
