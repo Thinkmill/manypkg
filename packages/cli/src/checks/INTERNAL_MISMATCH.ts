@@ -4,8 +4,11 @@ import {
   versionRangeToRangeType,
 } from "./utils.ts";
 import semver from "semver";
-import type { Package } from "@manypkg/get-packages";
-import { isDenoPackage, isNodePackage } from "@manypkg/tools";
+import {
+  isDenoPackage,
+  isNodePackage,
+  type Package,
+} from "@manypkg/get-packages";
 
 const dependencyRegexp =
   /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;

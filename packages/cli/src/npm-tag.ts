@@ -1,5 +1,4 @@
-import { getPackages } from "@manypkg/get-packages";
-import { isNodePackage } from "@manypkg/tools";
+import { getPackages, isNodePackage } from "@manypkg/get-packages";
 import type { PackageJSON } from "@changesets/types";
 import { exec } from "tinyexec";
 import pLimit from "p-limit";

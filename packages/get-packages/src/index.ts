@@ -7,7 +7,14 @@ import {
 } from "@manypkg/find-root";
 import type { Packages, MonorepoRoot } from "@manypkg/tools";
 
-export type { Tool, Package, Packages } from "@manypkg/tools";
+export { isNodePackage, isDenoPackage } from "@manypkg/tools";
+export type {
+  Tool,
+  Package,
+  Packages,
+  PackageJSON,
+  DenoJSON,
+} from "@manypkg/tools";
 
 export class PackageJsonMissingNameError extends Error {
   directories: string[];

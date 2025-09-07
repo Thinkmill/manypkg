@@ -1,7 +1,9 @@
 import { makeCheck, NORMAL_DEPENDENCY_TYPES } from "./utils.ts";
-import { isNodePackage } from "@manypkg/tools";
-import type { Package } from "@manypkg/get-packages";
-import type { PackageJSON } from "@manypkg/tools";
+import {
+  isNodePackage,
+  type Package,
+  type PackageJSON,
+} from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "WORKSPACE_REQUIRED";

@@ -3,9 +3,12 @@ import {
   getMostCommonRangeMap,
   NORMAL_DEPENDENCY_TYPES,
 } from "./utils.ts";
-import type { Package } from "@manypkg/get-packages";
+import {
+  isDenoPackage,
+  isNodePackage,
+  type Package,
+} from "@manypkg/get-packages";
 import { validRange } from "semver";
-import { isDenoPackage, isNodePackage } from "@manypkg/tools";
 
 const dependencyRegexp =
   /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;

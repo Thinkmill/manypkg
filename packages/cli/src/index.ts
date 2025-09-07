@@ -3,8 +3,8 @@ import {
   getPackages,
   type Packages,
   type Package,
+  type PackageJSON,
 } from "@manypkg/get-packages";
-import type { PackageJSON } from "@manypkg/tools";
 import type { Options } from "./checks/utils.ts";
 import { checks } from "./checks/index.ts";
 import { ExitError } from "./errors.ts";

@@ -1,11 +1,14 @@
-import { isDenoPackage, isNodePackage } from "@manypkg/tools";
+import {
+  isDenoPackage,
+  isNodePackage,
+  type Package,
+} from "@manypkg/get-packages";
 import {
   makeCheck,
   DEPENDENCY_TYPES,
   sortDeps,
   isArrayEqual,
 } from "./utils.ts";
-import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";

@@ -1,5 +1,4 @@
-import { getPackages } from "@manypkg/get-packages";
-import { isNodePackage } from "@manypkg/tools";
+import { getPackages, isNodePackage } from "@manypkg/get-packages";
 import semver from "semver";
 import { DEPENDENCY_TYPES, versionRangeToRangeType } from "./checks/utils.ts";
 import pLimit from "p-limit";

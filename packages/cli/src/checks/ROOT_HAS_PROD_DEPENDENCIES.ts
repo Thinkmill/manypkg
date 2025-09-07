@@ -1,8 +1,10 @@
 import { makeCheck, sortObject } from "./utils.ts";
-import { isNodePackage } from "@manypkg/tools";
 import pc from "picocolors";
-import type { Package } from "@manypkg/get-packages";
-import type { PackageJSON } from "@manypkg/tools";
+import {
+  isNodePackage,
+  type Package,
+  type PackageJSON,
+} from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "ROOT_HAS_PROD_DEPENDENCIES";

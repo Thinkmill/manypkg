@@ -1,7 +1,10 @@
-import type { Package } from "@manypkg/get-packages";
 import * as semver from "semver";
 import { highest } from "sembear";
-import { isDenoPackage, isNodePackage } from "@manypkg/tools";
+import {
+  isDenoPackage,
+  isNodePackage,
+  type Package,
+} from "@manypkg/get-packages";
 
 export const NORMAL_DEPENDENCY_TYPES = [
   "dependencies",

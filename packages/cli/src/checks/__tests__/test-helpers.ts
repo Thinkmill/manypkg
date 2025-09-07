@@ -1,5 +1,4 @@
-import type { Package } from "@manypkg/get-packages";
-import type { PackageJSON } from "@manypkg/tools";
+import type { Package, PackageJSON } from "@manypkg/get-packages";
 import crypto from "node:crypto";
 
 export let getRootWS = (): Package<PackageJSON> => {
