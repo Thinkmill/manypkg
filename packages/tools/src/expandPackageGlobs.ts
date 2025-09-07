@@ -14,7 +14,7 @@ export async function expandPackageGlobs(
   packageGlobs: string[],
   directory: string,
   tool: Tool
-): Promise<Package[]> {
+): Promise<Package<PackageJSON>[]> {
   const relativeDirectories: string[] = await glob(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
@@ -25,30 +25,31 @@ export async function expandPackageGlobs(
     .map((p) => path.resolve(directory, p))
     .sort();
 
-  const discoveredPackages: Array<Package | undefined> = await Promise.all(
-    directories.map((dir) =>
-      fsp
-        .readFile(path.join(dir, "package.json"), "utf-8")
-        .catch((err) => {
-          if (err && (err as { code: string }).code === "ENOENT") {
-            return undefined;
-          }
-          throw err;
-        })
-        .then((result) => {
-          if (result) {
-            return {
-              dir: path.resolve(dir),
-              relativeDir: path.relative(directory, dir),
-              packageJson: JSON.parse(result),
-              tool,
-            };
-          }
-        })
-    )
-  );
+  const discoveredPackages: Array<Package<PackageJSON> | undefined> =
+    await Promise.all(
+      directories.map((dir) =>
+        fsp
+          .readFile(path.join(dir, "package.json"), "utf-8")
+          .catch((err) => {
+            if (err && (err as { code: string }).code === "ENOENT") {
+              return undefined;
+            }
+            throw err;
+          })
+          .then((result) => {
+            if (result) {
+              return {
+                dir: path.resolve(dir),
+                relativeDir: path.relative(directory, dir),
+                packageJson: JSON.parse(result),
+                tool,
+              };
+            }
+          })
+      )
+    );
 
-  return discoveredPackages.filter((pkg) => pkg) as Package[];
+  return discoveredPackages.filter((pkg) => pkg) as Package<PackageJSON>[];
 }
 
 /**
@@ -58,7 +59,7 @@ export function expandPackageGlobsSync(
   packageGlobs: string[],
   directory: string,
   tool: Tool
-): Package[] {
+): Package<PackageJSON>[] {
   const relativeDirectories: string[] = globSync(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
@@ -69,8 +70,8 @@ export function expandPackageGlobsSync(
     .map((p) => path.resolve(directory, p))
     .sort();
 
-  const discoveredPackages: Array<Package | undefined> = directories.map(
-    (dir) => {
+  const discoveredPackages: Array<Package<PackageJSON> | undefined> =
+    directories.map((dir) => {
       try {
         const packageJson: PackageJSON = readJsonSync(dir, "package.json");
         return {
@@ -85,8 +86,7 @@ export function expandPackageGlobsSync(
         }
         throw err;
       }
-    }
-  );
+    });
 
-  return discoveredPackages.filter((pkg) => pkg) as Package[];
+  return discoveredPackages.filter((pkg) => pkg) as Package<PackageJSON>[];
 }

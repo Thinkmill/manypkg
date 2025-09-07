@@ -25,8 +25,8 @@ export type Options = {
 type RootCheck<ErrorType> = {
   type: "root";
   validate: (
-    rootPackage: Package,
-    allPackages: Map<string, Package>,
+    rootPackage: Package<any>,
+    allPackages: Map<string, Package<any>>,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -39,8 +39,8 @@ type RootCheck<ErrorType> = {
 type RootCheckWithFix<ErrorType> = {
   type: "root";
   validate: (
-    rootPackage: Package,
-    allPackages: Map<string, Package>,
+    rootPackage: Package<any>,
+    allPackages: Map<string, Package<any>>,
     options: Options
   ) => ErrorType[];
   fix: (
@@ -53,9 +53,9 @@ type RootCheckWithFix<ErrorType> = {
 type AllCheck<ErrorType> = {
   type: "all";
   validate: (
-    workspace: Package,
-    allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package | undefined,
+    workspace: Package<any>,
+    allWorkspaces: Map<string, Package<any>>,
+    rootWorkspace: Package<any> | undefined,
     options: Options
   ) => ErrorType[];
   fix?: (
@@ -68,9 +68,9 @@ type AllCheck<ErrorType> = {
 type AllCheckWithFix<ErrorType> = {
   type: "all";
   validate: (
-    workspace: Package,
-    allWorkspaces: Map<string, Package>,
-    rootWorkspace: Package | undefined,
+    workspace: Package<any>,
+    allWorkspaces: Map<string, Package<any>>,
+    rootWorkspace: Package<any> | undefined,
     options: Options
   ) => ErrorType[];
   fix: (
@@ -89,7 +89,7 @@ export function sortObject(prevObj: { [key: string]: string }) {
   return newObj;
 }
 
-export function sortDeps(pkg: Package) {
+export function sortDeps(pkg: Package<any>) {
   if (isDenoPackage(pkg)) {
     if (pkg.packageJson.imports) {
       pkg.packageJson.imports = sortObject(pkg.packageJson.imports || {});
@@ -119,7 +119,7 @@ function weakMemoize<Arg, Ret>(func: (arg: Arg) => Ret): (arg: Arg) => Ret {
 }
 
 export let getMostCommonRangeMap = weakMemoize(function getMostCommonRanges(
-  allPackages: Map<string, Package>
+  allPackages: Map<string, Package<any>>
 ) {
   let dependencyRangesMapping = new Map<string, { [key: string]: number }>();
 

@@ -16,6 +16,7 @@ type PublishConfig = {
 export type PackageJSON = {
   name: string;
   version: string;
+  repository?: any;
 
   // dependency maps (optional)
   dependencies?: DependencyMap;
@@ -36,11 +37,11 @@ export type PackageJSON = {
  */
 import type { DenoJSON } from "./DenoTool.ts";
 
-export interface Package {
+export interface Package<T extends PackageJSON | DenoJSON> {
   /**
    * The pre-loaded package json structure.
    */
-  packageJson: PackageJSON | DenoJSON;
+  packageJson: T;
   dependencies?: Record<
     string,
     {
@@ -79,12 +80,12 @@ export interface Packages {
   /**
    * A collection of disocvered packages.
    */
-  packages: Package[];
+  packages: Package<any>[];
 
   /**
    * If supported by the tool, this is the "root package" for the monorepo.
    */
-  rootPackage?: Package;
+  rootPackage?: Package<any>;
 
   /**
    * The absolute path of the root directory of this monorepo.
@@ -135,15 +136,11 @@ export type ToolType =
  * Each tool defines a common interface for detecting whether a directory is
  * a valid instance of this type of monorepo, how to retrieve the packages, etc.
  */
-export function isDenoPackage(
-  pkg: Package
-): pkg is Package & { packageJson: DenoJSON } {
+export function isDenoPackage(pkg: Package<any>): pkg is Package<DenoJSON> {
   return pkg.tool.type === "deno";
 }
 
-export function isNodePackage(
-  pkg: Package
-): pkg is Package & { packageJson: PackageJSON } {
+export function isNodePackage(pkg: Package<any>): pkg is Package<PackageJSON> {
   return pkg.tool.type !== "deno";
 }
 

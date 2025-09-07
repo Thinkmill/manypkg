@@ -72,7 +72,7 @@ export const NpmTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspaces!;
 
       const packages = await expandPackageGlobs(packageGlobs, rootDir, NpmTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<NpmPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -103,7 +103,7 @@ export const NpmTool: Tool = {
       const packageGlobs: string[] = pkgJson.workspaces!;
 
       const packages = expandPackageGlobsSync(packageGlobs, rootDir, NpmTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<NpmPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

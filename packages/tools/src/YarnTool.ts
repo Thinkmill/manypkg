@@ -87,7 +87,7 @@ export const YarnTool: Tool = {
         rootDir,
         YarnTool
       );
-      const rootPackage: Package = {
+      const rootPackage: Package<YarnPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,
@@ -120,7 +120,7 @@ export const YarnTool: Tool = {
         : pkgJson.workspaces!.packages;
 
       const packages = expandPackageGlobsSync(packageGlobs, rootDir, YarnTool);
-      const rootPackage: Package = {
+      const rootPackage: Package<YarnPackageJSON> = {
         dir: rootDir,
         relativeDir: ".",
         packageJson: pkgJson,

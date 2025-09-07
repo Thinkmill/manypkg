@@ -65,7 +65,7 @@ export const RushTool: Tool = {
       const directories = rushJson.projects.map((project) =>
         path.resolve(rootDir, project.projectFolder)
       );
-      const packages: Package[] = await Promise.all(
+      const packages: Package<PackageJSON>[] = await Promise.all(
         directories.map(async (dir: string) => {
           return {
             dir,
@@ -108,15 +108,17 @@ export const RushTool: Tool = {
       const directories = rushJson.projects.map((project) =>
         path.resolve(rootDir, project.projectFolder)
       );
-      const packages: Package[] = directories.map((dir: string) => {
-        const packageJson: PackageJSON = readJsonSync(dir, "package.json");
-        return {
-          dir,
-          relativeDir: path.relative(directory, dir),
-          packageJson,
-          tool: RushTool,
-        };
-      });
+      const packages: Package<PackageJSON>[] = directories.map(
+        (dir: string) => {
+          const packageJson: PackageJSON = readJsonSync(dir, "package.json");
+          return {
+            dir,
+            relativeDir: path.relative(directory, dir),
+            packageJson,
+            tool: RushTool,
+          };
+        }
+      );
 
       // Rush does not have a root package
       return {

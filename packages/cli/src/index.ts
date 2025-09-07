@@ -5,6 +5,7 @@ import {
   type Packages,
   type Package,
 } from "@manypkg/get-packages";
+import type { PackageJSON } from "@manypkg/tools";
 import type { Options } from "./checks/utils.ts";
 import { checks } from "./checks/index.ts";
 import { ExitError } from "./errors.ts";
@@ -15,7 +16,7 @@ import { npmTagAll } from "./npm-tag.ts";
 import { exec } from "tinyexec";
 import pLimit from "p-limit";
 
-type RootPackage = Package & {
+type RootPackage = Package<PackageJSON> & {
   packageJson: {
     manypkg?: Options;
   };
@@ -29,7 +30,7 @@ let defaultOptions = {
 };
 
 let runChecks = (
-  allWorkspaces: Map<string, Package>,
+  allWorkspaces: Map<string, Package<any>>,
   rootWorkspace: RootPackage | undefined,
   shouldFix: boolean,
   options: Options
@@ -140,7 +141,7 @@ async function execCmd(args: string[]) {
     ...rootPackage?.packageJson.manypkg,
   };
 
-  let packagesByName = new Map<string, Package>(
+  let packagesByName = new Map<string, Package<any>>(
     packages.map((x) => [x.packageJson.name, x])
   );
   if (rootPackage) {

@@ -9,7 +9,7 @@ import type { Package } from "@manypkg/get-packages";
 
 type ErrorType = {
   type: "UNSORTED_DEPENDENCIES";
-  workspace: Package;
+  workspace: Package<any>;
 };
 
 export default makeCheck<ErrorType>({

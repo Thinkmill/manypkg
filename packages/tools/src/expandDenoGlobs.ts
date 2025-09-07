@@ -7,8 +7,10 @@ import type { DenoJSON } from "./DenoTool.ts";
 const dependencyRegexp =
   /^(?<protocol>jsr:|npm:|https:|http:)(?:\/\/|\/)?(?<name>@?[^@\s]+)@?(?<version>[^?\s/]+)?/;
 
-function extractDependencies(json: DenoJSON): Package["dependencies"] {
-  const dependencies: Package["dependencies"] = {};
+function extractDependencies(
+  json: DenoJSON
+): Package<DenoJSON>["dependencies"] {
+  const dependencies: Package<DenoJSON>["dependencies"] = {};
   if (!json.imports) {
     return dependencies;
   }
@@ -35,7 +37,7 @@ async function getDenoPackageFromDir(
   packageDir: string,
   rootDir: string,
   tool: Tool
-): Promise<Package | undefined> {
+): Promise<Package<DenoJSON> | undefined> {
   const fullPath = path.resolve(rootDir, packageDir);
   const relativeDir = path.relative(rootDir, fullPath);
 
@@ -70,7 +72,7 @@ function getDenoPackageFromDirSync(
   packageDir: string,
   rootDir: string,
   tool: Tool
-): Package | undefined {
+): Package<DenoJSON> | undefined {
   const fullPath = path.resolve(rootDir, packageDir);
   const relativeDir = path.relative(rootDir, fullPath);
 
@@ -110,7 +112,7 @@ export async function expandDenoGlobs(
   packageGlobs: string[],
   directory: string,
   tool: Tool
-): Promise<Package[]> {
+): Promise<Package<DenoJSON>[]> {
   const relativeDirectories: string[] = await glob(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
@@ -121,11 +123,12 @@ export async function expandDenoGlobs(
     .map((p) => path.resolve(directory, p))
     .sort();
 
-  const discoveredPackages: Array<Package | undefined> = await Promise.all(
-    directories.map((dir) => getDenoPackageFromDir(dir, directory, tool))
-  );
+  const discoveredPackages: Array<Package<DenoJSON> | undefined> =
+    await Promise.all(
+      directories.map((dir) => getDenoPackageFromDir(dir, directory, tool))
+    );
 
-  return discoveredPackages.filter((pkg) => pkg) as Package[];
+  return discoveredPackages.filter((pkg) => pkg) as Package<DenoJSON>[];
 }
 
 /**
@@ -135,7 +138,7 @@ export function expandDenoGlobsSync(
   packageGlobs: string[],
   directory: string,
   tool: Tool
-): Package[] {
+): Package<DenoJSON>[] {
   const relativeDirectories: string[] = globSync(packageGlobs, {
     cwd: directory,
     onlyDirectories: true,
@@ -146,9 +149,8 @@ export function expandDenoGlobsSync(
     .map((p) => path.resolve(directory, p))
     .sort();
 
-  const discoveredPackages: Array<Package | undefined> = directories.map(
-    (dir) => getDenoPackageFromDirSync(dir, directory, tool)
-  );
+  const discoveredPackages: Array<Package<DenoJSON> | undefined> =
+    directories.map((dir) => getDenoPackageFromDirSync(dir, directory, tool));
 
-  return discoveredPackages.filter((pkg) => pkg) as Package[];
+  return discoveredPackages.filter((pkg) => pkg) as Package<DenoJSON>[];
 }

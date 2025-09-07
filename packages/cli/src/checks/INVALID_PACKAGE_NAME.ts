@@ -4,7 +4,7 @@ import validateNpmPackageName from "validate-npm-package-name";
 
 type ErrorType = {
   type: "INVALID_PACKAGE_NAME";
-  workspace: Package;
+  workspace: Package<any>;
   errors: string[];
 };
 
