@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import fixturez from "fixturez";
 import check from "../EXTERNAL_MISMATCH.ts";
 import { getPackages } from "@manypkg/get-packages";
-import { isDenoPackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage } from "@manypkg/tools";
 
 const f = fixturez(__dirname);
 

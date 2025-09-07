@@ -11,7 +11,7 @@ type ErrorType = {
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspaces, root, opts) => {
+  validate: (workspace, allWorkspaces, _root, opts) => {
     if (opts.workspaceProtocol !== "require") return [];
     if (isNodePackage(workspace)) {
       let errors: ErrorType[] = [];

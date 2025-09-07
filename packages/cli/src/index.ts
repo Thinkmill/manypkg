@@ -1,4 +1,3 @@
-import path from "node:path";
 import * as logger from "./logger.ts";
 import {
   getPackages,
@@ -155,7 +154,7 @@ async function execCmd(args: string[]) {
   );
   if (shouldFix) {
     await Promise.all(
-      [...packagesByName].map(async ([pkgName, workspace]) => {
+      [...packagesByName].map(async ([_pkgName, workspace]) => {
         writePackage(workspace);
       })
     );

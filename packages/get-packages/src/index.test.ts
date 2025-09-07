@@ -193,7 +193,7 @@ let runTests = (getPackages: GetPackages) => {
 
   it("should throw an error if a package.json is missing the name field", async () => {
     try {
-      const allPackages = await getPackagesSync(f.copy("no-name-field"));
+      getPackagesSync(f.copy("no-name-field"));
     } catch (err) {
       expect(
         !!err && typeof err === "object" && "message" in err && err.message

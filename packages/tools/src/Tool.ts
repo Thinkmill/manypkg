@@ -1,3 +1,5 @@
+import type { DenoJSON } from "./DenoTool.ts";
+
 /**
  * An in-memory representation of a package.json file.
  */
@@ -35,7 +37,6 @@ export type PackageJSON = {
  * An individual package json structure, along with the directory it lives in,
  * relative to the root of the current monorepo.
  */
-import type { DenoJSON } from "./DenoTool.ts";
 
 export interface Package<T extends PackageJSON | DenoJSON> {
   /**

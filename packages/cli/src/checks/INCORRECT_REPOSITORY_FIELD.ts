@@ -15,7 +15,7 @@ type ErrorType = {
 
 export default makeCheck<ErrorType>({
   type: "all",
-  validate: (workspace, allWorkspaces, rootWorkspace, options) => {
+  validate: (workspace, _allWorkspaces, rootWorkspace, options) => {
     if (
       isNodePackage(workspace) &&
       rootWorkspace &&

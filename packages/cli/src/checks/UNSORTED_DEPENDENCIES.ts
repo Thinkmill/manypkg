@@ -1,4 +1,4 @@
-import { isDenoPackage, isNodePackage, type DenoJSON } from "@manypkg/tools";
+import { isDenoPackage, isNodePackage } from "@manypkg/tools";
 import {
   makeCheck,
   DEPENDENCY_TYPES,

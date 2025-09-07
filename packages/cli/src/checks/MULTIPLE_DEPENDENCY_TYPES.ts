@@ -11,7 +11,7 @@ type ErrorType = {
 };
 
 export default makeCheck<ErrorType>({
-  validate: (workspace, allWorkspaces) => {
+  validate: (workspace, _allWorkspaces) => {
     if (isNodePackage(workspace)) {
       let dependencies = new Set<string>();
       let errors: ErrorType[] = [];
