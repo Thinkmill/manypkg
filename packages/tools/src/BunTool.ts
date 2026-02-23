@@ -16,7 +16,7 @@ import {
 import { readJson, readJsonSync } from "./utils.ts";
 
 interface BunPackageJSON extends PackageJSON {
-  workspaces?: string[] | { packages: string[] };
+  workspaces?: string[] | { packages: string[]; catalog?: Record<string, string> };
 }
 
 async function hasBunLockFile(directory: string): Promise<boolean> {
