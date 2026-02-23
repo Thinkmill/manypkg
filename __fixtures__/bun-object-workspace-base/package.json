@@ -1,0 +1,13 @@
+{
+  "name": "bun-object-workspace-base",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "catalog": {
+      "some-dep": "^1.0.0"
+    }
+  }
+}
