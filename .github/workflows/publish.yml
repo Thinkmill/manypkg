@@ -1,0 +1,36 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions: {} # each job should define its own permission explicitly
+
+jobs:
+  publish:
+    name: Publish
+    if: github.repository == 'Thinkmill/manypkg'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # to create release (changesets/action)
+      issues: write # to post issue comments (changesets/action)
+      pull-requests: write # to create pull request (changesets/action)
+      id-token: write # to use OpenID Connect token for trusted publishing (changesets/action)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/ci-setup
+        with:
+          node-version: 24
+
+      - run: git branch -a
+
+      - name: "Create Pull Request or Publish to npm"
+        uses: changesets/action@v1
+        with:
+          publish: yarn release
