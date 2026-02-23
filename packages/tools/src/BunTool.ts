@@ -16,7 +16,9 @@ import {
 import { readJson, readJsonSync } from "./utils.ts";
 
 interface BunPackageJSON extends PackageJSON {
-  workspaces?: string[];
+  workspaces?:
+    | string[]
+    | { packages: string[]; catalog?: Record<string, string> };
 }
 
 async function hasBunLockFile(directory: string): Promise<boolean> {
@@ -55,7 +57,10 @@ export const BunTool: Tool = {
         hasBunLockFile(directory),
       ]);
       if (pkgJson.workspaces && hasLockFile) {
-        if (Array.isArray(pkgJson.workspaces)) {
+        if (
+          Array.isArray(pkgJson.workspaces) ||
+          Array.isArray(pkgJson.workspaces.packages)
+        ) {
           return true;
         }
       }
@@ -76,7 +81,10 @@ export const BunTool: Tool = {
       }
       const pkgJson = readJsonSync(directory, "package.json") as BunPackageJSON;
       if (pkgJson.workspaces) {
-        if (Array.isArray(pkgJson.workspaces)) {
+        if (
+          Array.isArray(pkgJson.workspaces) ||
+          Array.isArray(pkgJson.workspaces.packages)
+        ) {
           return true;
         }
       }
@@ -97,7 +105,9 @@ export const BunTool: Tool = {
         rootDir,
         "package.json"
       )) as BunPackageJSON;
-      const packageGlobs: string[] = pkgJson.workspaces || [];
+      const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
+        ? pkgJson.workspaces
+        : pkgJson.workspaces?.packages || [];
 
       return {
         tool: BunTool,
@@ -124,7 +134,9 @@ export const BunTool: Tool = {
 
     try {
       const pkgJson = readJsonSync(rootDir, "package.json") as BunPackageJSON;
-      const packageGlobs: string[] = pkgJson.workspaces || [];
+      const packageGlobs: string[] = Array.isArray(pkgJson.workspaces)
+        ? pkgJson.workspaces
+        : pkgJson.workspaces?.packages || [];
 
       return {
         tool: BunTool,

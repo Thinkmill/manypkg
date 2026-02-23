@@ -97,6 +97,17 @@ const runTests = (findRoot: FindRoot) => {
     });
   });
 
+  test("it returns the root of a bun monorepo with object-form workspaces", async () => {
+    let tmpPath = f.copy("basic-bun-object-workspaces");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: BunTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
   test("it does not detect bun monorepo without lock file", async () => {
     let tmpPath = f.copy("bun-no-lock");
     let monorepoRoot = await findRoot(

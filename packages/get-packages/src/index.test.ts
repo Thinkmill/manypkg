@@ -141,6 +141,27 @@ let runTests = (getPackages: GetPackages) => {
     }
   });
 
+  it("should resolve workspaces for bun with object-form workspaces", async () => {
+    const dir = f.copy("bun-object-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "bun-object-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "bun-object-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("bun");
+    }
+  });
+
   it("should resolve workspaces for lerna", async () => {
     const dir = f.copy("lerna-workspace-base");
 
