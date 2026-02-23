@@ -1,5 +1,11 @@
 # @manypkg/tools
 
+## 2.1.1
+
+### Patch Changes
+
+- [#266](https://github.com/Thinkmill/manypkg/pull/266) [`8c4e03b`](https://github.com/Thinkmill/manypkg/commit/8c4e03bba4d551bc9fd1a50581a1fec1e4717985) Thanks [@MatthieuMordrel](https://github.com/MatthieuMordrel)! - Support object-form workspaces in `BunTool` to handle `catalog` usage
+
 ## 2.1.0
 
 ### Minor Changes
