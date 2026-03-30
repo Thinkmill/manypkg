@@ -1,11 +1,17 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The npm tag to publish to"
+        required: true
+        type: choice
+        options:
+          - latest
+          - test
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: publish
 
 permissions: {} # each job should define its own permission explicitly
 
@@ -15,10 +21,9 @@ jobs:
     if: github.repository == 'Thinkmill/manypkg'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: Release
     permissions:
-      contents: write # to create release (changesets/action)
-      issues: write # to post issue comments (changesets/action)
-      pull-requests: write # to create pull request (changesets/action)
+      contents: write # to push tags
       id-token: write # to use OpenID Connect token for trusted publishing (changesets/action)
     steps:
       - uses: actions/checkout@v4
@@ -28,9 +33,28 @@ jobs:
         with:
           node-version: 24
 
-      - run: git branch -a
+      - run: yarn build
 
-      - name: "Create Pull Request or Publish to npm"
-        uses: changesets/action@v1
-        with:
-          publish: yarn release
+      - name: git config
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: version packages
+        if: inputs.tag != 'latest'
+        run: |
+          yarn changeset version --snapshot ${{ inputs.tag }}
+          git commit -a -m 'test'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: npm publish, git tag
+        run: yarn changeset publish --tag ${{ inputs.tag }}
+
+      # reset, then we have a tagged dangling commit
+      - name: git push
+        if: inputs.tag != 'latest'
+        run: |
+          git reset HEAD~1 --hard
+
+      - run: git push origin --tags
