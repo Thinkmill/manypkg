@@ -1,0 +1,29 @@
+name: Create Release PR
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  create-release-pr:
+    name: Create Release PR
+    if: github.repository == 'Thinkmill/manypkg'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # to push for release PR (changesets/action)
+      issues: write # to post issue comments (changesets/action)
+      pull-requests: write # to create pull request (changesets/action)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/ci-setup
+        with:
+          node-version: 24
+
+      - name: "Create Pull Request"
+        uses: changesets/action@v1
