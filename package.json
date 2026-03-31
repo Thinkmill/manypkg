@@ -10,7 +10,7 @@
     "build": "preconstruct build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "preconstruct dev && NODE_OPTIONS=--experimental-strip-types packages/cli/bin.js check",
+    "postinstall": "preconstruct dev && node --experimental-strip-types packages/cli/bin.js check",
     "knip": "knip",
     "test": "vitest"
   },
