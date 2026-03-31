@@ -10,6 +10,11 @@ on:
         options:
           - latest
           - test
+  push:
+    branches:
+      - main
+    paths:
+      - "**/CHANGELOG.md"
 
 concurrency: publish
 
@@ -41,7 +46,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: version packages
-        if: inputs.tag != 'latest'
+        if: inputs.tag == 'test'
         run: |
           yarn changeset version --snapshot ${{ inputs.tag }}
           git commit -a -m 'test'
@@ -49,11 +54,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: npm publish, git tag
-        run: yarn changeset publish --tag ${{ inputs.tag }}
+        run: yarn changeset publish --tag ${{ inputs.tag || 'latest' }}
 
       # reset, then we have a tagged dangling commit
       - name: git push
-        if: inputs.tag != 'latest'
+        if: inputs.tag == 'test'
         run: |
           git reset HEAD~1 --hard
 
