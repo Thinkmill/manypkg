@@ -1,5 +1,5 @@
 import path from "node:path";
-import yaml from "js-yaml";
+import * as yaml from "yaml";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 
@@ -18,10 +18,10 @@ import { readJson, readJsonSync } from "./utils.ts";
 async function readYamlFile<T = unknown>(path: string): Promise<T> {
   return fsp
     .readFile(path, "utf8")
-    .then((data) => yaml.load(data)) as Promise<T>;
+    .then((data) => yaml.parse(data)) as Promise<T>;
 }
 function readYamlFileSync<T = unknown>(path: string): T {
-  return yaml.load(fs.readFileSync(path, "utf8")) as T;
+  return yaml.parse(fs.readFileSync(path, "utf8")) as T;
 }
 
 export const PnpmTool: Tool = {
