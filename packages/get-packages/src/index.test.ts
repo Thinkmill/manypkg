@@ -219,7 +219,11 @@ let runTests = (getPackages: GetPackages) => {
       expect(
         !!err && typeof err === "object" && "message" in err && err.message
       ).toBe(
-        'The following package.jsons are missing the "name" field:\npackages/pkg-a/package.json\npackages/pkg-b/package.json'
+        `The following package.jsons are missing the "name" field:\n${path.join(
+          "packages",
+          "pkg-a",
+          "package.json"
+        )}\n${path.join("packages", "pkg-b", "package.json")}`
       );
     }
   });
