@@ -84,8 +84,8 @@ function convertFileLineEndings(path: string, targetLineEnding: LineEndings) {
   if (file.includes("\r\n") === (targetLineEnding === "crlf")) {
     return;
   }
-  const sourceLineEndingText = targetLineEnding === "crlf" ? "\n" : "\r\n";
-  const targetLineEndingText = targetLineEnding === "crlf" ? "\r\n" : "\n";
+  const [sourceLineEndingText, targetLineEndingText] =
+    targetLineEnding === "crlf" ? ["\n", "\r\n"] : ["\r\n", "\n"];
   fs.writeFileSync(
     path,
     file.replaceAll(sourceLineEndingText, targetLineEndingText)
