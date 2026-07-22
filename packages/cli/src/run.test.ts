@@ -37,10 +37,12 @@ describe("Run command", () => {
         arg1
       );
       expect(exitCode).toBe(expectedExitCode);
-      expect(stripAnsi(stdout.toString())).toMatchSnapshot("stdout");
-      expect(stripAnsi(stripNodeWarnings(stderr.toString()))).toMatchSnapshot(
-        "stderr"
-      );
+      expect(
+        normalizePathSeparators(stripAnsi(stdout.toString()))
+      ).toMatchSnapshot("stdout");
+      expect(
+        normalizePathSeparators(stripAnsi(stripNodeWarnings(stderr.toString())))
+      ).toMatchSnapshot("stderr");
     }
   );
 });
@@ -82,8 +84,8 @@ function convertFileLineEndings(path: string, targetLineEnding: LineEndings) {
   if (file.includes("\r\n") === (targetLineEnding === "crlf")) {
     return;
   }
-  const sourceLineEndingText = targetLineEnding === "crlf" ? "\n" : "\r\n";
-  const targetLineEndingText = targetLineEnding === "crlf" ? "\r\n" : "\r\n";
+  const [sourceLineEndingText, targetLineEndingText] =
+    targetLineEnding === "crlf" ? ["\n", "\r\n"] : ["\r\n", "\n"];
   fs.writeFileSync(
     path,
     file.replaceAll(sourceLineEndingText, targetLineEndingText)
@@ -104,4 +106,8 @@ function executeBin(path: string, command: string, ...args: string[]) {
 
 function detectLineEndings(content: string) {
   return (content.includes("\r\n") ? "crlf" : "lf") satisfies LineEndings;
+}
+
+function normalizePathSeparators(content: string) {
+  return content.replaceAll(path.win32.sep, path.posix.sep);
 }

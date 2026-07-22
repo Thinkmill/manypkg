@@ -8,8 +8,14 @@ on:
 
 jobs:
   test:
-    name: Tests
-    runs-on: ubuntu-latest
+    name: "Tests on ${{ matrix.platform }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/ci-setup

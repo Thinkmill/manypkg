@@ -1,13 +1,18 @@
 import { getPackages } from "@manypkg/get-packages";
 import { exec } from "tinyexec";
+import normalizePath from "normalize-path";
 import * as logger from "./logger.ts";
 import { ExitError } from "./errors.ts";
 
 export async function runCmd(args: string[], cwd: string) {
   let { packages } = await getPackages(cwd);
+  const normalizedIdentifier = normalizePath(args[0]);
 
   const exactMatchingPackage = packages.find((pkg) => {
-    return pkg.packageJson.name === args[0] || pkg.relativeDir === args[0];
+    return (
+      pkg.packageJson.name === args[0] ||
+      normalizePath(pkg.relativeDir) === normalizedIdentifier
+    );
   });
 
   if (exactMatchingPackage) {
@@ -23,7 +28,7 @@ export async function runCmd(args: string[], cwd: string) {
   const matchingPackages = packages.filter((pkg) => {
     return (
       pkg.packageJson.name.includes(args[0]) ||
-      pkg.relativeDir.includes(args[0])
+      normalizePath(pkg.relativeDir).includes(normalizedIdentifier)
     );
   });
 
