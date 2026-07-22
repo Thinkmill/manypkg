@@ -1,5 +1,11 @@
 # @manypkg/tools
 
+## 2.1.2
+
+### Patch Changes
+
+- [#271](https://github.com/Thinkmill/manypkg/pull/271) [`4b93c03`](https://github.com/Thinkmill/manypkg/commit/4b93c039aef8ff2dbb61036a140e409c679b3d65) Thanks [@bluwy](https://github.com/bluwy)! - Refactor yaml parsing to use the `yaml` package
+
 ## 2.1.1
 
 ### Patch Changes
