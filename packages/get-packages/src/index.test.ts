@@ -162,6 +162,48 @@ let runTests = (getPackages: GetPackages) => {
     }
   });
 
+  it("should resolve workspaces for nub", async () => {
+    const dir = f.copy("nub-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "nub-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "nub-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("nub");
+    }
+  });
+
+  it("should resolve workspaces for nub with object-form workspaces", async () => {
+    const dir = f.copy("nub-object-workspace-base");
+
+    // Test for both root and subdirectories
+    for (const location of [".", "packages", "packages/pkg-a"]) {
+      const allPackages = await getPackages(path.join(dir, location));
+
+      if (allPackages.packages === null) {
+        return expect(allPackages.packages).not.toBeNull();
+      }
+
+      expect(allPackages.packages[0].packageJson.name).toEqual(
+        "nub-object-workspace-base-pkg-a"
+      );
+      expect(allPackages.packages[1].packageJson.name).toEqual(
+        "nub-object-workspace-base-pkg-b"
+      );
+      expect(allPackages.tool.type).toEqual("nub");
+    }
+  });
+
   it("should resolve workspaces for lerna", async () => {
     const dir = f.copy("lerna-workspace-base");
 

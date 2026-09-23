@@ -1,6 +1,6 @@
 # Manypkg
 
-Manypkg is a linter for `package.json` files in Yarn, npm, Lerna, pnpm, Bun or Rush monorepos.
+Manypkg is a linter for `package.json` files in Yarn, npm, Lerna, pnpm, Bun, Nub or Rush monorepos.
 
 ## Install
 

@@ -7,6 +7,7 @@ import {
   BunTool,
   LernaTool,
   NpmTool,
+  NubTool,
   PnpmTool,
   RootTool,
   YarnTool,
@@ -105,6 +106,40 @@ const runTests = (findRoot: FindRoot) => {
     expect(monorepoRoot).toEqual({
       tool: BunTool.type,
       rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of a nub monorepo", async () => {
+    let tmpPath = f.copy("basic-nub");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: NubTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it returns the root of a nub monorepo with object-form workspaces", async () => {
+    let tmpPath = f.copy("basic-nub-object-workspaces");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    expect(monorepoRoot).toEqual({
+      tool: NubTool.type,
+      rootDir: tmpPath,
+    });
+  });
+
+  test("it does not detect nub monorepo without lock file", async () => {
+    let tmpPath = f.copy("nub-no-lock");
+    let monorepoRoot = await findRoot(
+      path.join(tmpPath, "packages", "package-one", "src")
+    );
+    // Should be detected as a root tool since it has workspaces but no lock file
+    expect(monorepoRoot).toEqual({
+      tool: RootTool.type,
+      rootDir: path.join(tmpPath, "packages", "package-one"),
     });
   });
 

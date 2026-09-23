@@ -23,6 +23,7 @@ export async function install(toolType: string, cwd: string) {
     bun: "bun",
     lerna: "lerna",
     npm: "npm",
+    nub: "nub",
     pnpm: "pnpm",
     root: "yarn",
     rush: "rushx",
@@ -31,7 +32,10 @@ export async function install(toolType: string, cwd: string) {
 
   await exec(
     cliRunners[toolType],
-    toolType === "npm" || toolType === "pnpm" || toolType === "bun"
+    toolType === "npm" ||
+      toolType === "pnpm" ||
+      toolType === "bun" ||
+      toolType === "nub"
       ? ["install"]
       : toolType === "lerna"
         ? ["bootstrap", "--since", "HEAD"]
